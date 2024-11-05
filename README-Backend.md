@@ -14,14 +14,61 @@ Aktiviere dein Environment
 foo@bar:~$ source backend/bin/activate
 ```
 
-Installiere Django v.5.1.2
+Installiere die dependencies
 ```console
-(backend) foo@bar:~$ pip install django==5.1.2
+(backend) foo@bar:~$ pip install -r path/to/requirements.txt
 ```
 
-Oder mit requirements.txt
+Postgresql unter Linux\
+[PostgreSQL Link](https://www.postgresql.org/download/)
 ```console
-(backend) foo@bar:~$ pip install -r path/to/requierement.txt
+(backend) foo@bar:~$ sudo apt install libpq-dev postgresql postgresql-contrib
 ```
 
+Login fuer eine interactive PostgreSQL session
+```console
+(backend) foo@bar:~$ sudo -u postgres psql
+```
+
+Erstelle einen User der sich mit der DB verbinden und interagieren kann
+```console
+postgres=# CREATE USER userName WITH PASSWORD 'password';
+```
+
+Datenbank erstellen
+```console
+postgres=# CREATE DATABASE dbName OWNER userName;
+```
+
+Finde hba_file
+```console
+postgres=# SHOW hba_file;
+```
+und aendere:
+von:    local   all             all             peer
+zu:     local   all             all             md5
+
+Schliesse
+```console
+postgres=# \q
+```
+
+Starte postgresql neu:
+```console
+(backend) foo@bar:~$ sudo systemctl restart postgresql
+```
+
+Login psql
+```console
+foo@bar:~$ psql -U userName -W -d dbName
+```
+
+**Change or create** a .env file under /backend/backend/ die folgende Felder
+enthalten:\
+DB_ENGINE=django.db.backends.postgresql\
+DB_NAME=dbName\
+DB_USER=userName\
+DB_PASSWORD=yourPassword\
+DB_HOST=localhost\
+DB_PORT=5432\
 
