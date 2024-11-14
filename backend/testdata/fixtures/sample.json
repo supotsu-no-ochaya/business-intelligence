@@ -1,0 +1,45 @@
+[
+    {
+      "model": "testdata.speise",
+      "pk": 1,
+      "fields": {
+        "name": "Sample Dish 1",
+        "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+        "menge": 200,
+        "preis": 15.5,
+        "rabatt": 10,
+        "r_preis": 13.95,
+        "erstellt": "2024-11-01T10:00:00Z",
+        "updated": "2024-11-10T12:00:00Z"
+      }
+    },
+    {
+      "model": "testdata.speise",
+      "pk": 2,
+      "fields": {
+        "name": "Sample Dish 2",
+        "zutaten": "Ingredient D, Ingredient E",
+        "menge": 150,
+        "preis": 12.0,
+        "rabatt": 5,
+        "r_preis": 11.4,
+        "erstellt": "2024-11-02T11:00:00Z",
+        "updated": "2024-11-10T12:30:00Z"
+      }
+    },
+    {
+      "model": "testdata.speise",
+      "pk": 3,
+      "fields": {
+        "name": "Sample Dish 3",
+        "zutaten": "Ingredient F, Ingredient G, Ingredient H",
+        "menge": 250,
+        "preis": 18.0,
+        "rabatt": 15,
+        "r_preis": 15.3,
+        "erstellt": "2024-11-03T09:30:00Z",
+        "updated": "2024-11-10T13:00:00Z"
+      }
+    }
+  ]
+  

@@ -14,3 +14,11 @@ class Speise(models.Model):
 
     def __str__(self):
         return self.name
+    
+class OrderItem(models.Model):
+    id = models.CharField(primary_key=True)
+    timestamp = models.DateTimeField()
+    Products = models.ManyToManyField(Speise, related_name='orders')
+
+    def __str__(self):
+        return super().__str__()
