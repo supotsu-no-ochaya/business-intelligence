@@ -1,0 +1,34 @@
+[
+    {
+      "model": "testdata.orderItem",
+      "pk": 1,
+      "fields": {
+        "timestamp": "2024-11-08 11:00:00+01",
+        "Products": [101]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 2,
+      "fields": {
+        "timestamp": "2024-11-08 11:00:00+01",
+        "Products": [101]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 3,
+      "fields": {
+        "timestamp": "2024-11-08 11:00:00+01",
+        "Products": [101]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 4,
+      "fields": {
+        "timestamp": "2024-11-08 11:00:00+01",
+        "Products": [101]
+      }
+    }
+]

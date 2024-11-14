@@ -1,0 +1,46 @@
+[
+    {
+        "model": "testdata.speise",
+        "pk": 201,
+        "fields": {
+            "name": "Onigiri (Ei Mais)",
+            "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+            "preis": 3.50,
+            "erstellt": "2024-11-01T10:00:00Z",
+            "updated": "2024-11-10T12:00:00Z"
+        }
+    },
+    {
+        "model": "testdata.speise",
+        "pk": 202,
+        "fields": {
+            "name": "Onigiri (Tofu)",
+            "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+            "preis": 3.50,
+            "erstellt": "2024-11-01T10:00:00Z",
+            "updated": "2024-11-10T12:00:00Z"
+        }
+    },
+    {
+        "model": "testdata.speise",
+        "pk": 203,
+        "fields": {
+            "name": "Onigiri (Hack)",
+            "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+            "preis": 4.50,
+            "erstellt": "2024-11-01T10:00:00Z",
+            "updated": "2024-11-10T12:00:00Z"
+        }
+    },
+    {
+        "model": "testdata.speise",
+        "pk": 204,
+        "fields": {
+            "name": "Onigiri (Thun)",
+            "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+            "preis": 4.50,
+            "erstellt": "2024-11-01T10:00:00Z",
+            "updated": "2024-11-10T12:00:00Z"
+        }
+    }
+]

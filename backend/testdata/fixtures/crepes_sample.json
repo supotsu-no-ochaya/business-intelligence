@@ -1,0 +1,79 @@
+[
+  {
+    "model": "testdata.speise",
+    "pk": 101,
+    "fields": {
+      "name": "Crepe (Zimt Zucker)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 3.50,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 102,
+    "fields": {
+      "name": "Crepe (Apfel)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 3.50,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 103,
+    "fields": {
+      "name": "Crepe (ZZA)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 4,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 104,
+    "fields": {
+      "name": "Crepe (Erdbeer)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 4,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 105,
+    "fields": {
+      "name": "Crepe (Nutella)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 4.50,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 106,
+    "fields": {
+      "name": "Crepe (Käse Schinken)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 4.50,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 107,
+    "fields": {
+      "name": "Crepe (Spekulatius)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 4.50,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  }
+]

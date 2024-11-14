@@ -5,10 +5,7 @@ from django.db import models
 class Speise(models.Model):
     name = models.CharField()
     zutaten = models.TextField()
-    menge = models.IntegerField()
     preis = models.FloatField()
-    rabatt = models.IntegerField()
-    r_preis = models.FloatField()
     erstellt = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
