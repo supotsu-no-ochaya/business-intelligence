@@ -2,6 +2,12 @@ name: Publish Container Action
 
 on: [push]
 
+
+env:
+  IMAGE_NAME: business-intelligence
+  IMAGE_TAG: dev
+  # IMAGE_TAG: latest
+
 jobs:
 
   build:
@@ -113,7 +119,20 @@ jobs:
       if: always()
       run: docker compose -f "backend/docker-compose.yml" down
 
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        platforms: linux/amd64,linux/arm64
+        tags: |
+          ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
 
