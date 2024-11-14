@@ -117,6 +117,7 @@ jobs:
       run: |
         export GITHUB_WORKFLOW=True
         export MODE="Test"
+        export DB_HOST="db"
         docker compose -f backend/docker-compose.yml build
         docker compose -f backend/docker-compose.yml up -d
         # run: docker compose up -d --build
