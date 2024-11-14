@@ -2,11 +2,22 @@ name: Publish Container Action
 
 on: [push]
 
+
+env:
+  IMAGE_NAME: business-intelligence-backend
+  IMAGE_TAG: dev
+  # IMAGE_TAG: latest
+
 jobs:
 
   build:
 
     runs-on: ubuntu-latest
+    
+    permissions:
+      packages: write
+      contents: read
+
     strategy:
       max-parallel: 4
       matrix:
@@ -113,7 +124,30 @@ jobs:
       if: always()
       run: docker compose -f "backend/docker-compose.yml" down
 
+    
+    #- name: Set up QEMU
+    #uses: docker/setup-qemu-action@v3
 
+        #- name: Set up Docker Buildx
+        #uses: docker/setup-buildx-action@v3
+        #with:
+        #dockerfile: ./backend/Dockerfile
 
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        context: ./backend
+        push: true
+          #platforms: linux/amd64,linux/arm64
+          #dockerfile: ./backend/Dockerfile
+        tags: |
+          ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
 
