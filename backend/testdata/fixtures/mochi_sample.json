@@ -1,0 +1,57 @@
+[
+  {
+    "model": "testdata.speise",
+    "pk": 401,
+    "fields": {
+      "name": "Sandwich (Nut)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 2.50,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 402,
+    "fields": {
+      "name": "Sandwich (Erdbeer)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 2.50,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 403,
+    "fields": {
+      "name": "Sandwich (Rote Bohne)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 2.50,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 404,
+    "fields": {
+      "name": "Sandwich (Spekulatius)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 2.50,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 405,
+    "fields": {
+      "name": "Sandwich (Box 9Stk)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 20.00,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  }
+]

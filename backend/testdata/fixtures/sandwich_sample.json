@@ -1,0 +1,46 @@
+[
+  {
+    "model": "testdata.speise",
+    "pk": 301,
+    "fields": {
+      "name": "Sandwich (Ei-Mais)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 3.50,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 302,
+    "fields": {
+      "name": "Sandwich (Tofu)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 3.50,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 304,
+    "fields": {
+      "name": "Sandwich (Käse Schinken)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 4,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 305,
+    "fields": {
+      "name": "Sandwich (Käse Salami)",
+      "zutaten": "Ingredient A, Ingredient B, Ingredient C",
+      "preis": 4,
+      "erstellt": "2024-11-01T10:00:00Z",
+      "updated": "2024-11-10T12:00:00Z"
+    }
+  }
+]
