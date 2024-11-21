@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from routers import router
+from testdata import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include((router.urls, 'backend'), namespace='backend')),
+    path('api/total_earnings', views.earnings, name="total_earnings")
 ]

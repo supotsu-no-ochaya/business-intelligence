@@ -19,3 +19,7 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return super().__str__()
+    
+    def getTotalPrice(self):
+        total_price = sum(speise.preis for speise in self.Products.all())
+        return total_price
