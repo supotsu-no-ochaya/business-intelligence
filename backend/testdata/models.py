@@ -23,3 +23,12 @@ class OrderItem(models.Model):
     def getTotalPrice(self):
         total_price = sum(speise.preis for speise in self.Products.all())
         return total_price
+
+class MesseEvent(models.Model):
+    id = models.CharField(primary_key=True)
+    name = models.CharField()
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return self.name
