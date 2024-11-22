@@ -13,7 +13,7 @@ class Speise(models.Model):
         return self.name
     
 class OrderItem(models.Model):
-    id = models.CharField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     timestamp = models.DateTimeField()
     Products = models.ManyToManyField(Speise, related_name='orders')
 
@@ -25,7 +25,7 @@ class OrderItem(models.Model):
         return total_price
 
 class MesseEvent(models.Model):
-    id = models.CharField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField()
     start_date = models.DateField()
     end_date = models.DateField()

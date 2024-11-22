@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from testdata.models import Speise, OrderItem
+from testdata.models import Speise, OrderItem, MesseEvent
 
 class SpeiseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,4 +11,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
+        fields = "__all__"
+
+class MesseEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MesseEvent
         fields = "__all__"
