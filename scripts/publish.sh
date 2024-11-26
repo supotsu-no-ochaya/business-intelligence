@@ -62,12 +62,13 @@ repository=$(echo "$repository" | tr '[:upper:]' '[:lower:]')
 docker login "${registry}" -u "${username}" -p "${password}"
 
 if [[ "${build}" == true ]]; then
-    docker compose -f ../backend/docker-compose.yml build --no-cache
+    docker compose -f ./backend/docker-compose.yml build --no-cache
 fi
 
 echo "version: ${version}"
 images=$(docker images --filter "label=name" --format='{{.ID}}')
-
+all_images=$(docker images)
+echo "all images: ${all_images}"
 echo "images: ${images}"
 for image in $images; do
     name=$(basename "${repository}").$(docker inspect --format '{{ index .Config.Labels "name" }}' "${image}")
