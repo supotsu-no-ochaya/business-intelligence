@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
-    steps:
-      - name: publish
+      
+    - name: publish
       uses: soltys/publish-docker-compose@v1.0.0
       with:
         version: 'latest'
