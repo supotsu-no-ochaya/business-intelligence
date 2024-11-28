@@ -1,0 +1,66 @@
+[
+    {
+        "model": "testdata.messeevent",
+        "fields": {
+            "name": "AnimeCon 2024",
+            "start_date": "2024-03-15",
+            "end_date": "2024-03-17"
+        }
+    },
+    {
+        "model": "testdata.messeevent",
+        "fields": {
+            "name": "Cosplay Fiesta",
+            "start_date": "2024-05-10",
+            "end_date": "2024-05-12"
+        }
+    },
+    {
+        "model": "testdata.messeevent",
+        "fields": {
+            "name": "Otaku Fest",
+            "start_date": "2024-06-20",
+            "end_date": "2024-06-22"
+        }
+    },
+    {
+        "model": "testdata.messeevent",
+        "fields": {
+            "name": "Manga Mania Expo",
+            "start_date": "2024-07-05",
+            "end_date": "2024-07-07"
+        }
+    },
+    {
+        "model": "testdata.messeevent",
+        "fields": {
+            "name": "Kawaii Convention",
+            "start_date": "2024-08-15",
+            "end_date": "2024-08-17"
+        }
+    },
+    {
+        "model": "testdata.messeevent",
+        "fields": {
+            "name": "Chibi Fest",
+            "start_date": "2024-09-12",
+            "end_date": "2024-09-14"
+        }
+    },
+    {
+        "model": "testdata.messeevent",
+        "fields": {
+            "name": "Anime World Summit",
+            "start_date": "2024-10-01",
+            "end_date": "2024-10-03"
+        }
+    },
+    {
+        "model": "testdata.messeevent",
+        "fields": {
+            "name": "Cosplay Stars Weekend",
+            "start_date": "2024-11-20",
+            "end_date": "2024-11-22"
+        }
+    }
+]
