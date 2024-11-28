@@ -129,7 +129,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-provenv/
+backend/provenv/
 
 # Spyder project settings
 .spyderproject
