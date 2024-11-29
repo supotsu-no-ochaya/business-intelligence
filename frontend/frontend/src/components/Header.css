@@ -10,7 +10,7 @@
   }
   
   .top-bar h1 {
-    color: #fff;
+    color: #DBDFEA;
     font-size: 1.125rem;
     font-weight: 600;
   }
@@ -22,7 +22,7 @@
   }
   
   .top-bar .icon {
-    color: #fff;
+    color: #DBDFEA;
     cursor: pointer;
   }
   
@@ -40,7 +40,7 @@
   }
   
   .top-bar .profile span {
-    color: #fff;
+    color: #DBDFEA;
     font-size: 0.875rem;
   }
   

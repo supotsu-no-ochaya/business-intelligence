@@ -7,7 +7,8 @@ const Dashboard = () => {
       <div className="card">
         <h2>Analytics</h2>
         <select className="dropdown">
-          <option>Last Month</option>
+        <option>Letztes Event</option>
+        <option>Alle Events</option>
         </select>
         <ul className="analytics-list">
           {/* Beispielhafte Liste */}
@@ -25,11 +26,18 @@ const Dashboard = () => {
       <div className="card">
         <h2>Analytics</h2>
         <select className="dropdown">
-          <option>Last Month</option>
+        <option>Letztes Event</option>
+        <option>Alle Events</option>
         </select>
         {/* Wiederhole den Inhalt */}
         <ul className="analytics-list">
-          {/* Gleicher Inhalt */}
+       {/* Beispielhafte Liste */}
+       {['Stairs', 'Footings', 'Electrical', 'Framing Material', 'Finish Labor', 'Hardware', 'Framing', 'Tile Installation', 'Roofing', 'Appliances Install', 'Insulation', 'Interior Painting'].map((item, index) => (
+            <li key={index}>
+              <span>{item}</span>
+              <div className="progress-bar"><div className="progress-fill"></div></div>
+            </li>
+          ))}
         </ul>
         <div className="total">Total: $17,355</div>
       </div>
@@ -37,11 +45,18 @@ const Dashboard = () => {
       <div className="card">
         <h2>Analytics</h2>
         <select className="dropdown">
-          <option>Last Month</option>
+          <option>Letztes Event</option>
+          <option>Alle Events</option>
         </select>
         {/* Wiederhole den Inhalt */}
         <ul className="analytics-list">
-          {/* Gleicher Inhalt */}
+          {/* Beispielhafte Liste */}
+          {['Stairs', 'Footings', 'Electrical', 'Framing Material', 'Finish Labor', 'Hardware', 'Framing', 'Tile Installation', 'Roofing', 'Appliances Install', 'Insulation', 'Interior Painting'].map((item, index) => (
+            <li key={index}>
+              <span>{item}</span>
+              <div className="progress-bar"><div className="progress-fill"></div></div>
+            </li>
+          ))}
         </ul>
         <div className="total">Total: $17,355</div>
       </div>
