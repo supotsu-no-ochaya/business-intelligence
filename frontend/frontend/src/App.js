@@ -1,13 +1,12 @@
 import React from 'react';
 import Sidebar from './components/Sidebar'; // Sidebar importieren
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', backgroundColor: '#1D1E2C',  minHeight: '100vh'}}>
       <Sidebar />
-      <div style={{ flex: 1, padding: '20px' }}>
-        <h1>Willkommen zum Dashboard!</h1>
-      </div>
+      <Dashboard/>
     </div>
   );
 }

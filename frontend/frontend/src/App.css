@@ -1,7 +1,34 @@
-.App {
-  text-align: center;
+/* Grundlegendes Styling für die gesamte App */
+body, html {
+  margin: 0;
+  padding: 0;
+  background-color: #24263A;  /* Dunkler Hintergrund für die gesamte Seite */
+  color: #24263A;                /* Standard-Textfarbe */
+  height: 100%;                /* Volle Höhe des Bildschirms */
 }
 
+.App {
+  text-align: center;
+  background-color: #24263A;  /* Hintergrund für den Haupt-Container */
+  min-height: 100vh;       /* Volle Höhe des Viewports */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Optional: Entfernen von Scrollbars */
+body {
+  overflow: hidden;           /* Entfernt Scrollbars, wenn nicht notwendig */
+}
+
+.container {
+  display: flex;
+  background-color: #24263A;  /* Flex-Container mit Hintergrund */
+}
+
+
+/* Logo-Animation */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -13,21 +40,24 @@
   }
 }
 
+/* Header anpassen */
 .App-header {
-  background-color: #282c34;
+  background-color: #24263A;  /* Sicherstellen, dass der Header-Hintergrund dunkel bleibt */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #24263A;               /* Textfarbe */
 }
 
+/* Links-Styling anpassen */
 .App-link {
-  color: #61dafb;
+  color: #61dafb;             /* Farbe für Links (optional anpassen) */
 }
 
+/* Keyframe-Animation bleibt unverändert */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
