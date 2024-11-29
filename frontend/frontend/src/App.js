@@ -1,15 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
-import MyDashboard from './components/Dashboard';
-
+import React from 'react';
+import Sidebar from './components/Sidebar'; // Sidebar importieren
 
 function App() {
   return (
-    <div className="App">
-      <MyDashboard />
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, padding: '20px' }}>
+        <h1>Willkommen zum Dashboard!</h1>
+      </div>
     </div>
   );
 }
-
 
 export default App;
