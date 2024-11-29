@@ -1,17 +1,67 @@
-.container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    background: #171825;;
-  }
-  
-  .inner-box {
-    width: 1080px;
-    height: 627px;
-    position: absolute;
-    left: 143px;
-    top: 70px;
-    background: #171825;;
-    border-radius: 20px;
-  }
-  
+/* Container für das gesamte Dashboard */
+.dashboard-container {
+  display: flex;           /* Verwendet Flexbox für nebeneinander angeordnete Karten */
+  justify-content: center; /* Zentriert die Karten horizontal */
+  gap: 20px;               /* Abstand zwischen den Karten */
+  padding: 20px;
+  background-color: none;
+}
+
+/* Stil für jede Karte */
+.card {
+  background-color: #24263A;
+  border-radius: 15px;
+  padding: 20px;
+  width: 300px;            /* Festgelegte Breite für die Karten */
+  color: #DBDFEA;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dropdown-Menü */
+.dropdown {
+  background-color: #1E1E2D;
+  color: #DBDFEA;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 15px;
+}
+
+/* Analytics-Liste */
+.analytics-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.analytics-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Fortschrittsbalken */
+.progress-bar {
+  background-color: #3A3C54;
+  border-radius: 5px;
+  height: 10px;
+  width: 150px;
+  position: relative;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #FF4B4B, #FF00A6);  /* Gradient-Farbe */
+  border-radius: 5px;
+  height: 100%;
+  width: 70%;  /* Beispiel für Fortschritt: passe den Wert dynamisch an */
+}
+
+/* Total-Bereich */
+.total {
+  margin-top: 20px;
+  font-size: 1.2em;
+  text-align: center;
+  border-top: 1px solid #3A3C54;
+  padding-top: 10px;
+}
