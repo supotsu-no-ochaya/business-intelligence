@@ -1,15 +1,27 @@
 import React from 'react';
-import Sidebar from './components/Sidebar'; // Sidebar importieren
+import './App.css';
+import Sidebar from './components/Sidebar';
+import Header from './components/Header';
 
 function App() {
   return (
-    <div style={{ display: 'flex' }}>
-      <Sidebar />
-      <div style={{ flex: 1, padding: '20px' }}>
+    <div className="app">
+      {/* Sidebar Container */}
+      <aside className="app-sidebar">
+        <Sidebar />
+      </aside>
+
+      
+      {/* Header Container */}
+      <header className="app-header">
+        <Header />
+      </header>
+
+      {/* Dashboard Content */}
+      <div className="dashboard">
         <h1>Willkommen zum Dashboard!</h1>
       </div>
     </div>
   );
 }
-
 export default App;
