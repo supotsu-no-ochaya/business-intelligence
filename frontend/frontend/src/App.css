@@ -2,14 +2,14 @@
 body, html {
   margin: 0;
   padding: 0;
-  background-color: #24263A; /* Dunkler Hintergrund für die gesamte Seite */
+  background-color: #1D1E2C; /* Dunkler Hintergrund für die gesamte Seite */
   color: #24263A; /* Standard-Textfarbe */
   height: 100%; /* Volle Höhe des Bildschirms */
 }
 
-.App {
+.app {
   text-align: center;
-  background-color: #24263A; /* Hintergrund für den Haupt-Container */
+  background-color: #1D1E2C; /* Hintergrund für den Haupt-Container */
   min-height: 100vh; /* Volle Höhe des Viewports */
   display: flex;
   flex-direction: row; /* Sidebar und Hauptinhalt nebeneinander anordnen */
@@ -20,6 +20,7 @@ body, html {
   width: 250px; /* Breite der Sidebar */
   height: 100vh; /* Volle Höhe des Viewports */
   background-color: #14172b; /* Hintergrundfarbe der Sidebar */
+  margin-right: 4rem;
 }
 
 /*Mainboard*/
@@ -31,11 +32,11 @@ body, html {
 
 /* Header */
 .app-header {
-  width: 100%;/*calc(100% - 250px); /* Header soll die restliche Breite einnehmen */
+  width: 100%;/* Header soll die restliche Breite einnehmen */
   height: 70px; /* Höhe des Headers */
   display: flex;
   align-items: center;
-  /*justify-content: center; /* Zentriert den Inhalt im Header */
+  justify-content: center; /* Zentriert den Inhalt im Header */
   padding: 0 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -43,6 +44,6 @@ body, html {
 /* Dashboard Content */
 .dashboard {
   flex: 1; /* Nimmt den verbleibenden Platz ein */
-  padding: 1rem;
+  padding-top: 1rem;
   color: #1e2236; /* Standard-Textfarbe */
 }

@@ -4,7 +4,7 @@
   justify-content: center; /* Zentriert die Karten horizontal */
   gap: 20px;               /* Abstand zwischen den Karten */
   padding: 20px;
-  background-color: #1D1E2C;
+  background-color: none;
 }
 
 /* Stil für jede Karte */
