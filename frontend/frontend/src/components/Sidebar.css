@@ -2,8 +2,9 @@
 .sidebar {
     height: 100vh;
     width: 250px;
-    background-color: #1E1E2D;
-    color: #ffffff;
+    background-color: #24263A;
+    font-family: 'Alatsi';
+    color: #DBDFEA;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -11,14 +12,18 @@
   
   /* Logo */
   .logo h2 {
-    font-size: 1.5em;
-    text-align: center;
-    margin-bottom: 20px;
+    color: #DBDFEA;
+    font-size: 15;
+    font-family: 'Alatsi';
+    font-weight: 400;
+    word-wrap: 'break-word'
   }
   
   /* Navigation List */
   .nav-list {
-    flex: 1;
+    font-size: 10;
+    font-family: 'Alatsi';
+    font-weight: 400;
     list-style: none;
     padding: 0;
   }
@@ -32,11 +37,15 @@
     transition: background 0.3s;
   }
   
+  
   .nav-item:hover,
   .nav-item.active {
-    background-color: #2A2A3D;
-    border-radius: 8px;
+    background-color: #1D1E2C;
+    border-radius: 10px;          
+    width: calc(100% - 10px);    
+    margin-right: 0;              
   }
+  
   
   /* Icons */
   .icon {
