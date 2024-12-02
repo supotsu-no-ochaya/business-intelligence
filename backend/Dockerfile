@@ -7,19 +7,22 @@ ENV COLUMNS 80
 RUN apt-get update \
  && apt-get install -y --force-yes \
  vim netcat python3-pip gettext chrpath libssl-dev libxft-dev \
- libfreetype6 libfreetype6-dev  libfontconfig1 libfontconfig1-dev\
+ libfreetype6 libfreetype6-dev  libfontconfig1 libfontconfig1-dev \
+ #libpq-dev postgresql postgresql-contrib \
   && rm -rf /var/lib/apt/lists/*
-WORKDIR /code/
-COPY requirements.txt /code/
-RUN pip install -r requirements.txt
-COPY . /code/
+
+WORKDIR /app/backend/
+COPY requirements.txt /app/backend/
+RUN pip install -r /app/backend/requirements.txt
+COPY . /app/backend/
 
 # copy entrypoint.sh
-COPY ./entrypoint.sh .
-RUN sed -i 's/\r$//g' /code/entrypoint.sh
-RUN chmod +x /code/entrypoint.sh
+COPY ./entrypoint.sh /app/backend/.
+RUN sed -i 's/\r$//g' /app/backend/entrypoint.sh
+RUN chmod +x /app/backend/entrypoint.sh
 
 EXPOSE 8000
 
 # run entrypoint.sh
-ENTRYPOINT ["/code/entrypoint.sh"]
+#ENTRYPOINT ["/app/backend/entrypoint.sh"]
+CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
