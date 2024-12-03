@@ -1,0 +1,112 @@
+/* Container für das gesamte Dashboard innerhalb der ZutatenDashboard-Komponente */
+.zutaten-dashboard-container {
+    display: flex;            /* Flexbox für nebeneinander angeordnete Karten */
+    justify-content: center;  /* Zentriert die Karten horizontal */
+    gap: 20px;                /* Abstand zwischen den Karten */
+    padding: 20px;
+    background-color: #1A1C2E; /* Hintergrundfarbe für das Dashboard */
+  }
+  
+  /* Stil für jede Karte innerhalb der ZutatenDashboard-Komponente */
+  .zutaten-card {
+    background-color: #24263A;
+    border-radius: 15px;
+    padding: 20px;
+    width: 480px;             /* Die Karte wird breiter */
+    color: #DBDFEA;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Schatten für Tiefe */
+    transition: transform 0.3s ease;
+  }
+  
+  .zutaten-card:hover {
+    transform: translateY(-5px); /* Leichter "Anheben"-Effekt beim Hover */
+  }
+  
+  /* Dropdown-Menü */
+  .zutaten-dropdown {
+    background-color: #1E1E2D;
+    color: #DBDFEA;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    margin-bottom: 15px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+  
+  /* Analytics-Liste */
+  .zutaten-analytics-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .zutaten-analytics-list li {
+    display: flex;
+    align-items: center;  /* Items, Progressbar und Zahlen nebeneinander ausrichten */
+    justify-content: space-between;  /* Platz zwischen den Elementen */
+    margin-bottom: 15px;
+  }
+  
+  /* Stil für den Namen des Items */
+  .zutaten-item-name {
+    font-size: 0.95em;
+    margin-right: 15px;  /* Abstand zwischen Itemname und Progressbar */
+    width: 120px;  /* Festgelegte Breite für den Itemnamen */
+  }
+  
+  /* Fortschrittsbalken-Container */
+  .zutaten-progress-bar {
+    background-color: #3A3C54;
+    border-radius: 5px;
+    height: 10px;
+    width: 100%; /* Balken füllen die verfügbare Breite */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    margin-right: 15px;  /* Abstand zur rechten Zahl */
+  }
+  
+  /* Füllung für den gesamten Fortschritt */
+  .zutaten-progress-fill-total {
+    background: linear-gradient(90deg, #3A86FF, #8338EC);  /* Gradient für "total" */
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Hintergrundfüllung */
+  }
+  
+  /* Füllung für den benutzten Fortschritt */
+  .zutaten-progress-fill-used {
+    background: linear-gradient(90deg, #FF4B4B, #FF00A6);  /* Gradient für "used" */
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2; /* Füllung für den verwendeten Fortschritt */
+    opacity: 0.8;
+  }
+  
+  /* Werte-Bereich - Zahlen rechts */
+  .zutaten-values {
+    font-size: 0.9em;
+    color: #ADB5BD;
+    font-weight: bold;
+    width: 60px;  /* Breite für die Zahlen, um sie in der Reihe mit der Progressbar auszurichten */
+    text-align: right;  /* Zahlen rechts ausrichten */
+  }
+  
+  /* Total-Bereich */
+  .zutaten-total {
+    margin-top: 20px;
+    font-size: 1.2em;
+    text-align: center;
+    border-top: 1px solid #3A3C54;
+    padding-top: 10px;
+    font-weight: bold;
+    color: #FFFFFF;
+  }
+  
