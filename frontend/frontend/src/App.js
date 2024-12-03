@@ -3,9 +3,9 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Verbrauch from './components/Verbrauch';
-/*import Zutaten from './components/Zutaten';
+/*import Zutaten from './components/Zutaten';*/
 import Getraenke from './components/Getraenke';
-import Verkaufszahlen from './components/Verkaufszahlen';*/
+import Verkaufszahlen from './components/Verkaufszahlen';
 import './App.css'; // Importiere das CSS-Stylesheet
 
 function App() {
@@ -25,16 +25,16 @@ function App() {
       break;
     case 'verbrauch':
       content = <Verbrauch />;
-      break;/*
-    case 'zutaten':
-      content = <Zutaten />;
       break;
+    /*case 'zutaten':
+      content = <Zutaten />;
+      break;*/
     case 'getraenke':
       content = <Getraenke />;
       break;
     case 'verkaufszahlen':
       content = <Verkaufszahlen />;
-      break;*/
+      break;
     default:
       content = <Dashboard />;
   }

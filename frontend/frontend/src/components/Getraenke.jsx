@@ -1,10 +1,10 @@
 import React from 'react';
-import './Verbrauch.css';
+import './Getraenke.css';
 
 const Verbrauch = () => {
   const data = [
-    { name: 'Kaffee Filter', total: 7, used: 5 },
-    { name: 'Abwaschhandschuhe', total: 5, used: 5 },
+    { name: 'Kaffe', total: 7, used: 5 },
+    { name: 'Apfelschorle', total: 5, used: 5 },
     { name: 'Müllbeutel (60L)', total: 8, used: 6 },
     { name: 'Messer (Holz)', total: 2, used: 1 },
     { name: 'Gabel (Holz)', total: 2, used: 1 },
