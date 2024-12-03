@@ -1,5 +1,9 @@
 from rest_framework import serializers
-from testdata.models import Speise, OrderItem, MesseEvent
+from testdata.models import (
+    Speise, OrderItem, MesseEvent,
+    Station, Category, ProductAttribute, Product,
+    OrderEvent, Order, OrderItem2, PaymentOption, Payment
+)
 
 class SpeiseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,3 +21,111 @@ class MesseEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = MesseEvent
         fields = "__all__"
+
+
+# Serializers for file upload
+# Serializer for Station
+class StationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Station
+        fields = '__all__'
+
+# Serializer for Category
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+# Serializer for ProductAttribute
+class ProductAttributeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductAttribute
+        fields = '__all__'
+
+# Serializer for Product
+class ProductSerializer(serializers.ModelSerializer):
+    station = StationSerializer()
+    category = CategorySerializer()
+    attribute = ProductAttributeSerializer(many=True, required=False)
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+    def create(self, validated_data):
+        station_data = validated_data.pop('station')
+        category_data = validated_data.pop('category')
+        attributes_data = validated_data.pop('attribute', [])
+
+        station, _ = Station.objects.get_or_create(**station_data)
+        category, _ = Category.objects.get_or_create(**category_data)
+
+        product = Product.objects.create(**validated_data, station=station, category=category)
+
+        for attr_data in attributes_data:
+            attribute1, _ = ProductAttribute.objects.get_or_create(**attr_data)
+            product.attribute.add(attribute1)
+
+        return product
+
+# Serializer for OrderEvent
+class OrderEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderEvent
+        fields = '__all__'
+
+# Serializer for Order
+class OrderSerializer(serializers.ModelSerializer):
+    events = OrderEventSerializer(many=True, required=False)
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+    def create(self, validated_data):
+        events_data = validated_data.pop('events', [])
+        order = Order.objects.create(**validated_data)
+
+        for event_data in events_data:
+            event, _ = OrderEvent.objects.get_or_create(**event_data)
+            order.events.add(event)
+
+        return order
+
+# Serializer for OrderItem
+class OrderItem2Serializer(serializers.ModelSerializer):
+    events = OrderEventSerializer(many=True)
+
+    class Meta:
+        model = OrderItem2
+        fields = '__all__'
+
+    def create(self, validated_data):
+        events_data = validated_data.pop('events', [])
+        order_item = OrderItem2.objects.create(**validated_data)
+
+        for event_data in events_data:
+            event, _ = OrderEvent.objects.get_or_create(**event_data)
+            order_item.events.add(event)
+
+        return order_item
+
+# Serializer for PaymentOption
+class PaymentOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentOption
+        fields = '__all__'
+
+# Serializer for Payment
+class PaymentSerializer(serializers.ModelSerializer):
+    payment_option = PaymentOptionSerializer()
+
+    class Meta:
+        model = Payment
+        fields = '__all__'
+
+    def create(self, validated_data):
+        payment_option_data = validated_data.pop('payment_option')
+        payment_option, _ = PaymentOption.objects.get_or_create(**payment_option_data)
+
+        return Payment.objects.create(**validated_data, payment_option=payment_option)
+
