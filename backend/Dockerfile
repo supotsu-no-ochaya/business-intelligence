@@ -24,5 +24,8 @@ RUN chmod +x /app/backend/entrypoint.sh
 EXPOSE 8000
 
 # run entrypoint.sh
-#ENTRYPOINT ["/app/backend/entrypoint.sh"]
-CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+ENTRYPOINT ["sh", "/app/backend/entrypoint.sh"]
+#CMD [ "python", "manage.py", "createsuperuser", "--noinput", "--username","admin", "--email", "admin@mail.com"]
+#CMD [ "python", "manage.py", "makemigrations" ]
+#CMD [ "python", "manage.py", "migrate" ]
+#CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]

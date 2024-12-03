@@ -72,3 +72,13 @@ DB_PASSWORD=yourPassword\
 DB_HOST=localhost\
 DB_PORT=5432\
 
+Curl command for file upload
+```console
+foo@bar:~$ curl -X POST http://127.0.0.1:8000/upload-json/ -H "Content-Type: multipart/form-data" -F "file=@export.json"
+```
+
+Delete entries from fileupload (need to clean the db befor retrying the upload)
+```console
+foo@bar:~$ python3 manage.py clear_data
+```
+
