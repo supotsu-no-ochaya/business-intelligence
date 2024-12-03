@@ -1,0 +1,106 @@
+/* Container für das gesamte Dashboard */
+.dashboard-container {
+    display: flex;            /* Flexbox für nebeneinander angeordnete Karten */
+    justify-content: center;  /* Zentriert die Karten horizontal */
+    gap: 20px;                /* Abstand zwischen den Karten */
+    padding: 20px;
+    background-color: #1A1C2E; /* Hintergrundfarbe für das Dashboard */
+  }
+  
+  /* Stil für jede Karte */
+  .card {
+    background-color: #24263A;
+    border-radius: 15px;
+    padding: 20px;
+    width: 320px;             /* Festgelegte Breite für die Karten */
+    color: #DBDFEA;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Schatten für Tiefe */
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px); /* Leichter "Anheben"-Effekt beim Hover */
+  }
+  
+  /* Dropdown-Menü */
+  .dropdown {
+    background-color: #1E1E2D;
+    color: #DBDFEA;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    margin-bottom: 15px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+  
+  /* Analytics-Liste */
+  .analytics-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .analytics-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  /* Stil für den Namen des Items */
+  .item-name {
+    flex: 1;
+    font-size: 0.95em;
+  }
+  
+  /* Fortschrittsbalken */
+  .progress-bar {
+    background-color: #3A3C54;
+    border-radius: 5px;
+    height: 10px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    margin: 0 10px;
+  }
+  
+  /* Füllung für den gesamten Fortschritt */
+  .progress-fill.total {
+    background: linear-gradient(90deg, #3A86FF, #8338EC);  /* Gradient für "total" */
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  /* Füllung für den benutzten Fortschritt */
+  .progress-fill.used {
+    background: linear-gradient(90deg, #FF4B4B, #FF00A6);  /* Gradient für "used" */
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.8;  /* Leicht durchsichtig */
+  }
+  
+  /* Werte-Bereich */
+  .values {
+    font-size: 0.9em;
+    color: #ADB5BD;
+  }
+  
+  /* Total-Bereich */
+  .total {
+    margin-top: 20px;
+    font-size: 1.2em;
+    text-align: center;
+    border-top: 1px solid #3A3C54;
+    padding-top: 10px;
+    font-weight: bold;
+    color: #FFFFFF;
+  }
+
+  

@@ -3,21 +3,18 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Verbrauch from './components/Verbrauch';
-/*import Zutaten from './components/Zutaten';*/
+import Zutaten from './components/Zutaten'; // Beide Versionen importiert
 import Getraenke from './components/Getraenke';
 import Verkaufszahlen from './components/Verkaufszahlen';
 import './App.css'; // Importiere das CSS-Stylesheet
 
 function App() {
-  // Zustand für die aktuelle Ansicht
   const [currentView, setCurrentView] = useState('dashboard');
 
-  // Funktion zum Wechseln der Ansicht
   const navigate = (view) => {
     setCurrentView(view);
   };
 
-  // Komponente basierend auf der aktuellen Ansicht rendern
   let content;
   switch (currentView) {
     case 'dashboard':
@@ -26,9 +23,9 @@ function App() {
     case 'verbrauch':
       content = <Verbrauch />;
       break;
-    /*case 'zutaten':
-      content = <Zutaten />;
-      break;*/
+    case 'zutaten':
+      content = <Zutaten />;  // Stellen sicher, dass diese Komponente gerendert wird
+      break;
     case 'getraenke':
       content = <Getraenke />;
       break;
@@ -41,18 +38,15 @@ function App() {
 
   return (
     <div className="app">
-      {/* Sidebar Container */}
       <aside className="app-sidebar">
         <Sidebar navigate={navigate} />
       </aside>
 
-      {/* Main Content Container */}
       <main className="mainboard">
         <header className="app-header">
           <Header />
         </header>
 
-        {/* Der Hauptinhalt, basierend auf der aktuellen Ansicht */}
         {content}
       </main>
     </div>
