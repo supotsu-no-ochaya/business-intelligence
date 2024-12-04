@@ -1,5 +1,5 @@
 import React from 'react';
-import './Getraenke.css';
+import styles from './Getraenke.module.css';
 
 const Getraenke = () => {
   const data = [
@@ -17,32 +17,27 @@ const Getraenke = () => {
   ];
 
   return (
-    <div className="analytics-card">
-      <div className="analytics-header">
+    <div className={styles['analytics-card']}>
+      <div className={styles['analytics-header']}>
         <h2>Analytics</h2>
-        <div className="dropdown">
+        <div className={styles['dropdown']}>
           <span>Last Month</span>
-          <span className="arrow">▼</span>
+          <span className={styles['arrow']}>▼</span>
         </div>
       </div>
 
-      <div className="analytics-table">
-        <div className="table-header">
-          <span>Name</span>
-          <span>gesamt</span>
-          <span>gebraucht</span>
-        </div>
+      <div className={styles['analytics-table']}>
         {data.map((item, index) => (
-          <div key={index} className="table-row">
-            <span className="item-name">{item.name}</span>
-            <div className="progress-bar">
+          <div key={index} className={styles['table-row']}>
+            <span className={styles['item-name']}>{item.name}</span>
+            <div className={styles['progress-bar']}>
               <div
-                className="progress-used"
+                className={styles['progress-used']}
                 style={{
                   width: `${(item.used / item.total) * 100}%`,
                 }}
               >
-                <span className="progress-text">{item.used}</span>
+                <span className={styles['progress-text']}>{item.used}</span>
               </div>
             </div>
             <span>{item.total}</span>
@@ -50,9 +45,9 @@ const Getraenke = () => {
         ))}
       </div>
 
-      <div className="analytics-footer">
+      <div className={styles['analytics-footer']}>
         <span>Total</span>
-        <span className="total-amount">$17,355</span>
+        <span className={styles['total-amount']}>$17,355</span>
       </div>
     </div>
   );
