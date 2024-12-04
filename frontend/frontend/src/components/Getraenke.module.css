@@ -1,115 +1,93 @@
+/* Container für Zentrierung */
+.container {
+  display: flex;
+  justify-content: center; /* Zentriert die Karte */
+  align-items: center;
+  min-height: 100vh;
+  background-color: #1E1E2D;
+}
+
+/* Stil für die Karte */
 .analytics-card {
-    background-color: #24263A;
-    border-radius: 15px;
-    padding: 20px;
-    width: 100%;
-    max-width: 400px;
-    color: #DBDFEA;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease;
-  }
-  
-  .analytics-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .analytics-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  .analytics-header h2 {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin: 0;
-  }
-  
-  .dropdown {
-    background-color: #1E1E2D;
-    color: #DBDFEA;
-    padding: 8px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    font-size: 0.95em;
-  }
-  
-  .arrow {
-    margin-left: 5px;
-    font-size: 0.85em;
-  }
-  
-  .analytics-table {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .table-header {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .table-header span {
-    width: 33%;
-    text-align: left;
-  }
-  
-  .table-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9em;
-  }
-  
-  .item-name {
-    width: 35%;
-  }
-  
-  .progress-bar {
-    background-color: #3A3C54;
-    border-radius: 5px;
-    height: 12px;
-    flex-grow: 1;
-    position: relative;
-  }
-  
-  .progress-used {
-    background: linear-gradient(90deg, #FF4B4B, #FF00A6);
-    border-radius: 5px;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    font-weight: bold;
-  }
-  
-  .progress-text {
-    font-size: 0.8em;
-    z-index: 1;
-  }
-  
-  .analytics-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #fff;
-  }
-  
-  .total-amount {
-    color: #FF4B4B;
-  }
-  
+  background-color: #2A2D3E;
+  border-radius: 15px;
+  padding: 20px;
+  width: 350px;
+  color: #DBDFEA;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Header-Stil */
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+.dropdown {
+  background-color: #1E1E2D;
+  color: #DBDFEA;
+  border: none;
+  border-radius: 5px;
+  padding: 8px;
+  margin-bottom: 15px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+/* Liste und Elemente */
+.analytics-list {
+  list-style: none;
+  padding: 0;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.item-name {
+  flex: 1;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  flex: 2;
+}
+
+.progress-bar {
+  background-color: #3A3C54;
+  border-radius: 5px;
+  height: 12px;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.progress-used {
+  background: linear-gradient(90deg, #FF4B4B, #FF00A6);
+  border-radius: 5px;
+  height: 100%;
+}
+
+.values {
+  font-size: 0.9em;
+  color: #DBDFEA;
+  width: 50px;
+  text-align: right;
+}
+
+.total-section {
+  border-top: 1px solid #3A3C54;
+  padding-top: 10px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+}
+
+.total-amount {
+  font-weight: bold;
+}
