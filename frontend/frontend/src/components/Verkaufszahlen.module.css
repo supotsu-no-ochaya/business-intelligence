@@ -7,14 +7,13 @@
     align-items: flex-start; /* Obere Ausrichtung */
     gap: 20px; /* Abstand zwischen den Kacheln */
     padding: 20px;
-    background-color: #1E1E2D; /* Hintergrundfarbe */
     flex-wrap: wrap; /* Erlaubt Umbruch bei kleiner Bildschirmbreite */
   }
   
   
   /* Karte für jede Kategorie */
   .salesCard {
-    background-color: #2A2D3E;
+    background-color: #24263A;
     border-radius: 15px;
     padding: 20px;
     width: 350px;

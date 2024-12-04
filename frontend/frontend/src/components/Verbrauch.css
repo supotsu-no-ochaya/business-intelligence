@@ -4,7 +4,6 @@
     justify-content: center;  /* Zentriert die Karten horizontal */
     gap: 20px;                /* Abstand zwischen den Karten */
     padding: 20px;
-    background-color: #1A1C2E; /* Hintergrundfarbe für das Dashboard */
   }
   
   /* Stil für jede Karte innerhalb der Verbrauch-Komponente */
