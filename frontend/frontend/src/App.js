@@ -5,7 +5,7 @@ import Dashboard from './components/Dashboard';
 import Verbrauch from './components/Verbrauch';
 import Zutaten from './components/Zutaten';
 import Getraenke from './components/Getraenke';
-import Verkaufszahlen from './components/Verkaufszahlen.jsx';
+import Verkaufszahlen from './components/Verkaufszahlen';
 import './App.css'; // Importiere das CSS-Stylesheet
 
 function App() {

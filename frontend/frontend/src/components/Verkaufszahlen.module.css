@@ -1,0 +1,132 @@
+
+/* Gesamtcontainer für das Verkaufszahlen-Dashboard */
+.salesDashboard {
+    display: flex; /* Flexbox für nebeneinanderliegende Kacheln */
+    flex-direction: row;
+    justify-content: center; /* Zentriere die Kacheln horizontal */
+    align-items: flex-start; /* Obere Ausrichtung */
+    gap: 20px; /* Abstand zwischen den Kacheln */
+    padding: 20px;
+    background-color: #1E1E2D; /* Hintergrundfarbe */
+    flex-wrap: wrap; /* Erlaubt Umbruch bei kleiner Bildschirmbreite */
+  }
+  
+  
+  /* Karte für jede Kategorie */
+  .salesCard {
+    background-color: #2A2D3E;
+    border-radius: 15px;
+    padding: 20px;
+    width: 350px;
+    color: #DBDFEA;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px; /* Abstand zwischen Karten */
+  }
+  
+  /* Header der Karte */
+  .salesHeader {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .sales-header h2 {
+    font-size: 1.5em;
+    color: #FFFFFF;
+    margin: 0;
+  }
+  
+  /* Filter-Stile */
+  .filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .filter {
+    background-color: #1E1E2D;
+    color: #DBDFEA;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .filter:hover {
+    background-color: #3A3C54;
+  }
+  
+  /* Kategorieüberschrift */
+  .salesCategory {
+    font-size: 1.2em;
+    color: #ADB5BD;
+    border-bottom: 1px solid #3A3C54;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+  }
+  
+  /* Zeilenstil */
+  .salesRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  /* Name des Items */
+  .itemName {
+    flex: 1; /* Füllt den Platz links */
+    font-size: 0.95em;
+    color: #DBDFEA;
+    margin-right: 10px;
+  }
+  
+  /* Fortschrittsbalken-Container */
+  .progressBar {
+    background-color: #3A3C54;
+    border-radius: 5px;
+    height: 12px;
+    flex: 2; /* Breite des Fortschrittsbalkens */
+    position: relative;
+    overflow: hidden;
+    margin-right: 10px;
+  }
+  
+  /* Fortschrittsfüllung */
+  .progressFill {
+    background: linear-gradient(90deg, #FF4B4B, #FF00A6);
+    height: 100%;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 5px;
+    color: #FFFFFF;
+    font-size: 0.8em;
+    font-weight: bold;
+  }
+  
+  /* Werte neben dem Fortschrittsbalken */
+  .values {
+    font-size: 0.9em;
+    color: #DBDFEA;
+    width: 50px;
+    text-align: right;
+  }
+  
+  /* Footer für die Gesamtsumme */
+  .salesFooter {
+    border-top: 1px solid #3A3C54;
+    padding-top: 10px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1em;
+  }
+  
+  .totalAmount {
+    font-weight: bold;
+    color: #FFFFFF;
+  }
+  

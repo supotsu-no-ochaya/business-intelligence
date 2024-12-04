@@ -1,0 +1,94 @@
+/* Container für Zentrierung */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px; 
+  box-sizing: border-box;
+}
+
+
+/* Stil für die Karte */
+.analytics-card {
+  background-color: #24263A;
+  border-radius: 15px;
+  padding: 20px;
+  width: 350px;
+  color: #DBDFEA;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Header-Stil */
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+.dropdown {
+  background-color: #1E1E2D;
+  color: #DBDFEA;
+  border: none;
+  border-radius: 5px;
+  padding: 8px;
+  margin-bottom: 15px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+/* Liste und Elemente */
+.analytics-list {
+  list-style: none;
+  padding: 0;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.item-name {
+  flex: 1;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  flex: 2;
+}
+
+.progress-bar {
+  background-color: #3A3C54;
+  border-radius: 5px;
+  height: 12px;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.progress-used {
+  background: linear-gradient(90deg, #FF4B4B, #FF00A6);
+  border-radius: 5px;
+  height: 100%;
+}
+
+.values {
+  font-size: 0.9em;
+  color: #DBDFEA;
+  width: 50px;
+  text-align: right;
+}
+
+.total-section {
+  border-top: 1px solid #3A3C54;
+  padding-top: 10px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+}
+
+.total-amount {
+  font-weight: bold;
+}
