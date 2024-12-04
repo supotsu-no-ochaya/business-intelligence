@@ -18,10 +18,15 @@ from django.contrib import admin
 from django.urls import path, include
 from routers import router
 from testdata import views
+from testdata.views import IncomeListView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include((router.urls, 'backend'), namespace='backend')),
     path('api/total_earnings', views.earnings, name="total_earnings"),
     path('upload-json/', views.UploadJsonView.as_view(), name='upload-json'),
+    path('api/income/', IncomeListView.as_view(), name='income-list'),
+
 ]
+
