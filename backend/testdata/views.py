@@ -5,7 +5,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
+from rest_framework.permissions import IsAuthenticated
+from django.db.models import Sum
+from rest_framework.permissions import BasePermission
 from .models import (
     OrderItem, Product, Order, OrderItem2,
     Payment
@@ -100,3 +102,29 @@ class UploadJsonView(APIView):
 
         return Response({"message": "Data uploaded successfully"}, status=status.HTTP_201_CREATED)
 
+class IsTreasurer(BasePermission):
+    def has_permission(self, request, view):
+        # Check if the user has the 'view_payment' permission
+        return request.user.has_perm('testdata.view_payment')
+
+class IncomeListView(APIView):
+    permission_classes = [IsAuthenticated, IsTreasurer]
+
+    def get(self, request, *args, **kwargs):
+        # Filter payments by 'income' type
+        income_payments = Payment.objects.all()
+
+        # Calculate total income
+        total_income = income_payments.aggregate(total=Sum('total_amount'))['total'] or 0
+
+        # Group income by payment option 
+        income_by_payment_option = income_payments.values('payment_option__name').annotate(
+            total=Sum('total_amount')
+        )
+
+        # Return both total income and breakdown by payment method
+        return Response({
+            "total_income": total_income,
+            "income_by_payment_option": income_by_payment_option
+        })
+    
