@@ -4,8 +4,6 @@
   justify-content: center; /* Zentriert die Karten horizontal */
   gap: 20px;               /* Abstand zwischen den Karten */
   padding: 20px;
-  background-color: none;
-  font-family: 'Alatsi';
 }
 
 /* Stil für jede Karte */

@@ -7,8 +7,7 @@
     align-items: flex-start; /* Obere Ausrichtung */
     gap: 20px; /* Abstand zwischen den Kacheln */
     padding: 20px;
-    flex-wrap: wrap; /* Erlaubt Umbruch bei kleiner Bildschirmbreite */
-    font-family: 'Alatsi';
+    flex-wrap: wrap; 
   }
   
   
