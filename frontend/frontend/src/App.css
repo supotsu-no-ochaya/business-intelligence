@@ -4,10 +4,7 @@ body, html {
   padding: 0;
   background-color: #1D1E2C; /* Dunkler Hintergrund für die gesamte Seite */
   color: #24263A; /* Standard-Textfarbe */
-  height: 100%; /* Volle Höhe des Bildschirms */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 100%; 
 }
 
 .app {
