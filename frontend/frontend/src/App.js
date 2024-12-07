@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import Login from './login_component/Login';
+import Login from './components_allways/Login';
 import Sidebar from './components/Sidebar';
-import Header from './components/Header';
+import Header from './components_allways/Header';
 import Dashboard from './components/Dashboard';
-import Verbrauch from './components/Verbrauch';
-import Zutaten from './components/Zutaten';
-import Getraenke from './components/Getraenke';
+ //import Verbrauch from './components/Verbrauch';
+// import Zutaten from './components/Zutaten';
+// import Getraenke from './components/Getraenke';
 import Verkaufszahlen from './components/Verkaufszahlen';
 import './App.css'; // Importiere das CSS-Stylesheet
 
@@ -32,7 +32,7 @@ function App() {
     case 'dashboard':
       content = <Dashboard />;
       break;
-    case 'verbrauch':
+   /* case 'verbrauch':
       content = <Verbrauch />;
       break;
     case 'zutaten':
@@ -40,7 +40,7 @@ function App() {
       break;
     case 'getraenke':
       content = <Getraenke />;
-      break;
+      break; */
     case 'verkaufszahlen':
       content = <Verkaufszahlen />;
       break;

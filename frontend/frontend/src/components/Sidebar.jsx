@@ -12,7 +12,7 @@ const Sidebar = ({ navigate }) => {
         <li className="nav-item" onClick={() => navigate('dashboard')}>
           <i className="icon">⌛</i> Dashboard
         </li>
-        <li className="nav-item" onClick={() => navigate('verbrauch')}>
+        {/*<li className="nav-item" onClick={() => navigate('verbrauch')}>
           <i className="icon">🍴</i> Verbrauch
         </li>
         <li className="nav-item" onClick={() => navigate('zutaten')}>
@@ -20,7 +20,7 @@ const Sidebar = ({ navigate }) => {
         </li>
         <li className="nav-item" onClick={() => navigate('getraenke')}>
           <i className="icon">🥤</i> Getränke
-        </li>
+        </li>*/}
         <li className="nav-item" onClick={() => navigate('verkaufszahlen')}>
           <i className="icon">📊</i> Verkaufszahlen
         </li>
@@ -30,9 +30,9 @@ const Sidebar = ({ navigate }) => {
         <div className="nav-item">
           <i className="icon">⚙️</i> Settings
         </div>
-        <div className="nav-item">
+        {/*<div className="nav-item">
           <i className="icon">❓</i> Support
-        </div>
+        </div>*/}
         <div style={{ width: '100%', border: '1px #1D1E2C solid' }}></div>
         <div className="nav-item logout">
           <i className="icon">🔓</i> Log out
