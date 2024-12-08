@@ -43,12 +43,18 @@ class Station(models.Model):
     created = models.DateTimeField()
     updated = models.DateTimeField()
 
+    def __str__(self):
+        return self.name
+
 # Model for Category
 class Category(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
     name = models.CharField(max_length=255)
     created = models.DateTimeField()
     updated = models.DateTimeField()
+
+    def __str__(self):
+        return self.name
 
 # Model for Product Attributes
 class ProductAttribute(models.Model):
@@ -67,6 +73,9 @@ class Product(models.Model):
     attribute = models.ManyToManyField(ProductAttribute)
     created = models.DateTimeField()
     updated = models.DateTimeField()
+
+    def __str__(self):
+        return "Product -- Id: %s - Name: %s - Station: %s - Category: %s".format(self.id, self.name, self.station, self.category)
 
 # Model for Order Events
 class OrderEvent(models.Model):

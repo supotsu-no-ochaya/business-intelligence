@@ -9,12 +9,12 @@ from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 from rest_framework.permissions import BasePermission
 from .models import (
-    OrderItem, Product, Order, OrderItem2,
+    OrderItem, Product, Order, OrderItem2, OrderEvent,
     Payment
 )
 from .serializer import (
     ProductSerializer, OrderSerializer,
-    OrderItem2Serializer, PaymentSerializer
+    OrderItem2Serializer, PaymentSerializer, OrderEventSerializer
 )
 
 # Create your views here.
@@ -60,7 +60,7 @@ class UploadJsonView(APIView):
                 serializer.save()
             else:
                 return Response({"error in products": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
+            
         # Process Orders and Order Items
         orders = data.get('orders', [])
         for order_data in orders:
@@ -79,17 +79,24 @@ class UploadJsonView(APIView):
 
                         # Handle Order Item Events
                         for event_data in events_data:
-                            event_serializer = OrderSerializer(data=event_data)
+                            existing_event = OrderEvent.objects.filter(id=event_data.get("id")).first()
+                            if existing_event:
+                                event_serializer = OrderEventSerializer(existing_event, data=event_data)
+                            else:
+                                event_serializer = OrderEventSerializer(data=event_data)
+                                
+                            import pprint
+                            pprint.pprint(event_serializer.initial_data)
                             if event_serializer.is_valid():
                                 event_serializer.save()
                             else:
-                                return Response({"error": event_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                                return Response({"event data error": event_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         print(f'Error occurs here')
-                        return Response({"error": order_item_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({"Order item error": order_item_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 print("Order Validation Errors: ", order_serializer.errors)
-                return Response({"error": order_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"Order error": order_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         # Process Payments
         payments = data.get('payments', [])
@@ -98,7 +105,7 @@ class UploadJsonView(APIView):
             if serializer.is_valid():
                 serializer.save()
             else:
-                return Response({"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"Payments error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"message": "Data uploaded successfully"}, status=status.HTTP_201_CREATED)
 
