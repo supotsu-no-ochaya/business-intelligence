@@ -93,6 +93,8 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
+        import pprint
+        pprint.pprint(validated_data.get("events"))
         events_data = validated_data.pop('events', [])
         order, _ = Order.objects.update_or_create(**validated_data)
 

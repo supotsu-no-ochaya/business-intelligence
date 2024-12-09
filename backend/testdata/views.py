@@ -65,7 +65,7 @@ class UploadJsonView(APIView):
         orders = data.get('orders', [])
         for order_data in orders:
             order_items_data = order_data.pop('order_items', [])
-            events_data = order_data.pop('events', [])
+            events_data = order_data.get('events', [])
             order_serializer = OrderSerializer(data=order_data)
             if order_serializer.is_valid():
                 order = order_serializer.save()
