@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from testdata.models import Speise, OrderItem, MesseEvent
-from testdata.serializer import SpeiseSerializer, OrderItemSerializer, MesseEventSerializer
+from testdata.models import Order, OrderItem2, Product, Speise, OrderItem, MesseEvent
+from testdata.serializer import OrderItem2Serializer, ProductSerializer, SpeiseSerializer, OrderItemSerializer, MesseEventSerializer, OrderSerializer
 from datetime import date
 
 # Same as Controllers
@@ -29,3 +29,21 @@ class MesseEventViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return MesseEvent.objects.all()
+    
+class OrderViewSet(viewsets.ModelViewSet):
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        return Order.objects.all()
+    
+class ProductViewSet(viewsets.ModelViewSet):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        return Product.objects.all()
+    
+class OrderItemViewSet(viewsets.ModelViewSet):
+    serializer_class = OrderItem2Serializer
+
+    def get_queryset(self):
+        return OrderItem2.objects.all()

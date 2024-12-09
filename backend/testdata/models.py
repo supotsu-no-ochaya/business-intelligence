@@ -93,6 +93,8 @@ class Order(models.Model):
     status = models.CharField(max_length=255)
     created = models.DateTimeField()
     updated = models.DateTimeField()
+    menu_item_name = models.CharField()
+    menu_item_price_in_cents = models.IntegerField()
     events = models.ManyToManyField(OrderEvent)
 
 # Model for Order Items
