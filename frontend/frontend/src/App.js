@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 // import Getraenke from './components/Getraenke';
 import Verkaufszahlen from './components/Verkaufszahlen';
 import './App.css'; // Importiere das CSS-Stylesheet
+import Settings from './components/Settings';
 
 function App() {
   // Zustand für die aktuelle Ansicht
@@ -43,6 +44,9 @@ function App() {
       break; */
     case 'verkaufszahlen':
       content = <Verkaufszahlen />;
+      break;
+    case 'settings':
+      content = <Settings />;
       break;
     default:
       content = <Dashboard />;

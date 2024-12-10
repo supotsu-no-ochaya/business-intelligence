@@ -27,9 +27,9 @@ const Sidebar = ({ navigate }) => {
       </ul>
       <div style={{ width: '100%', border: '1px #1D1E2C solid' }}></div>
       <div className="bottom-links">
-        <div className="nav-item">
+        <li className="nav-item" onClick={() => navigate('settings')}>
           <i className="icon">⚙️</i> Settings
-        </div>
+        </li>
         {/*<div className="nav-item">
           <i className="icon">❓</i> Support
         </div>*/}
