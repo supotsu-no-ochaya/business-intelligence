@@ -5,27 +5,40 @@ const Settings = () => {
   const [password, setPassword] = useState('');
   const [newUser, setNewUser] = useState({ username: '', email: '' });
   const [file, setFile] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleNewUserChange = (e) => {
     const { name, value } = e.target;
     setNewUser((prev) => ({ ...prev, [name]: value }));
   };
-  const handleFileUpload = (e) => setFile(e.target.files[0]);
+
+  const handleFileUpload = (e) => {
+    const uploadedFile = e.target.files[0];
+    if (uploadedFile && uploadedFile.type === 'application/json') {
+      setFile(uploadedFile);
+      setErrorMessage(''); // Fehler zurücksetzen, falls vorher ein Fehler aufgetreten ist
+    } else {
+      setFile(null);
+      setErrorMessage('Bitte laden Sie nur eine JSON-Datei hoch.');
+    }
+  };
 
   const handlePasswordSubmit = () => {
-    alert('Password changed!');
+    alert('Passwort geändert!');
     setPassword('');
   };
 
   const handleNewUserSubmit = () => {
-    alert(`New user added: ${newUser.username}`);
+    alert(`Neuer Benutzer hinzugefügt: ${newUser.username}`);
     setNewUser({ username: '', email: '' });
   };
 
   const handleFileSubmit = () => {
-    alert(`File uploaded: ${file.name}`);
-    setFile(null);
+    if (file) {
+      alert(`Datei hochgeladen: ${file.name}`);
+      setFile(null);
+    }
   };
 
   return (
@@ -78,11 +91,12 @@ const Settings = () => {
       <div className="settings-section">
         <h3>Datei hochladen</h3>
         <div className="form-group">
-          <input type="file" onChange={handleFileUpload} />
+          <input type="file" accept=".json" onChange={handleFileUpload} />
           <button onClick={handleFileSubmit} disabled={!file}>
             Datei hochladen
           </button>
         </div>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         {file && <p>Ausgewählte Datei: {file.name}</p>}
       </div>
     </div>
