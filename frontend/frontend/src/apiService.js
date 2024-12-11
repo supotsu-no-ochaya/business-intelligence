@@ -12,3 +12,14 @@ export const fetchTotalEarnings = async () => {
         throw error;
     }
 };
+
+export const fetchOrders = async () => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/order`);
+        // Extrahiere den Wert für "total" aus dem JSON
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching total earnings:', error);
+        throw error;
+    }
+};
