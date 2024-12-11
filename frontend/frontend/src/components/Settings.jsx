@@ -6,6 +6,7 @@ const Settings = () => {
   const [newUser, setNewUser] = useState({ username: '', email: '' });
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleNewUserChange = (e) => {
@@ -17,7 +18,7 @@ const Settings = () => {
     const uploadedFile = e.target.files[0];
     if (uploadedFile && uploadedFile.type === 'application/json') {
       setFile(uploadedFile);
-      setErrorMessage(''); // Fehler zurücksetzen, falls vorher ein Fehler aufgetreten ist
+      setErrorMessage('');
     } else {
       setFile(null);
       setErrorMessage('Bitte laden Sie nur eine JSON-Datei hoch.');
@@ -34,10 +35,27 @@ const Settings = () => {
     setNewUser({ username: '', email: '' });
   };
 
-  const handleFileSubmit = () => {
-    if (file) {
-      alert(`Datei hochgeladen: ${file.name}`);
-      setFile(null);
+  const handleFileSubmit = async () => {
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('http://localhost:8000/upload-json/', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        setSuccessMessage('Datei erfolgreich hochgeladen!');
+        setFile(null); // Datei-Status zurücksetzen
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Fehler beim Hochladen der Datei.');
+      }
+    } catch (error) {
+      setErrorMessage('Netzwerkfehler. Bitte versuchen Sie es später erneut.');
     }
   };
 
@@ -97,6 +115,7 @@ const Settings = () => {
           </button>
         </div>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {successMessage && <p className="success-message">{successMessage}</p>}
         {file && <p>Ausgewählte Datei: {file.name}</p>}
       </div>
     </div>
