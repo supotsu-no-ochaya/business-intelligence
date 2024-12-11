@@ -3,26 +3,12 @@ import axios from 'axios';
 import styles from './Verkaufszahlen.module.css';
 
 const Verkaufszahlen = () => {
-  const [speisen, setSpeisen] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    // API-Call im useEffect
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('/api/total_earnings'); // API-Endpoint aufrufen
-        setSpeisen(response.data); // Daten aus der API setzen
-      } catch (err) {
-        setError('Fehler beim Abrufen der Verkaufszahlen');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const speisen = [
+    { name: 'Sandwich Käse Schinken', sales: 142 },
+    { name: 'Nutella Crepe', sales: 96 },
+    { name: 'Thun Onigiri', sales: 96 },
+    { name: 'Hack Onigiri', sales: 85 },
+  ];
 
   const getraenke = [
     { name: 'Cola', sales: 108 },
@@ -30,7 +16,7 @@ const Verkaufszahlen = () => {
     { name: 'Kaffee', sales: 62 },
   ];
 
-  const maxSalesSpeisen = Math.max(...speisen.map(item => item.sales), 0);
+  const maxSalesSpeisen = Math.max(...speisen.map(item => item.sales));
   const maxSalesGetraenke = Math.max(...getraenke.map(item => item.sales));
 
   const renderCategory = (data, maxSales, title) => (
@@ -68,9 +54,6 @@ const Verkaufszahlen = () => {
       </div>
     </div>
   );
-
-  if (loading) return <div>Lädt...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <div className={styles.salesDashboard}>

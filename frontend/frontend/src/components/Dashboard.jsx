@@ -10,6 +10,7 @@ const Dashboard = () => {
             try {
                 const earnings = await fetchTotalEarnings(); // Hole die "total earnings" aus der API
                 setTotalEarnings(earnings);
+                console.log(earnings);
             } catch (error) {
                 console.error(error);
             } finally {
