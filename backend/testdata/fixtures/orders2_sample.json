@@ -1,0 +1,130 @@
+[
+    {
+      "model": "testdata.orderItem",
+      "pk": 1,
+      "fields": {
+        "timestamp": "2024-03-15 09:00:00+01",
+        "Products": [101, 102]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 2,
+      "fields": {
+        "timestamp": "2024-03-15 10:30:00+01",
+        "Products": [103, 104]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 3,
+      "fields": {
+        "timestamp": "2024-05-10 11:00:00+01",
+        "Products": [105, 106]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 4,
+      "fields": {
+        "timestamp": "2024-05-10 13:15:00+01",
+        "Products": [107, 401]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 5,
+      "fields": {
+        "timestamp": "2024-06-20 14:45:00+01",
+        "Products": [402, 403]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 6,
+      "fields": {
+        "timestamp": "2024-06-20 16:00:00+01",
+        "Products": [404, 405]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 7,
+      "fields": {
+        "timestamp": "2024-07-05 09:30:00+01",
+        "Products": [301, 302]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 8,
+      "fields": {
+        "timestamp": "2024-07-05 11:00:00+01",
+        "Products": [304, 305]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 9,
+      "fields": {
+        "timestamp": "2024-08-15 13:00:00+01",
+        "Products": [201, 202]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 10,
+      "fields": {
+        "timestamp": "2024-08-15 15:30:00+01",
+        "Products": [203, 204]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 11,
+      "fields": {
+        "timestamp": "2024-09-12 10:00:00+01",
+        "Products": [105, 402]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 12,
+      "fields": {
+        "timestamp": "2024-09-12 12:45:00+01",
+        "Products": [301, 202]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 13,
+      "fields": {
+        "timestamp": "2024-10-01 14:30:00+01",
+        "Products": [403, 405]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 14,
+      "fields": {
+        "timestamp": "2024-10-01 16:00:00+01",
+        "Products": [107, 204]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 15,
+      "fields": {
+        "timestamp": "2024-11-20 09:00:00+01",
+        "Products": [401, 202]
+      }
+    },
+    {
+      "model": "testdata.orderItem",
+      "pk": 16,
+      "fields": {
+        "timestamp": "2024-11-20 11:00:00+01",
+        "Products": [302, 103]
+      }
+    }
+]
