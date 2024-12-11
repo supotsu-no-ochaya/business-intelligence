@@ -1,66 +1,57 @@
 .settings-container {
-    padding: 20px;
-    background-color: #24263A;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    color: #ccc;
-    border-radius: 10px;
-    max-width: 600px;
-    margin: 20px auto;
-  }
+  padding: 20px;
+  color: #fff;
+}
 
-  
-  h2 {
-    margin-bottom: 20px;
-    color: #fff;
-  }
-  
-  .settings-section {
-    margin-bottom: 30px;
-  }
-  
-  .settings-section h3 {
-    color: #ff416c;
-    margin-bottom: 10px;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  input[type='password'],
-  input[type='text'],
-  input[type='email'],
-  input[type='file'] {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #444;
-    background-color: #2e2e3f;
-    color: #ccc;
-  }
-  
-  button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ac2222;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  button:hover {
-    background-color: #ff4b2b;
-  }
-  
-  button:disabled {
-    background-color: #555;
-    cursor: not-allowed;
-  }
-  
-  p {
-    font-size: 14px;
-    color: #aaa;
-  }
-  
+.settings-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Drei Spalten */
+  gap: 20px; /* Abstand zwischen den Kacheln */
+}
+
+.settings-section {
+  background-color: #1c1c2b;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.settings-section h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button {
+  background-color: #ff4b2b;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff1e00;
+}
+
+.error-message {
+  color: #ff4b2b;
+  font-size: 14px;
+}
+
+.success-message {
+  color: #4caf50;
+  font-size: 14px;
+}
