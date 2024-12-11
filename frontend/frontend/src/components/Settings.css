@@ -1,0 +1,66 @@
+.settings-container {
+    padding: 20px;
+    background-color: #24263A;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: #ccc;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+
+  
+  h2 {
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  
+  .settings-section {
+    margin-bottom: 30px;
+  }
+  
+  .settings-section h3 {
+    color: #ff416c;
+    margin-bottom: 10px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  input[type='password'],
+  input[type='text'],
+  input[type='email'],
+  input[type='file'] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #2e2e3f;
+    color: #ccc;
+  }
+  
+  button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ac2222;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  button:hover {
+    background-color: #ff4b2b;
+  }
+  
+  button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
+  
+  p {
+    font-size: 14px;
+    color: #aaa;
+  }
+  
