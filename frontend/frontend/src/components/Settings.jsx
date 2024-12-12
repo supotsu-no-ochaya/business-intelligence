@@ -32,7 +32,7 @@ const Settings = () => {
 
   const handleNewUserSubmit = () => {
     alert(`Neuer Benutzer hinzugefügt: ${newUser.username}`);
-    setNewUser({ username: '', email: '' });
+    setNewUser({ username: '', email: '', group: '' });
   };
 
   const handleFileSubmit = async () => {
@@ -82,30 +82,45 @@ const Settings = () => {
         </div>
 
         {/* Benutzer hinzufügen */}
-        <div className="settings-section">
-          <h3>Benutzer hinzufügen</h3>
-          <div className="form-group">
-            <label htmlFor="username">Benutzername</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={newUser.username}
-              onChange={handleNewUserChange}
-              placeholder="Benutzername eingeben"
-            />
-            <label htmlFor="email">E-Mail</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={newUser.email}
-              onChange={handleNewUserChange}
-              placeholder="E-Mail eingeben"
-            />
-            <button onClick={handleNewUserSubmit}>Benutzer hinzufügen</button>
-          </div>
-        </div>
+    <div className="settings-section">
+      <h3>Benutzer hinzufügen</h3>
+     <div className="form-group">
+        <label htmlFor="username">Benutzername</label>
+        <input
+         type="text"
+         id="username"
+         name="username"
+         value={newUser.username}
+          onChange={handleNewUserChange}
+         placeholder="Benutzername eingeben"
+        />
+        <label htmlFor="email">E-Mail</label>
+        <input
+         type="email"
+          id="email"
+          name="email"
+          value={newUser.email}
+          onChange={handleNewUserChange}
+          placeholder="E-Mail eingeben"
+        />
+        <label htmlFor="group">Gruppe</label>
+        <select
+          id="group"
+          name="group"
+          value={newUser.group}
+          onChange={handleNewUserChange}
+        >
+          <option value="" disabled>
+            Gruppe auswählen
+          </option>
+          <option value="admin">Admin</option>
+          <option value="editor">Kassenwart</option>
+          <option value="viewer">Küchenleitung</option>
+        </select>
+        <button onClick={handleNewUserSubmit}>Benutzer hinzufügen</button>
+      </div>
+    </div>
+
 
         {/* Datei hochladen */}
         <div className="settings-section">

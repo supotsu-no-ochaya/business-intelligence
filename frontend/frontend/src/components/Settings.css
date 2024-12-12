@@ -37,6 +37,16 @@ input {
   font-size: 1em;
   background-color: #24263A;
   border: 1px solid #756F65;
+  color: #DBDFEA;
+  border-radius: 4px;
+}
+
+select {
+  padding: 8px;
+  font-size: 1em;
+  background-color: #24263A;
+  border: 1px solid #756F65;
+  color: #DBDFEA;
   border-radius: 4px;
 }
 
