@@ -39,7 +39,7 @@ const Dashboard = () => {
             </li>
           ))}
         </ul>
-        <div className="total">Total: $17,355</div>
+        <div className="total">Total: $42,355</div>
       </div>
 
       <div className="card">
