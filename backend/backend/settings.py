@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'testdata',    
     'corsheaders',  # CORS-Headers-App hinzufügen
+    'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
@@ -107,6 +108,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
 
 
 
