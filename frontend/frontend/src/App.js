@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from './components_allways/Login';
 import Sidebar from './components/Sidebar';
 import Header from './components_allways/Header';
 import Dashboard from './components/Dashboard';
- //import Verbrauch from './components/Verbrauch';
+// import Verbrauch from './components/Verbrauch';
 // import Zutaten from './components/Zutaten';
 // import Getraenke from './components/Getraenke';
 import Verkaufszahlen from './components/Verkaufszahlen';
@@ -11,11 +12,11 @@ import './App.css'; // Importiere das CSS-Stylesheet
 import Settings from './components/Settings';
 
 function App() {
-  // Zustand für die aktuelle Ansicht
-  const [currentView, setCurrentView] = useState('dashboard');
-
   // Zustand für den Login-Status
   const [loggedIn, setLoggedIn] = useState(false);
+
+  // Zustand für die aktuelle Ansicht
+  const [currentView, setCurrentView] = useState('dashboard');
 
   // Funktion zum Wechseln der Ansicht
   const navigate = (view) => {
@@ -27,54 +28,42 @@ function App() {
     setLoggedIn(true); // Setzt den Login-Status auf 'true'
   };
 
-  // Komponente basierend auf der aktuellen Ansicht rendern
-  let content;
-  switch (currentView) {
-    case 'dashboard':
-      content = <Dashboard />;
-      break;
-   /* case 'verbrauch':
-      content = <Verbrauch />;
-      break;
-    case 'zutaten':
-      content = <Zutaten />;
-      break;
-    case 'getraenke':
-      content = <Getraenke />;
-      break; */
-    case 'verkaufszahlen':
-      content = <Verkaufszahlen />;
-      break;
-    case 'settings':
-      content = <Settings />;
-      break;
-    default:
-      content = <Dashboard />;
-  }
-
   return (
-    <div className="app">
-      {!loggedIn ? (
-        <Login onLogin={handleLogin} />  
-      ) : (
-        <>
-          {/* Sidebar Container */}
-          <aside className="app-sidebar">
-            <Sidebar navigate={navigate} />
-          </aside>
+    <BrowserRouter>
+      <div className="app">
+        {!loggedIn ? (
+          <Routes>
+            {/* Route für Login */}
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            {/* Weiterleitung zur Login-Seite */}
+            <Route path="*" element={<Navigate to="/login" />} />
+          </Routes>
+        ) : (
+          <>
+            {/* Sidebar Container */}
+            <aside className="app-sidebar">
+              <Sidebar navigate={navigate} />
+            </aside>
 
-          {/* Main Content Container */}
-          <main className="mainboard">
-            <header className="app-header">
-              <Header />
-            </header>
+            {/* Main Content Container */}
+            <main className="mainboard">
+              <header className="app-header">
+                <Header />
+              </header>
 
-            {/* Der Hauptinhalt, basierend auf der aktuellen Ansicht */}
-            {content}
-          </main>
-        </>
-      )}
-    </div>
+              {/* Der Hauptinhalt, basierend auf der aktuellen Ansicht */}
+              <Routes>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/verkaufszahlen" element={<Verkaufszahlen />} />
+                <Route path="/settings" element={<Settings />} />
+                {/* Standardroute */}
+                <Route path="*" element={<Navigate to="/dashboard" />} />
+              </Routes>
+            </main>
+          </>
+        )}
+      </div>
+    </BrowserRouter>
   );
 }
 
