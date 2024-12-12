@@ -1,6 +1,6 @@
 .settings-container {
   padding: 20px;
-  color: #fff;
+  color: #DBDFEA;
 }
 
 .settings-container h2 {
@@ -15,7 +15,7 @@
 }
 
 .settings-section {
-  background-color: #1c1c2b;
+  background-color: #24263A;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
@@ -32,9 +32,17 @@
   gap: 10px;
 }
 
+input {
+  padding: 8px;
+  font-size: 1em;
+  background-color: #24263A;
+  border: 1px solid #756F65;
+  border-radius: 4px;
+}
+
 button {
-  background-color: #ff4b2b;
-  color: #fff;
+  background-color: rgba(87.82, 130.04, 193.37, 0.28);
+  color: #DBDFEA;
   border: none;
   border-radius: 4px;
   padding: 10px;
@@ -43,7 +51,7 @@ button {
 }
 
 button:hover {
-  background-color: #ff1e00;
+  background-color: #003465;
 }
 
 .error-message {
