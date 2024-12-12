@@ -49,7 +49,7 @@ function App() {
       content = <Settings />;
       break;
     default:
-      content = <Dashboard />;
+      content = <Verkaufszahlen />;
   }
 
   return (
