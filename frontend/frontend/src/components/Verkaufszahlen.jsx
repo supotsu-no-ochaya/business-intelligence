@@ -49,7 +49,7 @@ const Verkaufszahlen = () => {
 
     // Unterteilung in "Speisen" und "Getränke" basierend auf Namen
     const speisen = groupedOrders.filter(item =>
-        ["Sandwich", "Crepe", "Onigiri", "Pizza", "Salad"].some(keyword =>
+        ["Sandwich", "Crepe", "Mochi", "Burger", "Pizza Slice", "Taco", "Sushi Roll", "Pasta Bowl", "Salad", "Cupcake"].some(keyword =>
             item.name.includes(keyword)
         )
     );

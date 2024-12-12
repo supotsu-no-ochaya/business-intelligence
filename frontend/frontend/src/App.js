@@ -30,10 +30,10 @@ function App() {
   // Komponente basierend auf der aktuellen Ansicht rendern
   let content;
   switch (currentView) {
-    case 'dashboard':
+   /* case 'dashboard':
       content = <Dashboard />;
       break;
-   /* case 'verbrauch':
+    case 'verbrauch':
       content = <Verbrauch />;
       break;
     case 'zutaten':
