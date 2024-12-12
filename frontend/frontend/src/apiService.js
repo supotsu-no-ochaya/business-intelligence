@@ -13,7 +13,7 @@ export const fetchTotalEarnings = async () => {
     }
 };
 
-export const fetchOrders = async () => {
+export const fetchOrders = async (user) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/order`);
         // Extrahiere den Wert für "total" aus dem JSON
