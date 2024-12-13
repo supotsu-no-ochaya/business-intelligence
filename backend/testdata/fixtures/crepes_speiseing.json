@@ -1,0 +1,303 @@
+[
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 1,
+      "fields": {
+        "speise": 101,
+        "ingredient": 1,
+        "portion": 1,
+        "required_quantity": 1
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 2,
+      "fields": {
+        "speise": 101,
+        "ingredient": 2,
+        "portion": 1,
+        "required_quantity": 2
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 3,
+      "fields": {
+        "speise": 101,
+        "ingredient": 3,
+        "portion": 1,
+        "required_quantity": 3
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 4,
+      "fields": {
+        "speise": 101,
+        "ingredient": 4,
+        "portion": 1,
+        "required_quantity": 4
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 5,
+      "fields": {
+        "speise": 102,
+        "ingredient": 1,
+        "portion": 1,
+        "required_quantity": 1
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 6,
+      "fields": {
+        "speise": 102,
+        "ingredient": 2,
+        "portion": 1,
+        "required_quantity": 2
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 7,
+      "fields": {
+        "speise": 102,
+        "ingredient": 5,
+        "portion": 1,
+        "required_quantity": 3
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 8,
+      "fields": {
+        "speise": 102,
+        "ingredient": 4,
+        "portion": 1,
+        "required_quantity": 4
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 9,
+      "fields": {
+        "speise": 103,
+        "ingredient": 1,
+        "portion": 1,
+        "required_quantity": 1
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 10,
+      "fields": {
+        "speise": 103,
+        "ingredient": 2,
+        "portion": 1,
+        "required_quantity": 2
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 11,
+      "fields": {
+        "speise": 103,
+        "ingredient": 5,
+        "portion": 1,
+        "required_quantity": 3
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 12,
+      "fields": {
+        "speise": 103,
+        "ingredient": 3,
+        "portion": 1,
+        "required_quantity": 2
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 13,
+      "fields": {
+        "speise": 103,
+        "ingredient": 4,
+        "portion": 1,
+        "required_quantity": 4
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 14,
+      "fields": {
+        "speise": 104,
+        "ingredient": 1,
+        "portion": 1,
+        "required_quantity": 1
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 15,
+      "fields": {
+        "speise": 104,
+        "ingredient": 2,
+        "portion": 1,
+        "required_quantity": 2
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 16,
+      "fields": {
+        "speise": 104,
+        "ingredient": 6,
+        "portion": 1,
+        "required_quantity": 3
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 17,
+      "fields": {
+        "speise": 104,
+        "ingredient": 4,
+        "portion": 1,
+        "required_quantity": 4
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 18,
+      "fields": {
+        "speise": 105,
+        "ingredient": 1,
+        "portion": 1,
+        "required_quantity": 1
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 19,
+      "fields": {
+        "speise": 105,
+        "ingredient": 2,
+        "portion": 1,
+        "required_quantity": 2
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 20,
+      "fields": {
+        "speise": 105,
+        "ingredient": 7,
+        "portion": 1,
+        "required_quantity": 3
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 21,
+      "fields": {
+        "speise": 105,
+        "ingredient": 4,
+        "portion": 1,
+        "required_quantity": 4
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 22,
+      "fields": {
+        "speise": 106,
+        "ingredient": 1,
+        "portion": 1,
+        "required_quantity": 1
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 23,
+      "fields": {
+        "speise": 106,
+        "ingredient": 2,
+        "portion": 1,
+        "required_quantity": 2
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 24,
+      "fields": {
+        "speise": 106,
+        "ingredient": 8,
+        "portion": 1,
+        "required_quantity": 3
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 25,
+      "fields": {
+        "speise": 106,
+        "ingredient": 9,
+        "portion": 1,
+        "required_quantity": 3
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 26,
+      "fields": {
+        "speise": 106,
+        "ingredient": 4,
+        "portion": 1,
+        "required_quantity": 4
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 27,
+      "fields": {
+        "speise": 107,
+        "ingredient": 1,
+        "portion": 1,
+        "required_quantity": 1
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 28,
+      "fields": {
+        "speise": 107,
+        "ingredient": 2,
+        "portion": 1,
+        "required_quantity": 2
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 29,
+      "fields": {
+        "speise": 107,
+        "ingredient": 10,
+        "portion": 1,
+        "required_quantity": 3
+      }
+    },
+    {
+      "model": "testdata.speiseingredient",
+      "pk": 30,
+      "fields": {
+        "speise": 107,
+        "ingredient": 4,
+        "portion": 1,
+        "required_quantity": 4
+      }
+    }
+  ]
+  

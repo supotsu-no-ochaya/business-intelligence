@@ -10,7 +10,13 @@ class MesseEventAdmin(admin.ModelAdmin):
 
 @admin.register(Speise)
 class SpeiseAdmin(admin.ModelAdmin):
-    list_display =  ["name", "zutaten", "preis"]
+    list_display = ["name", "preis", "get_zutaten"]  # Remove zutaten, add get_zutaten method
+
+    def get_zutaten(self, obj):
+        # Get all ingredients (zutaten) for the Speise object as a comma-separated string
+        return ", ".join([zutaten.name for zutaten in obj.zutaten.all()])
+    
+    get_zutaten.short_description = 'Ingredients'
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):

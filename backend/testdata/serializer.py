@@ -2,13 +2,38 @@ from rest_framework import serializers
 from testdata.models import (
     Speise, OrderItem, MesseEvent,
     Station, Category, ProductAttribute, Product,
-    OrderEvent, Order, OrderItem2, PaymentOption, Payment
+    OrderEvent, Order, OrderItem2, PaymentOption, Payment,
+    StorageItem, StorageLocation, Ingredient, SpeiseIngredient
 )
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+# Ingredient Serializer
+class IngredientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ingredient
+        fields = ['id', 'name', 'quantity', 'unit', 'last_updated']
+
+# SpeiseIngredient Serializer
+class SpeiseIngredientSerializer(serializers.ModelSerializer):
+    ingredient = IngredientSerializer(required=False, allow_null=True)
+    
+    class Meta:
+        model = SpeiseIngredient
+        fields = ['ingredient', 'portion']
+
+# Updated Speise Serializer to include Ingredients
 class SpeiseSerializer(serializers.ModelSerializer):
+    zutaten = SpeiseIngredientSerializer(many=True)  # Include ingredients with their portions
+    
     class Meta:
         model = Speise
         fields = ['id', 'name', 'zutaten', 'preis', 'erstellt', 'updated']
+
+    # Overriding update method to include ingredient availability update
+    def update_ingredient_availability(self, speise, order_quantity):
+        speise.update_ingredient_availability(order_quantity)
 
 class OrderItemSerializer(serializers.ModelSerializer):
     Products = SpeiseSerializer(read_only=True, many=True)
@@ -127,5 +152,14 @@ class PaymentSerializer(serializers.ModelSerializer):
         payment_option_data = validated_data.pop('payment_option')
         payment_option, _ = PaymentOption.objects.get_or_create(**payment_option_data)
 
-        return Payment.objects.create(**validated_data, payment_option=payment_option)
+        payment, _ = Payment.objects.update_or_create(**validated_data, payment_option=payment_option)
+        return payment
+    
+class StorageItemSerializer(serializers.ModelSerializer):
+    product = SpeiseSerializer()  # Include details about the product
+    location = serializers.CharField(source='location.name')  # Display the storage location name
+
+    class Meta:
+        model = StorageItem
+        fields = ['product', 'location', 'quantity', 'unit']
 
