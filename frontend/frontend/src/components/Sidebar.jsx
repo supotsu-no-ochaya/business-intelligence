@@ -17,10 +17,19 @@ const Sidebar = ({ navigate }) => {
         </li>
         <li className="nav-item" onClick={() => navigate('zutaten')}>
           <i className="icon">📦</i> Zutaten
-        </li>
+        </li>*/}
         <li className="nav-item" onClick={() => navigate('getraenke')}>
           <i className="icon">🥤</i> Getränke
-        </li>*/}
+        </li>
+        <li className="nav-item" onClick={() => navigate('transaktionen')}>
+          <i className="icon">💳</i> Transaktionen
+        </li>
+        <li className="nav-item" onClick={() => navigate('einnahmen')}>
+          <i className="icon">📈</i> Einnahmen
+        </li>
+        <li className="nav-item" onClick={() => navigate('ausgaben')}>
+          <i className="icon">💲</i> Ausgaben
+        </li>
         <li className="nav-item" onClick={() => navigate('verkaufszahlen')}>
           <i className="icon">📊</i> Verkaufszahlen
         </li>
