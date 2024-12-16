@@ -23,3 +23,15 @@ export const fetchOrders = async () => {
         throw error;
     }
 };
+
+export const fetchSpeisen = async() => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/speise`);
+        console.log(response);
+        
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching Speisen:', error);
+        throw error;
+    }
+}

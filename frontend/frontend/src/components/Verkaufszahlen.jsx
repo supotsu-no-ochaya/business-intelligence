@@ -1,26 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Verkaufszahlen.module.css';
-import { fetchOrders } from '../apiService'; // Importiere die API-Funktion
+import { fetchOrders, fetchSpeisen } from '../apiService'; // Importiere die API-Funktionen
 
 const Verkaufszahlen = () => {
     const [orders, setOrders] = useState([]);
+    const [speisen, setSpeisen] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Bestellungen laden
     useEffect(() => {
-        const loadData = async () => {
+        const loadOrders = async () => {
             try {
-                const fetchedOrders = await fetchOrders(); // API-Daten abrufen
+                const fetchedOrders = await fetchOrders();
                 setOrders(fetchedOrders);
-                console.log(fetchedOrders); // Debugging-Ausgabe
+                console.log('Orders:', fetchedOrders);
             } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
+                console.error('Fehler beim Laden der Bestellungen:', error);
             }
         };
 
-        loadData();
+        loadOrders();
     }, []);
+
+    // Speisen aus der API laden und filtern
+    useEffect(() => {
+        const loadSpeisen = async () => {
+            try {
+                const fetchedSpeisen = await fetchSpeisen();
+                console.log('Speisen:', fetchedSpeisen);
+
+                // Filtere Bestellungen basierend auf Speisen-Daten
+                const filteredSpeisen = orders.filter(order =>
+                    fetchedSpeisen.some(speise => order.menu_item_name.includes(speise.name))
+                );
+                console.log('speisen:', filteredSpeisen);
+                setSpeisen(filteredSpeisen);
+            } catch (error) {
+                console.error('Fehler beim Laden der Speisen:', error);
+            } finally {
+                setLoading(false);
+                
+            }
+        };
+
+        // Nur laden, wenn Bestellungen vorhanden sind
+        if (orders.length > 0) {
+            loadSpeisen();
+        }
+    }, [orders]);
 
     if (loading) {
         return <p>Loading...</p>;
@@ -44,27 +71,23 @@ const Verkaufszahlen = () => {
         return Object.values(grouped).sort((a, b) => b.sales - a.sales);
     };
 
-    // Datenaufbereitung: Gruppieren und Sortieren
-    const groupedOrders = groupAndSummarize(orders);
-
-    // Unterteilung in "Speisen" und "Getränke" basierend auf Namen
-    const speisen = groupedOrders.filter(item =>
-        ["Sandwich", "Crepe", "Onigiri", "Pizza", "Salad"].some(keyword =>
-            item.name.includes(keyword)
+    // Gruppierte Daten
+    const groupedSpeisen = groupAndSummarize(speisen);
+    const getraenke = groupAndSummarize(
+        orders.filter(order =>
+            ["Cola", "Kakao", "Kaffee", "Tea", "Juice"].some(keyword =>
+                order.menu_item_name.includes(keyword)
+            )
         )
     );
-    const getraenke = groupedOrders.filter(item =>
-        ["Cola", "Kakao", "Kaffee", "Tea", "Juice"].some(keyword =>
-            item.name.includes(keyword)
-        )
-    );
+    
 
-    // Gesamtsummen für Speisen und Getränke berechnen
-    const totalSpeisen = speisen.reduce((sum, item) => sum + item.totalRevenue, 0);
+    // Gesamtsummen berechnen
+    const totalSpeisen = groupedSpeisen.reduce((sum, item) => sum + item.totalRevenue, 0);
     const totalGetraenke = getraenke.reduce((sum, item) => sum + item.totalRevenue, 0);
 
-    const maxSalesSpeisen = Math.max(...speisen.map(item => item.sales));
-    const maxSalesGetraenke = Math.max(...getraenke.map(item => item.sales));
+    const maxSalesSpeisen = Math.max(...groupedSpeisen.map(item => item.sales), 0);
+    const maxSalesGetraenke = Math.max(...getraenke.map(item => item.sales), 0);
 
     const renderCategory = (data, maxSales, title, total) => (
         <div className={styles.salesCard}>
@@ -104,7 +127,7 @@ const Verkaufszahlen = () => {
 
     return (
         <div className={styles.salesDashboard}>
-            {renderCategory(speisen, maxSalesSpeisen, 'Speisen', totalSpeisen)}
+            {renderCategory(groupedSpeisen, maxSalesSpeisen, 'Speisen', totalSpeisen)}
             {renderCategory(getraenke, maxSalesGetraenke, 'Getränke', totalGetraenke)}
         </div>
     );
