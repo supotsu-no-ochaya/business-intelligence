@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components_allways/Header';
 import Dashboard from './components/Dashboard';
 import Ausgaben from './components/Ausgaben';
+import Einnahmen from './components/Einnahmen';
  //import Verbrauch from './components/Verbrauch';
 // import Zutaten from './components/Zutaten';
 import Getraenke from './components/Getraenke';
@@ -45,6 +46,9 @@ function App() {
       break; 
     case 'ausgaben':
       content = <Ausgaben />;
+      break;
+    case 'einnahmen':
+      content = <Einnahmen />;
       break;
     case 'verkaufszahlen':
       content = <Verkaufszahlen />;
