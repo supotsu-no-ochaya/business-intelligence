@@ -38,10 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'testdata',
+    'testdata',    
+    'corsheaders',  # CORS-Headers-App hinzufügen
+    'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # CORS-Middleware an erster Stelle hinzufügen
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -104,6 +107,23 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    #'DEFAULT_RENDERER_CLASSES': (
+    #    'rest_framework.renderers.JSONRenderer',
+    #)
+}
+
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"  # React Development Server
+]
+
+
 
 
 # Internationalization

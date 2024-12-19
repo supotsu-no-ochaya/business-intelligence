@@ -2,28 +2,12 @@ from rest_framework import serializers
 from testdata.models import (
     Speise, OrderItem, MesseEvent,
     Station, Category, ProductAttribute, Product,
-    OrderEvent, Order, OrderItem2, PaymentOption, Payment,
-    StorageItem, StorageLocation, Ingredient, SpeiseIngredient
+    OrderEvent, Order, OrderItem2, PaymentOption, Payment
 )
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-# Ingredient Serializer
-class IngredientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ingredient
-        fields = ['id', 'name', 'quantity', 'unit', 'last_updated']
-
-# SpeiseIngredient Serializer
-class SpeiseIngredientSerializer(serializers.ModelSerializer):
-    ingredient = IngredientSerializer(required=False, allow_null=True)
-    
-    class Meta:
-        model = SpeiseIngredient
-        fields = ['ingredient', 'portion']
-
-# Updated Speise Serializer to include Ingredients
 class SpeiseSerializer(serializers.ModelSerializer):
     zutaten = SpeiseIngredientSerializer(many=True)  # Include ingredients with their portions
     
@@ -51,18 +35,21 @@ class MesseEventSerializer(serializers.ModelSerializer):
 # Serializers for file upload
 # Serializer for Station
 class StationSerializer(serializers.ModelSerializer):
+    id = serializers.CharField()
     class Meta:
         model = Station
         fields = '__all__'
 
 # Serializer for Category
 class CategorySerializer(serializers.ModelSerializer):
+    id = serializers.CharField()
     class Meta:
         model = Category
         fields = '__all__'
 
 # Serializer for ProductAttribute
 class ProductAttributeSerializer(serializers.ModelSerializer):
+    id = serializers.CharField()
     class Meta:
         model = ProductAttribute
         fields = '__all__'
@@ -72,6 +59,7 @@ class ProductSerializer(serializers.ModelSerializer):
     station = StationSerializer()
     category = CategorySerializer()
     attribute = ProductAttributeSerializer(many=True, required=False)
+    id = serializers.CharField()
 
     class Meta:
         model = Product
@@ -85,7 +73,7 @@ class ProductSerializer(serializers.ModelSerializer):
         station, _ = Station.objects.get_or_create(**station_data)
         category, _ = Category.objects.get_or_create(**category_data)
 
-        product = Product.objects.create(**validated_data, station=station, category=category)
+        product, _ = Product.objects.update_or_create(**validated_data, station=station, category=category)
 
         for attr_data in attributes_data:
             attribute1, _ = ProductAttribute.objects.get_or_create(**attr_data)
@@ -95,20 +83,26 @@ class ProductSerializer(serializers.ModelSerializer):
 
 # Serializer for OrderEvent
 class OrderEventSerializer(serializers.ModelSerializer):
+    id = serializers.CharField()
+
     class Meta:
         model = OrderEvent
         fields = '__all__'
 
 # Serializer for Order
 class OrderSerializer(serializers.ModelSerializer):
+    id = serializers.CharField()
     events = OrderEventSerializer(many=True, required=False)
+
     class Meta:
         model = Order
         fields = '__all__'
 
     def create(self, validated_data):
+        import pprint
+        pprint.pprint(validated_data.get("events"))
         events_data = validated_data.pop('events', [])
-        order = Order.objects.create(**validated_data)
+        order, _ = Order.objects.update_or_create(**validated_data)
 
         for event_data in events_data:
             event, _ = OrderEvent.objects.get_or_create(**event_data)
@@ -118,7 +112,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
 # Serializer for OrderItem
 class OrderItem2Serializer(serializers.ModelSerializer):
-    events = OrderEventSerializer(many=True)
+    id = serializers.CharField()
+    events = OrderEventSerializer(many=True, required=False)
 
     class Meta:
         model = OrderItem2
@@ -126,7 +121,7 @@ class OrderItem2Serializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         events_data = validated_data.pop('events', [])
-        order_item = OrderItem2.objects.create(**validated_data)
+        order_item, _ = OrderItem2.objects.update_or_create(**validated_data)
 
         for event_data in events_data:
             event, _ = OrderEvent.objects.get_or_create(**event_data)
@@ -136,6 +131,7 @@ class OrderItem2Serializer(serializers.ModelSerializer):
 
 # Serializer for PaymentOption
 class PaymentOptionSerializer(serializers.ModelSerializer):
+    id = serializers.CharField()
     class Meta:
         model = PaymentOption
         fields = '__all__'
@@ -143,6 +139,7 @@ class PaymentOptionSerializer(serializers.ModelSerializer):
 # Serializer for Payment
 class PaymentSerializer(serializers.ModelSerializer):
     payment_option = PaymentOptionSerializer()
+    id = serializers.CharField()
 
     class Meta:
         model = Payment
@@ -154,12 +151,4 @@ class PaymentSerializer(serializers.ModelSerializer):
 
         payment, _ = Payment.objects.update_or_create(**validated_data, payment_option=payment_option)
         return payment
-    
-class StorageItemSerializer(serializers.ModelSerializer):
-    product = SpeiseSerializer()  # Include details about the product
-    location = serializers.CharField(source='location.name')  # Display the storage location name
-
-    class Meta:
-        model = StorageItem
-        fields = ['product', 'location', 'quantity', 'unit']
 

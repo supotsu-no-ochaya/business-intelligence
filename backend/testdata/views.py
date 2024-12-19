@@ -8,14 +8,13 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 from rest_framework.permissions import BasePermission
-from testdata.models import (
-    OrderItem, Product, Order, OrderItem2,
-    Payment, Speise, Ingredient
+from .models import (
+    OrderItem, Product, Order, OrderItem2, OrderEvent,
+    Payment
 )
 from testdata.serializer import (
     ProductSerializer, OrderSerializer,
-    OrderItem2Serializer, PaymentSerializer,
-    IngredientSerializer
+    OrderItem2Serializer, PaymentSerializer, OrderEventSerializer
 )
 
 # Create your views here.
@@ -61,12 +60,12 @@ class UploadJsonView(APIView):
                 serializer.save()
             else:
                 return Response({"error in products": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
+            
         # Process Orders and Order Items
         orders = data.get('orders', [])
         for order_data in orders:
             order_items_data = order_data.pop('order_items', [])
-            events_data = order_data.pop('events', [])
+            events_data = order_data.get('events', [])
             order_serializer = OrderSerializer(data=order_data)
             if order_serializer.is_valid():
                 order = order_serializer.save()
@@ -90,17 +89,24 @@ class UploadJsonView(APIView):
 
                         # Handle Order Item Events
                         for event_data in events_data:
-                            event_serializer = OrderSerializer(data=event_data)
+                            existing_event = OrderEvent.objects.filter(id=event_data.get("id")).first()
+                            if existing_event:
+                                event_serializer = OrderEventSerializer(existing_event, data=event_data)
+                            else:
+                                event_serializer = OrderEventSerializer(data=event_data)
+                                
+                            import pprint
+                            pprint.pprint(event_serializer.initial_data)
                             if event_serializer.is_valid():
                                 event_serializer.save()
                             else:
-                                return Response({"error": event_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                                return Response({"event data error": event_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         print(f'Error occurs here')
-                        return Response({"error": order_item_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({"Order item error": order_item_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 print("Order Validation Errors: ", order_serializer.errors)
-                return Response({"error": order_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"Order error": order_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         # Process Payments
         payments = data.get('payments', [])
@@ -109,7 +115,7 @@ class UploadJsonView(APIView):
             if serializer.is_valid():
                 serializer.save()
             else:
-                return Response({"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"Payments error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"message": "Data uploaded successfully"}, status=status.HTTP_201_CREATED)
 
@@ -139,42 +145,3 @@ class IncomeListView(APIView):
             "income_by_payment_option": income_by_payment_option
         })
 
-class AvailableProductView(APIView):
-    def get(self, request, *args, **kwargs):
-        speisen = Speise.objects.all()  # Fetch all menu items
-        available_data = []
-
-        for speise in speisen:
-            ingredient_data = []
-            min_portions = None  # Placeholder to calculate available portions
-
-            for speise_ingredient in speise.speiseingredient_set.all():
-                ingredient = speise_ingredient.ingredient
-                required_quantity = speise_ingredient.portion * speise.preis  # Assuming order quantity is linked to price for simplicity
-                # Check the stock of the ingredient
-                available_quantity = ingredient.quantity
-
-                if min_portions is None or available_quantity // required_quantity < min_portions:
-                    min_portions = available_quantity // required_quantity
-
-                ingredient_data.append({
-                    'name': ingredient.name,
-                    'available_quantity': available_quantity,
-                    'unit': ingredient.unit,
-                    'required_quantity': required_quantity
-                })
-
-            available_data.append({
-                'name': speise.name,
-                'price': speise.preis,
-                'available_portions': min_portions,
-                'ingredients': ingredient_data
-            })
-
-        return Response(available_data)
-    
-class IngredientListView(APIView):
-    def get(self, request):
-        ingredients = Ingredient.objects.all()
-        serializer = IngredientSerializer(ingredients, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
