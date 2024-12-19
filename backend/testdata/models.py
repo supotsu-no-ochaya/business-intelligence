@@ -1,6 +1,17 @@
 from django.db import models
 
 # Create your models here.
+
+class Speise(models.Model):
+    name = models.CharField(max_length=255)
+    zutaten = models.TextField()
+    preis = models.FloatField()
+    erstellt = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
 class Ingredient(models.Model):
     name = models.CharField(max_length=255)
     unit = models.CharField(max_length=50, default='unit')  # e.g., "kg", "g", "pieces"
@@ -10,9 +21,7 @@ class Ingredient(models.Model):
     def __str__(self):
         return f"{self.name} - {self.quantity} {self.unit}"
 
-    
-# all menu
-class Speise(models.Model):
+class SpeiseLager(models.Model):
     name = models.CharField(max_length=255)
     zutaten = models.ManyToManyField(Ingredient, through='SpeiseIngredient')
     preis = models.FloatField()
@@ -28,7 +37,7 @@ class Speise(models.Model):
             speise_ingredient.update_ingredient_availability(order_quantity)
 
 class SpeiseIngredient(models.Model):
-    speise = models.ForeignKey(Speise, on_delete=models.CASCADE)
+    speise = models.ForeignKey(SpeiseLager, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     portion = models.PositiveIntegerField(default=1)  # Amount of the ingredient used per dish portion
     required_quantity = models.PositiveIntegerField(default=0)  # The required quantity for each portion
@@ -174,7 +183,7 @@ class StorageLocation(models.Model):
 
 class StorageItem(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
-    product = models.ForeignKey(Speise, on_delete=models.CASCADE)  # Link to your Speise/Product
+    product = models.ForeignKey(SpeiseLager, on_delete=models.CASCADE)  
     location = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)  # Current stock quantity
     unit = models.CharField(max_length=50, default='unit')  # e.g., "kg", "liters", "units"

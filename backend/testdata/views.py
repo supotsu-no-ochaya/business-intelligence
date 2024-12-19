@@ -8,13 +8,14 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 from rest_framework.permissions import BasePermission
-from .models import (
+from testdata.models import (
     OrderItem, Product, Order, OrderItem2, OrderEvent,
-    Payment
+    Payment, SpeiseLager, Ingredient
 )
 from testdata.serializer import (
     ProductSerializer, OrderSerializer,
-    OrderItem2Serializer, PaymentSerializer, OrderEventSerializer
+    OrderItem2Serializer, PaymentSerializer, 
+    OrderEventSerializer, IngredientSerializer
 )
 
 # Create your views here.
@@ -145,3 +146,42 @@ class IncomeListView(APIView):
             "income_by_payment_option": income_by_payment_option
         })
 
+class AvailableProductView(APIView):
+    def get(self, request, *args, **kwargs):
+        speisen = SpeiseLager.objects.all()  # Fetch all menu items
+        available_data = []
+
+        for speise in speisen:
+            ingredient_data = []
+            min_portions = None  # Placeholder to calculate available portions
+
+            for speise_ingredient in speise.speiseingredient_set.all():
+                ingredient = speise_ingredient.ingredient
+                required_quantity = speise_ingredient.portion * speise.preis  # Assuming order quantity is linked to price for simplicity
+                # Check the stock of the ingredient
+                available_quantity = ingredient.quantity
+
+                if min_portions is None or available_quantity // required_quantity < min_portions:
+                    min_portions = available_quantity // required_quantity
+
+                ingredient_data.append({
+                    'name': ingredient.name,
+                    'available_quantity': available_quantity,
+                    'unit': ingredient.unit,
+                    'required_quantity': required_quantity
+                })
+
+            available_data.append({
+                'name': speise.name,
+                'price': speise.preis,
+                'available_portions': min_portions,
+                'ingredients': ingredient_data
+            })
+
+        return Response(available_data)
+    
+class IngredientListView(APIView):
+    def get(self, request):
+        ingredients = Ingredient.objects.all()
+        serializer = IngredientSerializer(ingredients, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

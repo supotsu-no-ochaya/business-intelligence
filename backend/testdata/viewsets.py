@@ -1,19 +1,22 @@
 from rest_framework import viewsets
-from testdata.models import Order, OrderItem2, Product, Speise, OrderItem, MesseEvent
-from testdata.serializer import OrderItem2Serializer, ProductSerializer, SpeiseSerializer, OrderItemSerializer, MesseEventSerializer, OrderSerializer
+from testdata.models import (Order, OrderItem2, Product, Speise, 
+                             OrderItem, MesseEvent, Ingredient)
+from testdata.serializer import (OrderItem2Serializer, ProductSerializer, SpeiseSerializer, 
+                                 OrderItemSerializer, MesseEventSerializer, OrderSerializer,
+                                 IngredientSerializer)
 from datetime import date
 
 # Same as Controllers
 # This set of views corresponds to the predefined actions of CRUD type
-class IngredientViewSet(viewsets.ModelViewSet):
-    queryset = Ingredient.objects.all()
-    serializer_class = IngredientSerializer
-
 class SpeiseViewSet(viewsets.ModelViewSet):
     serializer_class = SpeiseSerializer
 
     def get_queryset(self):
         return Speise.objects.all()
+
+class IngredientViewSet(viewsets.ModelViewSet):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
 
 class OrderItemViewSet(viewsets.ModelViewSet):
     serializer_class = OrderItemSerializer
