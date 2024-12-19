@@ -1,0 +1,51 @@
+[
+  {
+    "model": "testdata.storagelocation",
+    "pk": "L1",
+    "fields": {
+      "name": "Main Warehouse",
+      "description": "Primary storage for all products"
+    }
+  },
+  {
+    "model": "testdata.storagelocation",
+    "pk": "L2",
+    "fields": {
+      "name": "Backup Storage",
+      "description": "Secondary storage for overflow inventory"
+    }
+  },
+  {
+    "model": "testdata.storageitem",
+    "pk": "SI1",
+    "fields": {
+      "product": 101,
+      "location": "L1",
+      "quantity": 50,
+      "unit": "pieces",
+      "last_updated": "2024-12-11T10:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.storageitem",
+    "pk": "SI2",
+    "fields": {
+      "product": 102,
+      "location": "L1",
+      "quantity": 30,
+      "unit": "pieces",
+      "last_updated": "2024-12-11T10:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.storageitem",
+    "pk": "SI3",
+    "fields": {
+      "product": 103,
+      "location": "L2",
+      "quantity": 20,
+      "unit": "pieces",
+      "last_updated": "2024-12-11T10:00:00Z"
+    }
+  }
+]

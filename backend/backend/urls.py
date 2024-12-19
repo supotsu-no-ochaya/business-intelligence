@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from routers import router
 from testdata import views
-from testdata.views import IncomeListView
+from testdata.views import IncomeListView, AvailableProductView, IngredientListView
 
 
 urlpatterns = [
@@ -27,6 +27,6 @@ urlpatterns = [
     path('api/total_earnings', views.earnings, name="total_earnings"),
     path('upload-json/', views.UploadJsonView.as_view(), name='upload-json'),
     path('api/income/', IncomeListView.as_view(), name='income-list'),
-
+    path('api/available-products/', AvailableProductView.as_view(), name='available-products'),
+    path('ingredients/', IngredientListView.as_view(), name='ingredient-list'),
 ]
-
