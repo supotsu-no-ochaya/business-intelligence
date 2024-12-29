@@ -1,5 +1,5 @@
-from testdata.user.serializers import UserSerializer
-from django.contrib.auth import get_user_model
+from testdata.user.serializers import GroupsSerializer, UserSerializer
+from django.contrib.auth import get_user_model, models
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
@@ -11,11 +11,9 @@ class UserViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         return User.objects.all()
+    
+class GroupViewSet(viewsets.ModelViewSet):
+    serializer_class = GroupsSerializer
 
-    def get_object(self):
-        lookup_field_value = self.kwargs[self.lookup_field]
-
-        obj = User.objects.get(lookup_field_value)
-        self.check_object_permissions(self.request, obj)
-
-        return obj
+    def get_queryset(self):
+        return models.Group.objects.all()

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, models
 
 User = get_user_model()
 
@@ -17,4 +17,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # Tuple of serialized model fields (see link [2])
-        fields = ( "id", "username", "password", )
+        fields = ( "id", "username", "password", 'groups' )
+        extra_kwargs = {
+            'url': {'lookup_field': 'id'}
+        }
+
+class GroupsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Group
+        fields = ("id", "name")
