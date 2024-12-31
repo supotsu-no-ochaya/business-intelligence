@@ -58,7 +58,7 @@ jobs:
         run: |
           echo "DATABASE_URL=postgres://postgres:postgres@localhost:5432/testdb" >> $GITHUB_ENV
           echo "DJANGO_SETTINGS_MODULE=backend.backend.settings_test" >> $GITHUB_ENV
-        echo "PYTHONPATH=$PYTHONPATH:/home/runner/work/business-intelligence/business-intelligence/backend/backend" >> $GITHUB_ENV
+          echo "PYTHONPATH=$PYTHONPATH:/home/runner/work/business-intelligence/business-intelligence/backend/backend" >> $GITHUB_ENV
 
       - name: Test database connection
         run: |
