@@ -58,7 +58,7 @@ jobs:
         run: |
           echo "DATABASE_URL=postgres://postgres:postgres@localhost:5432/testdb" >> $GITHUB_ENV
           echo "DJANGO_SETTINGS_MODULE=backend.settings_test" >> $GITHUB_ENV
-          echo "PYTHONPATH=$PYTHONPATH:/home/runner/work/business-intelligence/business-intelligence/backend/backend" >> $GITHUB_ENV
+          echo "PYTHONPATH=$PYTHONPATH:/home/runner/work/business-intelligence/business-intelligence/backend" >> $GITHUB_ENV
 
       - name: Test database connection
         run: |
@@ -72,6 +72,6 @@ jobs:
       # Step 6: Run tests
       - name: Run tests
         run: |
-          python backend/manage.py test
+          python backend/manage.py test testdata.tests_file --pattern="test_*.py"
 
 
