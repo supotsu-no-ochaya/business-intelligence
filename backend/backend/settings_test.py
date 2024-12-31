@@ -30,6 +30,7 @@ SESSION_COOKIE_SECURE = False
 DATABASES['default']['NAME'] = 'testdb'
 
 # Disable migrations for faster testing (optional)
+"""
 MIGRATION_MODULES = {
     'auth': None,
     'contenttypes': None,
@@ -39,4 +40,4 @@ MIGRATION_MODULES = {
     'messages': None,
     'staticfiles': None,
 }
-
+"""
