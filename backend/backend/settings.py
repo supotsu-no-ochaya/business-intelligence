@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 from decouple import config
 
@@ -21,12 +22,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=!tg=#a3vv98_*9o0w)$^7t9w@f6_)*fw125+w=22yhpk1#!-x'
-
+#SECRET_KEY = 'django-insecure-=!tg=#a3vv98_*9o0w)$^7t9w@f6_)*fw125+w=22yhpk1#!-x'
+#SECRET_KEY = os.getenvv("DJANGO_SECRET_KEY", "fallback-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
-DEBUG = config('DEBUG')
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '[::1]']
+#DEBUG = config('DEBUG')
+#ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '[::1]']
+
+#DEBUG = os.getenv('DJANGOP_DEBUG', 'False') == 'True'
+#ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
+SECRET_KEY = config('DJANGO_SECRET_KEY', default='fallback-secret-key')
+DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='localhost').split(',')
+
 
 # Application definition
 
@@ -77,7 +85,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE'),
@@ -88,8 +96,17 @@ DATABASES = {
         'PORT': config('DB_PORT'), # Default port
     }
 }
-
-
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('POSTGRES_DB', default='default_db_name'),
+        'USER': config('POSTGRES_USER', default='default_user'),
+        'PASSWORD': config('POSTGRES_PASSWORD', default='default_password'),
+        'HOST': config('DB_HOST', default='localhost'),  # Use 'db' for Docker Compose
+        'PORT': config('DB_PORT', default='5432'),
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 

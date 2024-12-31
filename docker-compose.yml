@@ -1,52 +1,39 @@
 version: '3.9'
 services:
-  db:
-    image: postgres:14-alpine
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: django_backend
     ports:
-      - '5432:5432'
-
-    environment:
-      #- "POSTGRES_HOST_AUTH_METHOD=trust"
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=testdb
-
+      - "8000:8000"
     volumes:
-      - ./data/db:/var/lib/postgresql/data/
-
+      - ./backend:/app
+    depends_on:
+      - db
+    env_file:
+      - .env
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-
+    container_name: react_frontend
     ports:
-      - '3000:3000'
-
+      - "3000:3000"
     volumes:
-      - ./frontend/frontend:/app/frontend
-      - /app/frontend/node_modules
+      - ./frontend/frontend:/app
+    env_file:
+      - .env
 
-    depends_on:
-      - backend
-
-  backend: 
-    build: 
-      context: ./backend
-      dockerfile: Dockerfile
-
-    environment:
-      #- POSTGRES_PASSWORD=postgres
-      #- POSTGRES_USER=postgres
-      #- POSTGRES_DB=testdb
-      - DB_HOST=db
-
+  db:
+    image: postgres:15
+    container_name: postgres_db
     ports:
-      - '8000:8000'
-
+      - "5432:5432"
     volumes:
-      - ./backend:/app/backend
-
-    depends_on:
-      - db
-
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+volumes:
+  postgres_data:
 
