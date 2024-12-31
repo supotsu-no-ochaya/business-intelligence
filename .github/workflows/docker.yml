@@ -46,7 +46,7 @@ jobs:
 
     - name: Build and push Django backend Docker image
       run: |
-        docker build -t ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/django-backend:latest -f backend/Dockerfile .
+        docker build -t ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/django-backend:latest ./backend
         docker push ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/django-backend:latest
 
     - name: Build and push PostgreSQL image (optional)
