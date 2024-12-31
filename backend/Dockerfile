@@ -5,11 +5,11 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Install dependencies
-COPY requirements.txt /app/
+COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
-COPY . /app/
+COPY . ./
 
 # Expose port 8000 for Django development server
 EXPOSE 8000
