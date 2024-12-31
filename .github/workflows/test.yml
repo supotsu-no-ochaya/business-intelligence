@@ -67,7 +67,6 @@ jobs:
       # Step 5: Run migrations
       - name: Run migrations
         run: |
-          python backend/manage.py makemigrations --verbosity 3
           python backend/manage.py migrate
 
       # Step 6: Run tests
