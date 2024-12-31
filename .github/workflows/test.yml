@@ -28,6 +28,13 @@ jobs:
           --health-retries=3
 
     steps:
+      - name: Debug Working Directory
+        run: pwd
+
+      - name: Debug PYTHONPATH
+        run: python -c "import sys; print(sys.path)"
+
+
       # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
@@ -41,9 +48,8 @@ jobs:
       # Step 3: Install dependencies
       - name: Install dependencies
         run: |
-          cd backend
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r backend/requirements.txt
 
       # Step 4: Set environment variables for Django to use PostgreSQL
       - name: Set environment variables
@@ -54,13 +60,12 @@ jobs:
       # Step 5: Run migrations
       - name: Run migrations
         run: |
-          cd backend
-          python manage.py migrate
+          python backend/backend/manage.py makemigrations
+          python backend/backend/manage.py migrate
 
       # Step 6: Run tests
       - name: Run tests
         run: |
-          cd backend
-          python manage.py test
+          python backend/backend/manage.py test
 
 
