@@ -33,8 +33,13 @@ jobs:
 
       - name: Debug PYTHONPATH
         run: python -c "import sys; print(sys.path)"
-
-
+      
+      - name: Debug File Structure
+        run: ls -R
+      
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/backend" >> $GITHUB_ENV
+      
       # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
