@@ -65,12 +65,12 @@ jobs:
       # Step 5: Run migrations
       - name: Run migrations
         run: |
-          python backend/backend/manage.py makemigrations
-          python backend/backend/manage.py migrate
+          python backend/manage.py makemigrations
+          python backend/manage.py migrate
 
       # Step 6: Run tests
       - name: Run tests
         run: |
-          python backend/backend/manage.py test
+          python backend/manage.py test
 
 
