@@ -1,0 +1,52 @@
+.dashboard {
+    padding: 20px;
+    color: white;
+  }
+  
+  .topCards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .card {
+    flex: 1;
+    background-color: #24263A;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .card h3 {
+    margin-bottom: 10px;
+  }
+  
+  .card h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .transactions {
+    background-color: #24263A;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .transactionList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .transactionItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .transactionItem:last-child {
+    border-bottom: none;
+  }
+  
