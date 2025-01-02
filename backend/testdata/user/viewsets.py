@@ -2,6 +2,8 @@ from testdata.user.serializers import GroupsSerializer, UserSerializer
 from django.contrib.auth import get_user_model, models
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.hashers import make_password
+from pprint import pprint
 
 User = get_user_model()
 
