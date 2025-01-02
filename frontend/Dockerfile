@@ -1,10 +1,22 @@
-FROM node:16-alpine
+# Use an official Node.js runtime as a parent image
+FROM node:18-alpine
 
-WORKDIR /app/frontend/
+# Set the working directory
+WORKDIR /app
 
-COPY ./frontend/package*.json /app/frontend/
+# Install dependencies
+COPY frontend/package.json frontend/package-lock.json /app/
 RUN npm install
 
-COPY ./frontend /app/frontend/
+# Copy project files
+COPY frontend /app/
 
+# Build the React app
+RUN npm run build
+
+# Expose port 3000 for development
+EXPOSE 3000
+
+# Serve the app
 CMD ["npm", "start"]
+
