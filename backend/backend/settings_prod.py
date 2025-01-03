@@ -28,3 +28,5 @@ DEBUG = False
 
 # Other production settings like static files, logging, etc. can be configured here
 STATIC_URL = '/static/'
+# Directory where static files will be collected
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
