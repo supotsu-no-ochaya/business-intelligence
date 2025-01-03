@@ -18,6 +18,15 @@ jobs:
       id-token: write
 
     steps:
+    - name: Debug Working Directory
+      run: pwd
+    
+    - name: Debug PYTHONPATH
+      run: python -c "import sys; print(sys.path)"
+
+    - name: Debug File Structure
+      run: ls -R
+
     - name: Checkout repository
       uses: actions/checkout@v2
 
