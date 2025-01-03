@@ -10,7 +10,7 @@ COPY frontend/package-lock.json /app/
 RUN npm install
 
 # Copy the rest of the frontend code
-COPY frontend/ /app/
+COPY frontend /app/
 
 # Build the production version of the app
 RUN npm run build
