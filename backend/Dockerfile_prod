@@ -18,7 +18,7 @@ RUN pip install gunicorn
 COPY . /app/
 
 # Set environment variable for settings file in production
-ENV DJANGO_SETTINGS_MODULE=backend.backend.settings_prod
+ENV DJANGO_SETTINGS_MODULE=backend.settings_prod
 
 # Run migrations, collect static files, and create a superuser (optional)
 RUN python manage.py migrate
