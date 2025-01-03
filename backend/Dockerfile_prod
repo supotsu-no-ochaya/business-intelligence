@@ -8,14 +8,14 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
 # Copy the requirements file and install dependencies
-COPY backend/requirements.txt /app/
-RUN pip install --no-cache-dir -r /app/requirements.txt
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Gunicorn for running the application
 RUN pip install gunicorn
 
 # Copy the Django project files into the container
-COPY backend/ /app/
+COPY . /app/
 
 # Set environment variable for settings file in production
 ENV DJANGO_SETTINGS_MODULE=backend.backend.settings_prod

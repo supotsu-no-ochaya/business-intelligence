@@ -41,12 +41,12 @@ jobs:
     # Step 1: Build Backend Docker Image
     - name: Build Backend Docker Image
       run: |
-        docker build -t ghcr.io/${{ github.repository }}/backend-prod:latest -f backend/Dockerfile_prod backend/
+        docker build -t ghcr.io/${{ github.repository }}/backend-prod:latest -f backend/Dockerfile_prod ./backend
 
     # Step 2: Build Frontend Docker Image
     - name: Build Frontend Docker Image
       run: |
-        docker build -t ghcr.io/${{ github.repository }}/frontend-prod:latest -f frontend/Dockerfile_prod frontend/
+        docker build -t ghcr.io/${{ github.repository }}/frontend-prod:latest -f frontend/Dockerfile_prod ./frontend
 
     # Step 3: Build PostgreSQL Docker Image (Optional)
     - name: Pull PostgreSQL Docker Image
