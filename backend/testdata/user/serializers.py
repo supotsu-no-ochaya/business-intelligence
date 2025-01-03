@@ -1,10 +1,17 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, models
-from django.contrib.auth.hashers import make_password
 
 User = get_user_model()
 
+
+class GroupsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Group
+        fields = ("id", "name")
+
 class UserSerializer(serializers.ModelSerializer):
+    groups = GroupsSerializer(many=True)
+    
     new_password = serializers.CharField(
         write_only=True,
         required=False,
@@ -22,7 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
-            password=validated_data['password'],
+            password = validated_data.pop('new_password', 'password'), 
         )
         return user
     
@@ -32,14 +39,9 @@ class UserSerializer(serializers.ModelSerializer):
 
         # If there's a new password, set it using the built-in set_password()
         if new_password:
-            instance.set_password(make_password(new_password))
+            instance.set_password(new_password)
+            print('--------> Clear PW:', new_password)
+            print('--------> Hashed PW:', instance.password)
 
         # Proceed with the default update for other fields (email, etc.)
         return super().update(instance, validated_data)
-
-
-
-class GroupsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Group
-        fields = ("id", "name")

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from decouple import config
+from datetime import timedelta # import this library top of the settings.py file    
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,7 +49,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'testdata',    
     'corsheaders',  # CORS-Headers-App hinzufügen
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    'rest_framework_roles',
 ]
 
 MIDDLEWARE = [
@@ -129,19 +131,27 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    #'DEFAULT_RENDERER_CLASSES': (
-    #    'rest_framework.renderers.JSONRenderer',
-    #)
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework_roles.permissions.RolesPermissions',
+    ],
 }
 
-
+REST_FRAMEWORK_ROLES = {
+    'ROLES': 'testdata.roles.ROLES',
+}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000"  # React Development Server
 ]
 
 
-
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
+    'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME_LATE_USER': timedelta(days=30),
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
