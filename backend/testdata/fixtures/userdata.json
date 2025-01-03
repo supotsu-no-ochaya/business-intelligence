@@ -1,0 +1,26 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 10,
+    "fields": {
+      "username": "fixture user",
+      "password": "pbkdf2_sha256$870000$xgwNCuOWy6izyxcUzJ1zWm$FeRgjjrT7iQndW+qHOMdvYXZ4lVCpTZVdKlJxnZgt2E="
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": "10",
+    "fields": {
+      "name": "Küchenpersonal",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": "11",
+    "fields": {
+      "name": "Servicepersonal",
+      "permissions": []
+    }
+  }
+]
