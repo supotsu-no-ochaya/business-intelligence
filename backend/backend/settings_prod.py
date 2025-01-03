@@ -12,7 +12,7 @@ DATABASES = {
         'NAME': config('POSTGRES_DB', 'your_database_name'),
         'USER': config('POSTGRES_USER', 'your_database_user'),
         'PASSWORD': config('POSTGRES_PASSWORD', 'your_database_password'),
-        'HOST': config('DB_HOST', 'localhost'),
+        'HOST': config('DB_HOST', 'db'),
         'PORT': config('DB_PORT', '5432'),
     }
 }
