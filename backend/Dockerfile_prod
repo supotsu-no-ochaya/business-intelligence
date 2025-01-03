@@ -22,8 +22,8 @@ ENV DJANGO_SETTINGS_MODULE=backend.settings_prod
 
 # Run migrations, collect static files, and create a superuser (optional)
 RUN ls -la
-RUN python backend/manage.py migrate
-RUN python backend/manage.py collectstatic --noinput
+RUN python manage.py migrate
+RUN python manage.py collectstatic --noinput
 
 # Expose the port your app will run on
 EXPOSE 8000
