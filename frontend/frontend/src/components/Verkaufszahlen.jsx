@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Verkaufszahlen.module.css';
 import { fetchOrders } from '../apiService';
+//api/products category:food/
 
 const Verkaufszahlen = () => {
     const [orders, setOrders] = useState([]);
