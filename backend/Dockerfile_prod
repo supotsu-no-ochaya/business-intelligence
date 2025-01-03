@@ -8,6 +8,14 @@ ENV PYTHONPATH=/app/backend:$PYTHONPATH
 # Set the working directory in the container
 WORKDIR /app
 
+# Install build dependencies (including distutils, gcc, and make)
+RUN apt-get update && apt-get install -y \
+    gcc \
+    make \
+    build-essential \
+    python3-distutils \
+    && apt-get clean
+
 # Copy the requirements file and install dependencies
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
