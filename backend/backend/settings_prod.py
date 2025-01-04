@@ -29,4 +29,4 @@ DEBUG = False
 # Other production settings like static files, logging, etc. can be configured here
 STATIC_URL = '/static/'
 # Directory where static files will be collected
-STATIC_ROOT = '/app/staticfiles'
+STATIC_ROOT = '/app/staticfiles/'
