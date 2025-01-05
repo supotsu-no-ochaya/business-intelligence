@@ -40,8 +40,9 @@ class UserSerializer(serializers.ModelSerializer):
         # If there's a new password, set it using the built-in set_password()
         if new_password:
             instance.set_password(new_password)
-            print('--------> Clear PW:', new_password)
-            print('--------> Hashed PW:', instance.password)
 
         # Proceed with the default update for other fields (email, etc.)
         return super().update(instance, validated_data)
+    
+    def get_object(self):
+        return self.request.user
