@@ -1,0 +1,73 @@
+.expenses-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: none;
+    color: #DBDFEA;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .top-section {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .bottom-section {
+    display: flex;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    background: #24263A;
+    padding: 20px;
+    width: 100%; /* Damit die Karten flexibel sind */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    flex: 1;
+  }
+  
+  .card h3 {
+    margin-bottom: 10px;
+  }
+  
+  .expense-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .expense-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #333;
+    padding: 10px 0;
+  }
+  
+  .expense-item strong {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .bar-chart, .total-expenses {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .top-section .card {
+    width: 45%; /* Setzt die Breite der oberen Karten auf 45% */
+  }
+  
+  .bottom-section .card {
+    width: 100%; /* Setzt die Breite der unteren Karte auf 100% */
+  }
+  
+  @media (max-width: 768px) {
+    .top-section .card {
+      width: 100%; /* Karten werden auf kleineren Bildschirmen auf 100% gesetzt */
+    }
+}
+  

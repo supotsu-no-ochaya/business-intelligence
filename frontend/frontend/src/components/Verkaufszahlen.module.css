@@ -33,6 +33,14 @@
     color: #FFFFFF;
     margin: 0;
   }
+
+  .salesTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333;
+}
   
   /* Filter-Stile */
   .filters {
@@ -129,4 +137,25 @@
     font-weight: bold;
     color: #FFFFFF;
   }
+
+  .filterButton {
+   background-color: rgba(87.82, 130.04, 193.37, 0.28);
+  color: #DBDFEA;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filterButton.active {
+  background-color: #003465;
+}
+
+.datePicker {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
   

@@ -3,10 +3,13 @@ import Login from './components_allways/Login';
 import Sidebar from './components/Sidebar';
 import Header from './components_allways/Header';
 import Dashboard from './components/Dashboard';
+import Ausgaben from './components/Ausgaben';
+import Einnahmen from './components/Einnahmen';
  //import Verbrauch from './components/Verbrauch';
 // import Zutaten from './components/Zutaten';
-// import Getraenke from './components/Getraenke';
+import Getraenke from './components/Getraenke';
 import Verkaufszahlen from './components/Verkaufszahlen';
+import Transaktionen from './components/Transkationen';
 import './App.css'; // Importiere das CSS-Stylesheet
 import Settings from './components/Settings';
 
@@ -38,12 +41,21 @@ function App() {
       break;
     case 'zutaten':
       content = <Zutaten />;
-      break;
+      break;*/
     case 'getraenke':
       content = <Getraenke />;
-      break; */
+      break; 
+    case 'ausgaben':
+      content = <Ausgaben />;
+      break;
+    case 'einnahmen':
+      content = <Einnahmen />;
+      break;
     case 'verkaufszahlen':
       content = <Verkaufszahlen />;
+      break;
+    case 'transaktionen':
+      content = <Transaktionen />;
       break;
     case 'settings':
       content = <Settings />;

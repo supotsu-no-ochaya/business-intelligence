@@ -1,0 +1,55 @@
+.einnahmenDashboard {
+  display: flex; /* Flexbox aktiviert */
+  gap: 20px; /* Abstand zwischen den Karten */
+  padding: 20px;
+  color: #DBDFEA;
+}
+
+.card {
+  flex: 1; /* Beide Karten bekommen den gleichen Platz */
+  background-color: #24263A;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.topSection, .middleSection {
+  display: flex;
+  gap: 20px;
+}
+
+.analyticsContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.analyticsItem {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.analyticsItem span {
+  width: 120px;
+}
+
+.bar {
+  flex-grow: 1;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 0 10px;
+  border-radius: 5px;
+}
+
+.bar div {
+  height: 100%;
+  background-color: #ff6384;
+  border-radius: 5px;
+}
+
+.total {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+}
