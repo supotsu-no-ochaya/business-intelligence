@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Verkaufszahlen.module.css';
 import { fetchOrders } from '../apiService';
-//api/products category:food/
 
 const Verkaufszahlen = () => {
     const [orders, setOrders] = useState([]);
@@ -11,18 +10,19 @@ const Verkaufszahlen = () => {
     const [showTopProductsSpeisen, setShowTopProductsSpeisen] = useState(false);
     const [startDateSpeisen, setStartDateSpeisen] = useState('');
     const [endDateSpeisen, setEndDateSpeisen] = useState('');
+    const [filteredSpeisen, setFilteredSpeisen] = useState([]);
 
     // Zustände für Getränke
     const [showTopProductsGetraenke, setShowTopProductsGetraenke] = useState(false);
     const [startDateGetraenke, setStartDateGetraenke] = useState('');
     const [endDateGetraenke, setEndDateGetraenke] = useState('');
+    const [filteredGetraenke, setFilteredGetraenke] = useState([]);
 
     useEffect(() => {
         const loadData = async () => {
             try {
                 const fetchedOrders = await fetchOrders();
                 setOrders(fetchedOrders);
-                console.log(fetchedOrders);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -33,11 +33,28 @@ const Verkaufszahlen = () => {
         loadData();
     }, []);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+    const filterByDateRange = (data, startDate, endDate) => {
+        const startTimestamp = startDate ? new Date(startDate).getTime() : null;
+        const endTimestamp = endDate ? new Date(endDate).getTime() : null;
 
-    // Hilfsfunktion: Gruppieren, Summieren und Sortieren der Bestellungen
+        console.log("Startdatum:", startDate, "Enddatum:", endDate);
+
+        return data.filter(order => {
+            const orderTimestamp = new Date(order.created).getTime();
+            console.log("Order:", order.menu_item_name, "Datum:", order.created, "Timestamp:", orderTimestamp);
+
+            if (startTimestamp && orderTimestamp < startTimestamp) {
+                console.log("Filtered out (before start):", order.menu_item_name);
+                return false;
+            }
+            if (endTimestamp && orderTimestamp > endTimestamp) {
+                console.log("Filtered out (after end):", order.menu_item_name);
+                return false;
+            }
+            return true;
+        });
+    };
+
     const groupAndSummarize = (data) => {
         const grouped = data.reduce((acc, order) => {
             if (!acc[order.menu_item_name]) {
@@ -54,42 +71,44 @@ const Verkaufszahlen = () => {
         return Object.values(grouped).sort((a, b) => b.sales - a.sales);
     };
 
-    // Zeitraumfilter anwenden
-    const filterByDateRange = (data, startDate, endDate) => {
-        const startTimestamp = startDate ? new Date(startDate).getTime() : null;
-        const endTimestamp = endDate ? new Date(endDate).getTime() : null;
-
-        return data.filter(order => {
-            const orderTimestamp = new Date(order.date).getTime();
-            if (startTimestamp && orderTimestamp < startTimestamp) return false;
-            if (endTimestamp && orderTimestamp > endTimestamp) return false;
-            return true;
-        });
+    const handleFilterSpeisen = () => {
+        const speisen = orders.filter(order =>
+            ["Sandwich", "Crepe", "Mochi", "Burger", "Pizza Slice", "Taco", "Sushi Roll", "Pasta Bowl", "Salad", "Cupcake"].some(keyword =>
+                order.menu_item_name.includes(keyword)
+            )
+        );
+        const filtered = filterByDateRange(speisen, startDateSpeisen, endDateSpeisen);
+        setFilteredSpeisen(groupAndSummarize(filtered));
     };
 
-    // Gruppierte Daten vorbereiten
-    const groupedOrders = groupAndSummarize(orders);
+    const handleFilterGetraenke = () => {
+        const getraenke = orders.filter(order =>
+            ["Cola", "Kakao", "Kaffee", "Tea", "Juice"].some(keyword =>
+                order.menu_item_name.includes(keyword)
+            )
+        );
+        const filtered = filterByDateRange(getraenke, startDateGetraenke, endDateGetraenke);
+        setFilteredGetraenke(groupAndSummarize(filtered));
+    };
 
-    const renderCategory = (data, maxSales, title, total, showTopProducts, setShowTopProducts, startDate, setStartDate, endDate, setEndDate) => {
-        // Zeitraumfilter anwenden
-        const filteredData = filterByDateRange(data, startDate, endDate);
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
-        // Top 5 Produkte filtern
-        const displayedData = showTopProducts ? filteredData.slice(0, 5) : filteredData;
+    const renderCategory = (data, maxSales, title, total, showTopProducts, setShowTopProducts, startDate, setStartDate, endDate, setEndDate, handleFilter) => {
+        const displayedData = showTopProducts ? data.slice(0, 5) : data;
 
         return (
             <div className={styles.salesCard}>
                 <div className={styles.salesHeader}>
                     <h3>{title}</h3>
                     <div className={styles.filters}>
-                        {/* Top-Produkte-Button */}
                         <button
                             className={`${styles.filterButton} ${showTopProducts ? styles.active : ''}`}
                             onClick={() => setShowTopProducts(!showTopProducts)}
                         >
                             Top Produkte
                         </button>
-                        {/* Zeitraum-Filter */}
                         <div className={styles.dateFilters}>
                             <input
                                 type="date"
@@ -105,6 +124,9 @@ const Verkaufszahlen = () => {
                                 className={styles.datePicker}
                                 placeholder="Enddatum"
                             />
+                            <button onClick={handleFilter} className={styles.confirmButton}>
+                                Anwenden
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -133,28 +155,16 @@ const Verkaufszahlen = () => {
         );
     };
 
-    // Speisen und Getränke filtern
-    const speisen = groupedOrders.filter(item =>
-        ["Sandwich", "Crepe", "Mochi", "Burger", "Pizza Slice", "Taco", "Sushi Roll", "Pasta Bowl", "Salad", "Cupcake"].some(keyword =>
-            item.name.includes(keyword)
-        )
-    );
-    const getraenke = groupedOrders.filter(item =>
-        ["Cola", "Kakao", "Kaffee", "Tea", "Juice"].some(keyword =>
-            item.name.includes(keyword)
-        )
-    );
+    const totalSpeisen = filteredSpeisen.reduce((sum, item) => sum + item.totalRevenue, 0);
+    const totalGetraenke = filteredGetraenke.reduce((sum, item) => sum + item.totalRevenue, 0);
 
-    const totalSpeisen = speisen.reduce((sum, item) => sum + item.totalRevenue, 0);
-    const totalGetraenke = getraenke.reduce((sum, item) => sum + item.totalRevenue, 0);
-
-    const maxSalesSpeisen = Math.max(...speisen.map(item => item.sales), 0);
-    const maxSalesGetraenke = Math.max(...getraenke.map(item => item.sales), 0);
+    const maxSalesSpeisen = Math.max(...filteredSpeisen.map(item => item.sales), 0);
+    const maxSalesGetraenke = Math.max(...filteredGetraenke.map(item => item.sales), 0);
 
     return (
         <div className={styles.salesDashboard}>
             {renderCategory(
-                speisen,
+                filteredSpeisen,
                 maxSalesSpeisen,
                 'Speisen',
                 totalSpeisen,
@@ -163,10 +173,11 @@ const Verkaufszahlen = () => {
                 startDateSpeisen,
                 setStartDateSpeisen,
                 endDateSpeisen,
-                setEndDateSpeisen
+                setEndDateSpeisen,
+                handleFilterSpeisen
             )}
             {renderCategory(
-                getraenke,
+                filteredGetraenke,
                 maxSalesGetraenke,
                 'Getränke',
                 totalGetraenke,
@@ -175,7 +186,8 @@ const Verkaufszahlen = () => {
                 startDateGetraenke,
                 setStartDateGetraenke,
                 endDateGetraenke,
-                setEndDateGetraenke
+                setEndDateGetraenke,
+                handleFilterGetraenke
             )}
         </div>
     );
