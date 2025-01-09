@@ -27,6 +27,6 @@ SECRET_KEY = config('DJANGO_SECRET_KEY', 'your-production-secret-key')
 DEBUG = False
 
 # Other production settings like static files, logging, etc. can be configured here
-STATIC_URL = '/static/'
+STATIC_URL = '/django-static/'
 # Directory where static files will be collected
 STATIC_ROOT = '/app/staticfiles/'
