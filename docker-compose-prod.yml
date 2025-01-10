@@ -1,0 +1,52 @@
+services:
+  frontend:
+    image: ghcr.io/supotsu-no-ochaya/business-intelligence/frontend-prod:latest
+    container_name: frontend
+    ports:
+      - "80:80"
+    restart: always
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+        #volumes:
+        #- staticfiles:/app/staticfiles
+
+  backend:
+    image: ghcr.io/supotsu-no-ochaya/business-intelligence/backend-prod:latest
+    container_name: backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_SETTINGS_MODULE=backend.settings_prod
+      - PYTHONPATH=/app/backend:$PYTHONPATH
+      - DB_HOST=db
+    depends_on:
+      - db
+    restart: always
+    volumes:
+      - staticfiles:/app/staticfiles
+    env_file:
+      - .env_prod
+    command: >
+      sh -c "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py createsuperuser --noinput --username ${DJANGO_SUPERUSER_USERNAME} --email ${DJANGO_SUPERUSER_EMAIL} && gunicorn backend.wsgi:application --chdir /app/backend --bind 0.0.0.0:8000"
+
+  db:
+    image: ghcr.io/supotsu-no-ochaya/business-intelligence/postgres-prod:latest
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env_prod
+
+
+volumes:
+  postgres_data:
+  staticfiles:  # Named volume for static files
