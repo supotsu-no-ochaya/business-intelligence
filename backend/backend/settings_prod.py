@@ -24,7 +24,7 @@ ALLOWED_HOSTS = ['*']
 SECRET_KEY = config('DJANGO_SECRET_KEY', 'your-production-secret-key')
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:80'
+    'http://localhost/'
 ]
 
 # Set DEBUG to False for production
