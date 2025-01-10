@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'corsheaders',  # CORS-Headers-App hinzufügen
     'rest_framework_simplejwt',
     'rest_framework_roles',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
