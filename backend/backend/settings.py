@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'corsheaders',  # CORS-Headers-App hinzufügen
     'rest_framework_simplejwt',
     'rest_framework_roles',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -144,6 +145,22 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000"  # React Development Server
 ]
 
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,  # Disable session-based authentication for Swagger UI
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization',
+            'description': 'JWT Authorization header using the Bearer scheme. Example: "Bearer <your_token>"',
+        },
+    },
+    'DEFAULT_SECURITY': [
+        {'Bearer': []},  # Apply globally to all endpoints
+    ],   
+    'LOGIN_URL': 'api/auth/login/',  # Your login endpoint for Swagger UI
+    # 'LOGOUT_URL': 'api/auth/logout/',  # Optional: Logout endpoint if needed
+}
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
