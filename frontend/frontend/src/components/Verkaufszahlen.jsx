@@ -48,8 +48,7 @@ const Verkaufszahlen = () => {
             } catch (error) {
                 console.error('Fehler beim Laden der Speisen:', error);
             } finally {
-                setLoading(false);
-                
+                setLoading(false);                
             }
         };
 

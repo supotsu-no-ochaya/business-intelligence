@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import './Settings.css';
+import { changePassword, addUser, uploadFile } from '../apiService'; // Importiere die API-Funktionen
 
 const Settings = () => {
   const [password, setPassword] = useState('');
-  const [newUser, setNewUser] = useState({ username: '', email: '' });
+  const [newUser, setNewUser] = useState({ username: '', email: '', group: '' });
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
   const handlePasswordChange = (e) => setPassword(e.target.value);
+
   const handleNewUserChange = (e) => {
     const { name, value } = e.target;
     setNewUser((prev) => ({ ...prev, [name]: value }));
@@ -25,37 +27,38 @@ const Settings = () => {
     }
   };
 
-  const handlePasswordSubmit = () => {
-    alert('Passwort geändert!');
-    setPassword('');
+  const handlePasswordSubmit = async () => {
+    try {
+      await changePassword(password);
+      alert('Passwort geändert!');
+      setPassword('');
+    } catch (error) {
+      setErrorMessage('Fehler beim Ändern des Passworts.');
+      console.error(error);
+    }
   };
 
-  const handleNewUserSubmit = () => {
-    alert(`Neuer Benutzer hinzugefügt: ${newUser.username}`);
-    setNewUser({ username: '', email: '', group: '' });
+  const handleNewUserSubmit = async () => {
+    try {
+      await addUser(newUser);
+      alert(`Neuer Benutzer hinzugefügt: ${newUser.username}`);
+      setNewUser({ username: '', email: '', group: '' });
+    } catch (error) {
+      setErrorMessage('Fehler beim Hinzufügen des Benutzers.');
+      console.error(error);
+    }
   };
 
   const handleFileSubmit = async () => {
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
-
     try {
-      const response = await fetch('http://localhost:8000/upload-json/', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        setSuccessMessage('Datei erfolgreich hochgeladen!');
-        setFile(null); // Datei-Status zurücksetzen
-      } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Fehler beim Hochladen der Datei.');
-      }
+      await uploadFile(file);
+      setSuccessMessage('Datei erfolgreich hochgeladen!');
+      setFile(null);
     } catch (error) {
-      setErrorMessage('Netzwerkfehler. Bitte versuchen Sie es später erneut.');
+      setErrorMessage('Fehler beim Hochladen der Datei.');
+      console.error(error);
     }
   };
 
@@ -63,7 +66,6 @@ const Settings = () => {
     <div className="settings-container">
       <h2>Einstellungen</h2>
 
-      {/* Container für die Kacheln */}
       <div className="settings-grid">
         {/* Passwort ändern */}
         <div className="settings-section">
@@ -82,45 +84,44 @@ const Settings = () => {
         </div>
 
         {/* Benutzer hinzufügen */}
-    <div className="settings-section">
-      <h3>Benutzer hinzufügen</h3>
-     <div className="form-group">
-        <label htmlFor="username">Benutzername</label>
-        <input
-         type="text"
-         id="username"
-         name="username"
-         value={newUser.username}
-          onChange={handleNewUserChange}
-         placeholder="Benutzername eingeben"
-        />
-        <label htmlFor="email">E-Mail</label>
-        <input
-         type="email"
-          id="email"
-          name="email"
-          value={newUser.email}
-          onChange={handleNewUserChange}
-          placeholder="E-Mail eingeben"
-        />
-        <label htmlFor="group">Gruppe</label>
-        <select
-          id="group"
-          name="group"
-          value={newUser.group}
-          onChange={handleNewUserChange}
-        >
-          <option value="" disabled>
-            Gruppe auswählen
-          </option>
-          <option value="admin">Admin</option>
-          <option value="editor">Kassenwart</option>
-          <option value="viewer">Küchenleitung</option>
-        </select>
-        <button onClick={handleNewUserSubmit}>Benutzer hinzufügen</button>
-      </div>
-    </div>
-
+        <div className="settings-section">
+          <h3>Benutzer hinzufügen</h3>
+          <div className="form-group">
+            <label htmlFor="username">Benutzername</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={newUser.username}
+              onChange={handleNewUserChange}
+              placeholder="Benutzername eingeben"
+            />
+            <label htmlFor="email">E-Mail</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={newUser.email}
+              onChange={handleNewUserChange}
+              placeholder="E-Mail eingeben"
+            />
+            <label htmlFor="group">Gruppe</label>
+            <select
+              id="group"
+              name="group"
+              value={newUser.group}
+              onChange={handleNewUserChange}
+            >
+              <option value="" disabled>
+                Gruppe auswählen
+              </option>
+              <option value="admin">Admin</option>
+              <option value="editor">Kassenwart</option>
+              <option value="viewer">Küchenleitung</option>
+            </select>
+            <button onClick={handleNewUserSubmit}>Benutzer hinzufügen</button>
+          </div>
+        </div>
 
         {/* Datei hochladen */}
         <div className="settings-section">
