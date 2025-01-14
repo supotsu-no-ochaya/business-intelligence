@@ -142,7 +142,8 @@ REST_FRAMEWORK_ROLES = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000"  # React Development Server
+    "http://localhost:3000",  # React Development Server
+    "http://127.0.0.1:3000"
 ]
 
 SWAGGER_SETTINGS = {
