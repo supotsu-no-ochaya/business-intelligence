@@ -11,11 +11,14 @@ const Verkaufszahlen = () => {
     const [showTopProductsSpeisen, setShowTopProductsSpeisen] = useState(false);
     const [startDateSpeisen, setStartDateSpeisen] = useState('');
     const [endDateSpeisen, setEndDateSpeisen] = useState('');
+    const [filteredSpeisen, setFilteredSpeisen] = useState([]);
+
 
     // Zustände für Getränke
     const [showTopProductsGetraenke, setShowTopProductsGetraenke] = useState(false);
     const [startDateGetraenke, setStartDateGetraenke] = useState('');
     const [endDateGetraenke, setEndDateGetraenke] = useState('');
+    const [filteredGetraenke, setFilteredGetraenke] = useState([]);
 
     // Bestellungen laden
     useEffect(() => {
@@ -58,9 +61,15 @@ const Verkaufszahlen = () => {
         }
     }, [orders]);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+    const handleFilterSpeisen = () => {
+        const speisen = orders.filter(order =>
+            ["Sandwich", "Crepe", "Mochi", "Burger", "Pizza Slice", "Taco", "Sushi Roll", "Pasta Bowl", "Salad", "Cupcake"].some(keyword =>
+                order.menu_item_name.includes(keyword)
+            )
+        );
+        const filtered = filterByDateRange(speisen, startDateSpeisen, endDateSpeisen);
+        setFilteredSpeisen(groupAndSummarize(filtered));
+    };
 
     // Hilfsfunktion: Gruppieren, Summieren und Sortieren der Bestellungen
     const groupAndSummarize = (data) => {
@@ -92,15 +101,23 @@ const Verkaufszahlen = () => {
         });
     };
 
-    // Gruppierte Daten vorbereiten
-    const groupedOrders = groupAndSummarize(orders);
+    const handleFilterGetraenke = () => {
+        const getraenke = orders.filter(order =>
+            ["Cola", "Kakao", "Kaffee", "Tea", "Juice"].some(keyword =>
+                order.menu_item_name.includes(keyword)
+            )
+        );
+        const filtered = filterByDateRange(getraenke, startDateGetraenke, endDateGetraenke);
+        setFilteredGetraenke(groupAndSummarize(filtered));
+    };
 
-    const renderCategory = (data, maxSales, title, total, showTopProducts, setShowTopProducts, startDate, setStartDate, endDate, setEndDate) => {
-        // Zeitraumfilter anwenden
-        const filteredData = filterByDateRange(data, startDate, endDate);
 
+    if (loading) {
+        return <p>Loading...</p>;
+    }
         // Top 5 Produkte filtern
-        const displayedData = showTopProducts ? filteredData.slice(0, 5) : filteredData;
+        const renderCategory = (data, maxSales, title, total, showTopProducts, setShowTopProducts, startDate, setStartDate, endDate, setEndDate, handleFilter) => {
+            const displayedData = showTopProducts ? data.slice(0, 5) : data;
 
         return (
             <div className={styles.salesCard}>
@@ -130,6 +147,9 @@ const Verkaufszahlen = () => {
                                 className={styles.datePicker}
                                 placeholder="Enddatum"
                             />
+                            <button onClick={handleFilter} className={styles.confirmButton}>
+                                Anwenden
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -158,30 +178,16 @@ const Verkaufszahlen = () => {
         );
     };
 
-    // Speisen und Getränke filtern
-    /*const speisen = groupedOrders.filter(item =>
-        ["Sandwich", "Crepe", "Mochi", "Burger", "Pizza Slice", "Taco", "Sushi Roll", "Pasta Bowl", "Salad", "Cupcake"].some(keyword =>
-            item.name.includes(keyword)
-        )
-    );
-    */
-    const getraenke = groupedOrders.filter(item =>
-        ["Cola", "Kakao", "Kaffee", "Tea", "Juice"].some(keyword =>
-            item.name.includes(keyword)
-        )
-    );
-    
+    const totalSpeisen = filteredSpeisen.reduce((sum, item) => sum + item.totalRevenue, 0);
+    const totalGetraenke = filteredGetraenke.reduce((sum, item) => sum + item.totalRevenue, 0);
 
-    const totalSpeisen = speisen.reduce((sum, item) => sum + item.totalRevenue, 0);
-    const totalGetraenke = getraenke.reduce((sum, item) => sum + item.totalRevenue, 0);
-
-    const maxSalesSpeisen = Math.max(...speisen.map(item => item.sales), 0);
-    const maxSalesGetraenke = Math.max(...getraenke.map(item => item.sales), 0);
+    const maxSalesSpeisen = Math.max(...filteredSpeisen.map(item => item.sales), 0);
+    const maxSalesGetraenke = Math.max(...filteredGetraenke.map(item => item.sales), 0);
 
     return (
         <div className={styles.salesDashboard}>
             {renderCategory(
-                speisen,
+                filteredSpeisen,
                 maxSalesSpeisen,
                 'Speisen',
                 totalSpeisen,
@@ -190,10 +196,11 @@ const Verkaufszahlen = () => {
                 startDateSpeisen,
                 setStartDateSpeisen,
                 endDateSpeisen,
-                setEndDateSpeisen
+                setEndDateSpeisen,
+                handleFilterSpeisen
             )}
             {renderCategory(
-                getraenke,
+                filteredGetraenke,
                 maxSalesGetraenke,
                 'Getränke',
                 totalGetraenke,
@@ -202,7 +209,8 @@ const Verkaufszahlen = () => {
                 startDateGetraenke,
                 setStartDateGetraenke,
                 endDateGetraenke,
-                setEndDateGetraenke
+                setEndDateGetraenke,
+                handleFilterGetraenke
             )}
         </div>
     );
