@@ -81,14 +81,15 @@ class UploadJsonView(APIView):
                         order_item = order_item_serializer.save()
 
                         # Update ingredient availability for each ordered product
-                        for product in order_item.Products:
-                            for speise_ingredient in product.zutaten:
-                                ingredient = speise_ingredient.ingredient
-                                ingredient_quantity_used = speise_ingredient.portion * order_item_data['quantity']
-                                
-                                # Update ingredient availability
-                                ingredient.quantity -= ingredient_quantity_used
-                                ingredient.save()
+                        if getattr(order_item, 'Products', False): # fix for unavailable Products field
+                            for product in order_item.Products:
+                                for speise_ingredient in product.zutaten:
+                                    ingredient = speise_ingredient.ingredient
+                                    ingredient_quantity_used = speise_ingredient.portion * order_item_data['quantity']
+                                    
+                                    # Update ingredient availability
+                                    ingredient.quantity -= ingredient_quantity_used
+                                    ingredient.save()
 
                         # Handle Order Item Events
                         for event_data in events_data:
