@@ -14,9 +14,8 @@ services:
     env_file:
       - .env
     command: >
-      sh -c "./wait_for_db.sh db 5432 &&
+      sh -c "
       python3 manage.py migrate &&
-      python3 manage.py createsuperuser --noinput --username ${DJANGO_SUPERUSER_USERNAME} --email ${DJANGO_SUPERUSER_EMAIL} &&
       python3 manage.py runserver 0.0.0.0:8000"
   frontend:
     build:

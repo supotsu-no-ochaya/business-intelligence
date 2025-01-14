@@ -17,6 +17,7 @@ from testdata.serializer import (
     OrderItem2Serializer, PaymentSerializer, 
     OrderEventSerializer, IngredientSerializer
 )
+from testdata.roles import DEFAULT_PERMISSIONS
 
 # Create your views here.
 
@@ -41,6 +42,7 @@ def earnings(request):
 
 # File upload
 class UploadJsonView(APIView):
+    view_permissions = {'post': {'admin': True},}
     def post(self, request, *args, **kwargs):
         # Get the uploaded file from the request
         uploaded_file = request.FILES.get('file')
