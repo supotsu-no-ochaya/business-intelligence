@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Verkaufszahlen.module.css';
-import { fetchOrders, fetchSpeisen } from '../apiService'; // Importiere die API-Funktionen
+import { fetchOrders, fetchSpeisen } from '../apiService';
 
 const Verkaufszahlen = () => {
     const [orders, setOrders] = useState([]);
@@ -12,7 +12,6 @@ const Verkaufszahlen = () => {
     const [startDateSpeisen, setStartDateSpeisen] = useState('');
     const [endDateSpeisen, setEndDateSpeisen] = useState('');
     const [filteredSpeisen, setFilteredSpeisen] = useState([]);
-
 
     // Zustände für Getränke
     const [showTopProductsGetraenke, setShowTopProductsGetraenke] = useState(false);
@@ -42,7 +41,6 @@ const Verkaufszahlen = () => {
                 const fetchedSpeisen = await fetchSpeisen();
                 console.log('Speisen:', fetchedSpeisen);
 
-                // Filtere Bestellungen basierend auf Speisen-Daten
                 const filteredSpeisen = orders.filter(order =>
                     fetchedSpeisen.some(speise => order.menu_item_name.includes(speise.name))
                 );
@@ -55,7 +53,6 @@ const Verkaufszahlen = () => {
             }
         };
 
-        // Nur laden, wenn Bestellungen vorhanden sind
         if (orders.length > 0) {
             loadSpeisen();
         }
@@ -68,10 +65,19 @@ const Verkaufszahlen = () => {
             )
         );
         const filtered = filterByDateRange(speisen, startDateSpeisen, endDateSpeisen);
-        setFilteredSpeisen(groupAndSummarize(filtered));
+        setFilteredSpeisen(groupAndSummarize(filtered).slice(0, showTopProductsSpeisen ? 5 : undefined));
     };
 
-    // Hilfsfunktion: Gruppieren, Summieren und Sortieren der Bestellungen
+    const handleFilterGetraenke = () => {
+        const getraenke = orders.filter(order =>
+            ["Cola", "Kakao", "Kaffee", "Tea", "Juice"].some(keyword =>
+                order.menu_item_name.includes(keyword)
+            )
+        );
+        const filtered = filterByDateRange(getraenke, startDateGetraenke, endDateGetraenke);
+        setFilteredGetraenke(groupAndSummarize(filtered).slice(0, showTopProductsGetraenke ? 5 : undefined));
+    };
+
     const groupAndSummarize = (data) => {
         const grouped = data.reduce((acc, order) => {
             if (!acc[order.menu_item_name]) {
@@ -88,7 +94,6 @@ const Verkaufszahlen = () => {
         return Object.values(grouped).sort((a, b) => b.sales - a.sales);
     };
 
-    // Zeitraumfilter anwenden
     const filterByDateRange = (data, startDate, endDate) => {
         const startTimestamp = startDate ? new Date(startDate).getTime() : null;
         const endTimestamp = endDate ? new Date(endDate).getTime() : null;
@@ -101,37 +106,18 @@ const Verkaufszahlen = () => {
         });
     };
 
-    const handleFilterGetraenke = () => {
-        const getraenke = orders.filter(order =>
-            ["Cola", "Kakao", "Kaffee", "Tea", "Juice"].some(keyword =>
-                order.menu_item_name.includes(keyword)
-            )
-        );
-        const filtered = filterByDateRange(getraenke, startDateGetraenke, endDateGetraenke);
-        setFilteredGetraenke(groupAndSummarize(filtered));
-    };
-
-
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-        // Top 5 Produkte filtern
-        const renderCategory = (data, maxSales, title, total, showTopProducts, setShowTopProducts, startDate, setStartDate, endDate, setEndDate, handleFilter) => {
-            const displayedData = showTopProducts ? data.slice(0, 5) : data;
-
+    const renderCategory = (data, maxSales, title, total, showTopProducts, setShowTopProducts, startDate, setStartDate, endDate, setEndDate, handleFilter) => {
         return (
             <div className={styles.salesCard}>
                 <div className={styles.salesHeader}>
                     <h3>{title}</h3>
                     <div className={styles.filters}>
-                        {/* Top-Produkte-Button */}
                         <button
                             className={`${styles.filterButton} ${showTopProducts ? styles.active : ''}`}
                             onClick={() => setShowTopProducts(!showTopProducts)}
                         >
                             Top Produkte
                         </button>
-                        {/* Zeitraum-Filter */}
                         <div className={styles.dateFilters}>
                             <input
                                 type="date"
@@ -154,7 +140,7 @@ const Verkaufszahlen = () => {
                     </div>
                 </div>
                 <div className={styles.salesCategory}>
-                    {displayedData.map((item, index) => (
+                    {data.map((item, index) => (
                         <div key={index} className={styles.salesRow}>
                             <span className={styles.itemName}>{item.name}</span>
                             <div className={styles.progressBar}>
@@ -177,6 +163,10 @@ const Verkaufszahlen = () => {
             </div>
         );
     };
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
     const totalSpeisen = filteredSpeisen.reduce((sum, item) => sum + item.totalRevenue, 0);
     const totalGetraenke = filteredGetraenke.reduce((sum, item) => sum + item.totalRevenue, 0);
