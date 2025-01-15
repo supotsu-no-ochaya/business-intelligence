@@ -1,53 +1,74 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Sidebar.css'; // Importiere das CSS-Stylesheet
+import { fetchUserMe } from '../apiService';
 
 const Sidebar = ({ navigate }) => {
-  return (
-    <div className="sidebar">
-      <div className="logo">
-        <h2>Your Logo</h2>
+    const [userGroup, setUserGroup] = useState(null);
+
+    useEffect(() => {
+        const loadUser = async () => {
+            try {
+                const user = await fetchUserMe();
+                // Extrahiere den Gruppennamen aus der Datenstruktur
+                if (user.groups && user.groups.length > 0) {
+                    setUserGroup(user.groups[0].name); // Nimm den ersten Gruppennamen an
+                    console.log('Group:' + user.groups[0].name)
+                } else {
+                    console.error('Keine Gruppen gefunden für den Benutzer');
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden des Benutzers:', error);
+            }
+        };
+
+        loadUser();
+    }, []);
+
+    if (!userGroup) {
+        return <div className="sidebar">Lade Benutzer...</div>;
+    }
+
+    // Sichtbarkeitslogik basierend auf der Benutzergruppe
+    const menuItems = [
+        { label: 'Dashboard', icon: '⌛', route: 'dashboard', groups: ['Kasse', 'Kueche', 'Admin'] },
+        { label: 'Verbrauch', icon: '🍴', route: 'verbrauch', groups: ['Kueche', 'Admin'] },
+        { label: 'Zutaten', icon: '📦', route: 'zutaten', groups: ['Kueche', 'Admin'] },
+        { label: 'Getränke', icon: '🥤', route: 'getraenke', groups: ['Kueche', 'Admin'] },
+        { label: 'Transaktionen', icon: '💳', route: 'transaktionen', groups: ['Kasse', 'Admin'] },
+        { label: 'Einnahmen', icon: '📈', route: 'einnahmen', groups: ['Kasse', 'Admin'] },
+        { label: 'Ausgaben', icon: '💲', route: 'ausgaben', groups: ['Kasse', 'Admin'] },
+        { label: 'Verkaufszahlen', icon: '📊', route: 'verkaufszahlen', groups: ['Kasse', 'Admin'] },
+    ];
+
+    const bottomLinks = [
+        { label: 'Settings', icon: '⚙️', route: 'settings', groups: ['Kasse', 'Kueche', 'Admin'] },
+        { label: 'Log out', icon: '🔓', route: 'logout', groups: ['Kasse', 'Kueche', 'Admin'] },
+    ];
+
+    const renderMenuItems = (items) => {
+        return items
+            .filter(item => item.groups.includes(userGroup))
+            .map((item, index) => (
+                <li key={index} className="nav-item" onClick={() => navigate(item.route)}>
+                    <i className="icon">{item.icon}</i> {item.label}
+                </li>
+            ));
+    };
+
+    return (
+      <div className="sidebar">
+          <div className="logo">
+              <h2>Your Logo</h2>
+          </div>
+          <div style={{ width: '100%', border: '1px #1D1E2C solid' }}></div>
+          <ul className="nav-list">
+              {renderMenuItems(menuItems)}
+          </ul>
+          <div style={{ width: '100%', border: '1px #1D1E2C solid' }}></div>
+          <div className="bottom-links">
+              {renderMenuItems(bottomLinks)}
+          </div>
       </div>
-      <div style={{ width: '100%', border: '1px #1D1E2C solid' }}></div>
-      <ul className="nav-list">
-        <li className="nav-item" onClick={() => navigate('dashboard')}>
-          <i className="icon">⌛</i> Dashboard
-        </li>
-        {/*<li className="nav-item" onClick={() => navigate('verbrauch')}>
-          <i className="icon">🍴</i> Verbrauch
-        </li>
-        <li className="nav-item" onClick={() => navigate('zutaten')}>
-          <i className="icon">📦</i> Zutaten
-        </li>*/}
-        <li className="nav-item" onClick={() => navigate('getraenke')}>
-          <i className="icon">🥤</i> Getränke
-        </li>
-        <li className="nav-item" onClick={() => navigate('transaktionen')}>
-          <i className="icon">💳</i> Transaktionen
-        </li>
-        <li className="nav-item" onClick={() => navigate('einnahmen')}>
-          <i className="icon">📈</i> Einnahmen
-        </li>
-        <li className="nav-item" onClick={() => navigate('ausgaben')}>
-          <i className="icon">💲</i> Ausgaben
-        </li>
-        <li className="nav-item" onClick={() => navigate('verkaufszahlen')}>
-          <i className="icon">📊</i> Verkaufszahlen
-        </li>
-      </ul>
-      <div style={{ width: '100%', border: '1px #1D1E2C solid' }}></div>
-      <div className="bottom-links">
-        <li className="nav-item" onClick={() => navigate('settings')}>
-          <i className="icon">⚙️</i> Settings
-        </li>
-        {/*<div className="nav-item">
-          <i className="icon">❓</i> Support
-        </div>*/}
-        <div style={{ width: '100%', border: '1px #1D1E2C solid' }}></div>
-        <div className="nav-item logout">
-          <i className="icon">🔓</i> Log out
-        </div>
-      </div>
-    </div>
   );
 };
 

@@ -57,6 +57,8 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+
+
 // API-Funktionen verwenden die Instanz
 export const fetchTotalEarnings = async () => {
   const response = await axiosInstance.get('/total_earnings');
@@ -70,6 +72,16 @@ export const fetchOrders = async () => {
 
 export const fetchSpeisen = async () => {
   const response = await axiosInstance.get('/speise');
+  return response.data;
+};
+
+export const fetchUser = async () => {
+  const response = await axiosInstance.get('/user');
+  return response.data;
+};
+
+export const fetchUserMe = async () => {
+  const response = await axiosInstance.get('/user/me');
   return response.data;
 };
 
