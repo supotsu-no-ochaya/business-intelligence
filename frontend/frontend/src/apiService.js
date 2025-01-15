@@ -87,21 +87,29 @@ export const loginUser = async (username, password) => {
     }
   };
 
-  export const changePassword = async (password) => {
+  export const getCurrentUser = async () => {
     try {
-      await axiosInstance.post('/auth/change-password/', { password });
+      const response = await axiosInstance.get('/user/me');
+      return response.data; // Rückgabe des Benutzerobjekts
     } catch (error) {
-      console.error('Error changing password:', error);
-      throw error;
+      throw error; // Fehler weitergeben
     }
   };
-  
-  export const addUser = async (user) => {
+
+  export const changePassword = async (newPassword) => {
     try {
-      await axiosInstance.post('/auth/users/', user);
+      // Zuerst den aktuellen Benutzer abrufen
+      const currentUser = await getCurrentUser();
+      const userId = currentUser.id; // ID des aktuellen Benutzers
+  
+      // Passwortänderung an den Endpunkt senden
+      const response = await axiosInstance.patch(`/user/${userId}/`, {
+        password: newPassword, // Neues Passwort
+      });
+  
+      return response.data; // Erfolgsmeldung zurückgeben
     } catch (error) {
-      console.error('Error adding user:', error);
-      throw error;
+      throw error; // Fehler weitergeben
     }
   };
   

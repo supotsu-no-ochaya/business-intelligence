@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
 import './Settings.css';
-import { changePassword, addUser, uploadFile } from '../apiService'; // Importiere die API-Funktionen
+import { changePassword, uploadFile } from '../apiService'; // Importiere die API-Funktionen
 
 const Settings = () => {
   const [password, setPassword] = useState('');
-  const [newUser, setNewUser] = useState({ username: '', email: '', group: '' });
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
   const handlePasswordChange = (e) => setPassword(e.target.value);
-
-  const handleNewUserChange = (e) => {
-    const { name, value } = e.target;
-    setNewUser((prev) => ({ ...prev, [name]: value }));
-  };
 
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
@@ -34,17 +28,6 @@ const Settings = () => {
       setPassword('');
     } catch (error) {
       setErrorMessage('Fehler beim Ändern des Passworts.');
-      console.error(error);
-    }
-  };
-
-  const handleNewUserSubmit = async () => {
-    try {
-      await addUser(newUser);
-      alert(`Neuer Benutzer hinzugefügt: ${newUser.username}`);
-      setNewUser({ username: '', email: '', group: '' });
-    } catch (error) {
-      setErrorMessage('Fehler beim Hinzufügen des Benutzers.');
       console.error(error);
     }
   };
@@ -80,46 +63,6 @@ const Settings = () => {
               placeholder="Neues Passwort eingeben"
             />
             <button onClick={handlePasswordSubmit}>Passwort ändern</button>
-          </div>
-        </div>
-
-        {/* Benutzer hinzufügen */}
-        <div className="settings-section">
-          <h3>Benutzer hinzufügen</h3>
-          <div className="form-group">
-            <label htmlFor="username">Benutzername</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={newUser.username}
-              onChange={handleNewUserChange}
-              placeholder="Benutzername eingeben"
-            />
-            <label htmlFor="email">E-Mail</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={newUser.email}
-              onChange={handleNewUserChange}
-              placeholder="E-Mail eingeben"
-            />
-            <label htmlFor="group">Gruppe</label>
-            <select
-              id="group"
-              name="group"
-              value={newUser.group}
-              onChange={handleNewUserChange}
-            >
-              <option value="" disabled>
-                Gruppe auswählen
-              </option>
-              <option value="admin">Admin</option>
-              <option value="editor">Kassenwart</option>
-              <option value="viewer">Küchenleitung</option>
-            </select>
-            <button onClick={handleNewUserSubmit}>Benutzer hinzufügen</button>
           </div>
         </div>
 
