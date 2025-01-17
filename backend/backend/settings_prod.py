@@ -24,13 +24,17 @@ ALLOWED_HOSTS = ['*']
 SECRET_KEY = config('DJANGO_SECRET_KEY', 'your-production-secret-key')
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost/'
+    'localhost'
 ]
 
 # Set DEBUG to False for production
 DEBUG = False
 
 # Other production settings like static files, logging, etc. can be configured here
-STATIC_URL = '/django-static/'
+#STATIC_URL = '/django-static/'
 # Directory where static files will be collected
-STATIC_ROOT = '/app/staticfiles/'
+#STATIC_ROOT = '/app/staticfiles/'
+
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+# The URL to use when referring to static files (where they will be served from)
+STATIC_URL = '/django-static/'

@@ -31,7 +31,7 @@ services:
     env_file:
       - .env_prod
     command: >
-      sh -c "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py createsuperuser --noinput --username ${DJANGO_SUPERUSER_USERNAME} --email ${DJANGO_SUPERUSER_EMAIL} && gunicorn backend.wsgi:application --chdir /app/backend --bind 0.0.0.0:8000"
+      sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn backend.wsgi:application --chdir /app/backend --bind 0.0.0.0:8000"
 
   db:
     image: ghcr.io/supotsu-no-ochaya/business-intelligence/postgres-prod:latest
