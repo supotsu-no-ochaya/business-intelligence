@@ -17,15 +17,18 @@ DATABASES = {
     }
 }
 
-# Allow only production domain
-ALLOWED_HOSTS = ['*']
+# Allow only production domain (need to be different not *)
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '141.45.146.228']
 
 # Set the security key (ensure this is securely generated in production)
 SECRET_KEY = config('DJANGO_SECRET_KEY', 'your-production-secret-key')
 
 CORS_ALLOWED_ORIGINS = [
-    'localhost'
+    'localhost', '141.45.146.228'
 ]
+
+# Change this to not *
+CSRF_TRUSTED_ORIGINS = ['localhost', '127.0.0.1', '141.45.146.228']
 
 # Set DEBUG to False for production
 DEBUG = False
