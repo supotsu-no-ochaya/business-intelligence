@@ -29,7 +29,10 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # Change this to not *
-CSRF_TRUSTED_ORIGINS = ['localhost', '127.0.0.1', '141.45.146.228']
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost', 'http://127.0.0.1', 'http://141.45.146.228'
+    'https://localhost', 'https://127.0.0.1', 'https://141.45.146.228'
+]
 
 # Set DEBUG to False for production
 DEBUG = False
