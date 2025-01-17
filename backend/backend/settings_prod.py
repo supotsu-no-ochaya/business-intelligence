@@ -24,7 +24,8 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '141.45.146.228']
 SECRET_KEY = config('DJANGO_SECRET_KEY', 'your-production-secret-key')
 
 CORS_ALLOWED_ORIGINS = [
-    'localhost', '141.45.146.228'
+    'https://localhost', 'https://141.45.146.228',
+    'http://localhost', 'http://141.45.146.228'
 ]
 
 # Change this to not *
