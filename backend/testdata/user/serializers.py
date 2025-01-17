@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # Tuple of serialized model fields (see link [2])
-        fields = ( "id", "username", "new_password", "groups", )
+        fields = ( "id", "username", "new_password", "groups", "is_superuser", "is_staff" )
         extra_kwargs = {
             'url': {'lookup_field': 'id'}
         }
