@@ -27,3 +27,8 @@ Immer schoen runterfahren nicht Ctrl C...
 foo@bar:~$ docker compose down -v
 ```
 
+Run Production:
+```console
+foo@bar:~$ docker compose -f docker-compose-prod.yml --env-file .env_prod up --build
+```
+
