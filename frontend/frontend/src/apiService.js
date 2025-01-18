@@ -85,6 +85,16 @@ export const fetchUserMe = async () => {
   return response.data;
 };
 
+export const fetchCompanyExpense = async () => {
+  const response = await axiosInstance.get('/expense')
+  return response.data
+}
+
+export const createCompanyExpense = async(data) => {
+  const response = await axiosInstance.post('/expense/', data)
+  return response
+}
+
 export const loginUser = async (username, password) => {
     const user = { username, password };
     try {

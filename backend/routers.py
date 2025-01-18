@@ -1,7 +1,7 @@
 from rest_framework import routers
 from testdata.auth.viewsets import LoginViewSet, RefreshViewSet
 from testdata.user.viewsets import GroupViewSet, UserViewSet
-from testdata.viewsets import OrderItemViewSet, ProductViewSet, SpeiseViewSet, OrderViewSet, MesseEventViewSet
+from testdata.viewsets import CompanyExpenseViewSet, OrderItemViewSet, ProductViewSet, SpeiseViewSet, OrderViewSet, MesseEventViewSet
 
 
 router = routers.SimpleRouter()
@@ -14,3 +14,4 @@ router.register(r'auth/login', LoginViewSet, basename='auth-login')
 router.register(r'auth/refresh', RefreshViewSet, basename='auth-refresh')
 router.register(r'user', UserViewSet, basename='user')
 router.register(r'group', GroupViewSet, basename='usergroups')
+router.register(r'expense', CompanyExpenseViewSet, basename='companyexpense')
