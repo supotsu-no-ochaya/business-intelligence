@@ -1,17 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import styles from "./Transaktionen.module.css";
+import { createCompanyExpense, fetchCompanyExpense } from "../apiService";
 
 const Transaktionen = () => {
+
+  const [transactions, setTransactions] = useState([]);
   const [showUploadMenu, setShowUploadMenu] = useState(false); // Zustand für das Upload-Menü
   const [newTransaction, setNewTransaction] = useState({
-    title: "",
-    date: "",
-    amount: "",
-    type: "income",
-    paymentMethod: "Bar", // Standardwert
+    name: "",
+    date_purchased: "01.01.2025",
+    cost: 0,
+    paymentMethod: "CA", // Standardwert
     handler: "",
   });
+
+  useEffect(() => {
+    // Define an async function to fetch data
+    const fetchTransactions = async () => {
+      try {
+        const expense_data = await fetchCompanyExpense()
+        // Assuming the API returns an array of transactions
+        setTransactions(expense_data);
+      } catch (err) {
+        console.error('Error fetching transactions:', err);
+      }
+    };
+
+    fetchTransactions();
+  }, []); // Empty dependency array ensures this runs once when component mounts
+
 
   // Daten für die Line-Charts
   const totalExpenseData = {
@@ -51,33 +69,23 @@ const Transaktionen = () => {
     },
   };
 
-  // Transaktionsdaten
-  const [transactions, setTransactions] = useState([
-    {
-      title: "Metro Einkauf",
-      date: "13 Oktober 2024",
-      amount: "-678,72 €",
-      type: "expense",
-      paymentMethod: "Kreditkarte",
-      handler: "Max Mustermann",
-    },
-    {
-      title: "Standmiete",
-      date: "10 Oktober 2024",
-      amount: "-100,00 €",
-      type: "expense",
-      paymentMethod: "Überweisung",
-      handler: "Anna Schmidt",
-    },
-    {
-      title: "Einnahmen Messe",
-      date: "23 September 2023",
-      amount: "+6.158,04 €",
-      type: "income",
-      paymentMethod: "Bar",
-      handler: "Lisa Müller",
-    },
-  ]);
+
+  const expense_categories = {
+    'FOOD': 'Essen & Getränke',
+    'DECOR': 'Dekorationen',
+    'COSTUME': 'Kostüme',
+    'PROMO': 'Werbung & Promotion',
+    'SUPPLY': 'Materialien',
+    'EQUIP': 'Ausrüstung',
+    'TRAVEL': 'Reisekosten',
+    'FEES': 'Gebühren & Lizenzen',
+    'MISC': 'Sonstiges',
+  }
+
+  const payment_types = {
+    'CC': 'Kreditkarte',
+    'CA': 'Bargeld'
+  }
 
   // Funktion zum Hinzufügen einer neuen Transaktion
   const handleAddTransaction = () => {
@@ -87,21 +95,21 @@ const Transaktionen = () => {
       newTransaction.amount &&
       newTransaction.handler
     ) {
-      setTransactions([
-        ...transactions,
-        {
-          ...newTransaction,
-          amount: `${newTransaction.type === "income" ? "+" : "-"}${newTransaction.amount} €`,
-        },
-      ]);
+      let response = createCompanyExpense(newTransaction)
+      if(response.status = 200) {
+        window.alert('Upload successfull')
+        setTransactions([])
+        setTransactions(response.data)
+      }
       setShowUploadMenu(false);
       setNewTransaction({
         title: "",
+        description: "",
         date: "",
-        amount: "",
-        type: "income",
-        paymentMethod: "Bar",
+        amount: 0,
         handler: "",
+        category: Object.keys(expense_categories)[1],
+        payment_type: ""
       }); // Formular zurücksetzen
     }
   };
@@ -133,25 +141,33 @@ const Transaktionen = () => {
         >
           Transaktion hochladen
         </button>
-        <ul className={styles.transactionList}>
-          {transactions.map((transaction, index) => (
-            <li key={index} className={styles.transactionItem}>
-              <div>
-                <strong>{transaction.title}</strong>
-                <p>{transaction.date}</p>
-                <p>Zahlungsart: {transaction.paymentMethod}</p>
-                <p>Bearbeiter: {transaction.handler}</p>
-              </div>
-              <span
-                style={{
-                  color: transaction.type === "income" ? "green" : "red",
-                }}
-              >
-                {transaction.amount}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <table className={styles.transactionList}>
+          <thead>
+            <tr>
+              <th>Titel</th>
+              <th>Datum</th>
+              <th>Zahlungsart</th>
+              <th>Bearbeiter</th>
+              <th>Betrag</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((transaction, index) => (
+              <tr key={index} className={styles.transactionItem}>
+                <td>{transaction.title}</td>
+                <td>{transaction.date}</td>
+                <td>{payment_types[transaction.payment_type]}</td>
+                <td>{transaction.handler}</td>
+                <td
+                  style={{ color: transaction.amount > 0 ? "green" : "red" }}
+                  className={styles.transactionAmount}
+                >
+                  {transaction.amount}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Upload-Menü */}
@@ -167,6 +183,14 @@ const Transaktionen = () => {
             }
           />
           <input
+            type="text"
+            placeholder="Beschreibung"
+            value={newTransaction.description}
+            onChange={(e) =>
+              setNewTransaction({ ...newTransaction, description: e.target.value })
+            }
+          />
+          <input
             type="date"
             placeholder="Datum"
             value={newTransaction.date}
@@ -176,30 +200,33 @@ const Transaktionen = () => {
           />
           <input
             type="number"
-            placeholder="Betrag (€)"
+            placeholder="Betrag in Cent (-2000 für -20€)"
             value={newTransaction.amount}
             onChange={(e) =>
               setNewTransaction({ ...newTransaction, amount: e.target.value })
             }
           />
           <select
-            value={newTransaction.type}
+            value={newTransaction.payment_type}
             onChange={(e) =>
-              setNewTransaction({ ...newTransaction, type: e.target.value })
+              setNewTransaction({ ...newTransaction, payment_type: e.target.value })
             }
           >
-            <option value="income">Einnahme</option>
-            <option value="expense">Ausgabe</option>
+            
+            {Object.entries(payment_types).map(([key, value]) => (
+              <option value={key} key={key}>{value}</option>
+            ))}
           </select>
           <select
-            value={newTransaction.paymentMethod}
+            value={newTransaction.category}
             onChange={(e) =>
-              setNewTransaction({ ...newTransaction, paymentMethod: e.target.value })
+              setNewTransaction({ ...newTransaction, category: e.target.value })
             }
           >
-            <option value="Bar">Bar</option>
-            <option value="Kreditkarte">Kreditkarte</option>
-            <option value="Überweisung">Überweisung</option>
+            {Object.entries(expense_categories).map(([key, value]) => (
+              <option value={key} key={key}>{value}</option>
+            ))}
+            
           </select>
           <input
             type="text"

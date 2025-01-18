@@ -1,0 +1,72 @@
+[
+    {
+        "model": "testdata.companyexpense",
+        "pk": 701,
+        "fields": {
+            "title": "Cupcakes",
+            "description": "Delicious cupcakes for the café.",
+            "category": "FOOD",
+            "amount": -250,
+            "quantity": 100,
+            "date": "2025-01-15",
+            "payment_type": "CA",
+            "handler": "John Doe"
+        }
+    },
+    {
+        "model": "testdata.companyexpense",
+        "pk": 702,
+        "fields": {
+            "title": "Cosplay Props",
+            "description": "Props for staff costumes.",
+            "category": "COSTUME",
+            "amount": -150,
+            "quantity": 10,
+            "date": "2025-01-12",
+            "payment_type": "CA",
+            "handler": "Max Mustermann"
+        }
+    },
+    {
+        "model": "testdata.companyexpense",
+        "pk": 703,
+        "fields": {
+            "title": "Flyers",
+            "description": "Promotional flyers for the cosplay café.",
+            "category": "PROMO",
+            "amount": -100,
+            "quantity": 1000,
+            "date": "2025-01-10",
+            "payment_type": "CA",
+            "handler": "Lisa Musterfrau"
+        }
+    },
+    {
+        "model": "testdata.companyexpense",
+        "pk": 704,
+        "fields": {
+            "title": "Table Decorations",
+            "description": "Anime-themed decorations for tables.",
+            "category": "DECOR",
+            "amount": -100,
+            "quantity": 20,
+            "date": "2025-01-08",
+            "payment_type": "CA",
+            "handler": "Duke Nukem"
+        }
+    },
+    {
+        "model": "testdata.companyexpense",
+        "pk": 705,
+        "fields": {
+            "title": "Rückzahlung",
+            "description": "Rücksendung falsche Artikel",
+            "category": "DECOR",
+            "amount": 100,
+            "quantity": 1,
+            "date": "2025-01-08",
+            "payment_type": "CA",
+            "handler": "Duke Nukem"
+        }
+    }
+]

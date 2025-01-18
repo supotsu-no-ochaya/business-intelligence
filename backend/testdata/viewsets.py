@@ -1,9 +1,9 @@
 from rest_framework import viewsets
-from testdata.models import (Order, OrderItem2, Product, Speise, 
+from testdata.models import (CompanyExpense, Order, OrderItem2, Product, Speise, 
                              OrderItem, MesseEvent, Ingredient)
 from testdata.serializer import (OrderItem2Serializer, ProductSerializer, SpeiseSerializer, 
                                  OrderItemSerializer, MesseEventSerializer, OrderSerializer,
-                                 IngredientSerializer)
+                                 IngredientSerializer, CompanyExpenseSerializer)
 from datetime import date
 from testdata.roles import DEFAULT_PERMISSIONS
 
@@ -63,3 +63,11 @@ class OrderItemViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return OrderItem2.objects.all()
+    
+
+class CompanyExpenseViewSet(viewsets.ModelViewSet):
+    serializer_class = CompanyExpenseSerializer
+    view_permissions = DEFAULT_PERMISSIONS
+
+    def get_queryset(self):
+        return CompanyExpense.objects.all()

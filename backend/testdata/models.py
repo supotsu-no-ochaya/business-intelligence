@@ -191,3 +191,35 @@ class StorageItem(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.quantity} {self.unit}"
+    
+class CompanyExpense(models.Model):
+    EXPENSE_CATEGORIES = [
+        ('FOOD', 'Essen & Getränke'),
+        ('DECOR', 'Dekorationen'),
+        ('COSTUME', 'Kostüme'),
+        ('PROMO', 'Werbung & Promotion'),
+        ('SUPPLY', 'Materialien'),
+        ('EQUIP', 'Ausrüstung'),
+        ('TRAVEL', 'Reisekosten'),
+        ('FEES', 'Gebühren & Lizenzen'),
+        ('MISC', 'Sonstiges'),
+    ]
+
+    PAYMENT_CHOICES =  [
+        ("CC", "Kreditkarte"),
+        ("CA", "Bargeld"),
+    ]
+
+    id = models.AutoField(primary_key=True, auto_created=True)
+    description = models.TextField(blank=True, help_text="Details about the product or its purpose.")
+    title = models.CharField(max_length=255)
+    amount = models.IntegerField()
+    category = models.CharField(
+        max_length=10,
+        choices=EXPENSE_CATEGORIES,
+        help_text="Category of the expense."
+    )
+    quantity = models.PositiveIntegerField(default=1, help_text="Quantity purchased.")
+    date = models.DateField()
+    payment_type = models.CharField(choices=PAYMENT_CHOICES)
+    handler = models.CharField(help_text="Person who did the payment")
