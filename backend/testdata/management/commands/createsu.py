@@ -15,3 +15,4 @@ class Command(BaseCommand):
         else:
             self.stdout.write('Superuser creation skipped. Missing environment variables.')
 
+
