@@ -70,4 +70,4 @@ class CompanyExpenseViewSet(viewsets.ModelViewSet):
     view_permissions = DEFAULT_PERMISSIONS
 
     def get_queryset(self):
-        return CompanyExpense.objects.all()
+        return CompanyExpense.objects.all().order_by('-date')
