@@ -9,10 +9,17 @@ const Sidebar = ({ navigate }) => {
         const loadUser = async () => {
             try {
                 const user = await fetchUserMe();
+                console.log(user)
                 // Extrahiere den Gruppennamen aus der Datenstruktur
-                if (user.groups && user.groups.length > 0) {
-                    setUserGroup(user.groups[0].name); // Nimm den ersten Gruppennamen an
-                    console.log('Group:' + user.groups[0].name)
+                if (user.is_superuser || user.is_staff || (user.groups && user.groups.length > 0)) {
+                    let group = 'user'
+                    if (user.is_superuser || user.is_staff) {
+                        group = 'Admin'
+                    } else if (user.groups && user.groups.length > 0) {
+                        group = user.groups[0].name
+                    }
+
+                    setUserGroup(group); // Nimm den ersten Gruppennamen an
                 } else {
                     console.error('Keine Gruppen gefunden für den Benutzer');
                 }
@@ -25,6 +32,8 @@ const Sidebar = ({ navigate }) => {
     }, []);
 
     if (!userGroup) {
+        console.log("userGroup:", userGroup);
+        
         return <div className="sidebar">Lade Benutzer...</div>;
     }
 

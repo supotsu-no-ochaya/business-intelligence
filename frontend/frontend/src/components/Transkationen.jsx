@@ -1,25 +1,98 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import styles from "./Transaktionen.module.css";
+import { createCompanyExpense, fetchCompanyExpense} from "../apiService";
 
 const Transaktionen = () => {
+
+  const [transactions, setTransactions] = useState([]);
+  const [orders, setOrders] = useState([])
   const [showUploadMenu, setShowUploadMenu] = useState(false); // Zustand für das Upload-Menü
   const [newTransaction, setNewTransaction] = useState({
-    title: "",
-    date: "",
-    amount: "",
-    type: "income",
-    paymentMethod: "Bar", // Standardwert
+    name: "",
+    date_purchased: "",
+    cost: 0,
+    paymentMethod: "",
     handler: "",
   });
 
+  useEffect(() => {
+    // Define an async function to fetch data
+    const fetchTransactions = async () => {
+      try {
+        const expense_data = await fetchCompanyExpense()
+        // Assuming the API returns an array of transactions
+        setTransactions(expense_data);
+      } catch (err) {
+        console.error('Error fetching transactions:', err);
+      }
+    };
+
+    fetchTransactions();
+  }, []); // Empty dependency array ensures this runs once when component mounts
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
+
+  const calculateExpenseData = (transactions) => {
+    const expense_data = {};
+
+    transactions.forEach(({ date, amount }) => {
+      const [year, month] = date.split("-");
+      if (!expense_data[year]) expense_data[year] = Array(months.length).fill(0);
+      expense_data[year][month - 1] += amount;
+    });
+
+    return expense_data;
+  };
+
+  // Helper function to calculate accumulated expense data
+  const calculateAccumulatedData = (expenseData) => {
+    const accumulatedData = {};
+    let cumulativeTotal = 0;
+
+    Object.keys(expenseData)
+      .sort()
+      .forEach((year) => {
+        accumulatedData[year] = Array(months.length).fill(0);
+
+        for (let i = 0; i < months.length; i++) {
+          cumulativeTotal += expenseData[year][i];
+          accumulatedData[year][i] = cumulativeTotal;
+        }
+      });
+
+    return accumulatedData;
+  };
+
+  function convertToEuro(amount_in_cents) {
+    return (amount_in_cents/100).toFixed(2)
+  }
+
+  // Generate data for charts
+  const expenses = calculateExpenseData(transactions);
+  const accumulated_expenses = calculateAccumulatedData(expenses);
+
+  const earnings = {2025: []}
+  const accumulated_earnings = {2025: []}
+
+  var most_recent_year = Math.max(...Object.keys(accumulated_expenses))
+  
+  console.log('expenses:', expenses[most_recent_year])
+  console.log('order earnings:', earnings[most_recent_year])
+  const total_expenses = convertToEuro(
+    expenses[most_recent_year]?.reduce((sum, val) => sum + val, 0) || 0
+  )
+  const total_order_earnings = convertToEuro(
+    earnings[most_recent_year]?.reduce((sum, val) => sum + val, 0) || 0
+  )
+
   // Daten für die Line-Charts
   const totalExpenseData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+    labels: months,
     datasets: [
       {
         label: "Gesamtaufwand",
-        data: [300, 400, 500, 450, 550, 600, 680],
+        data: accumulated_expenses[most_recent_year]?.map(elem => (elem*(-1))/100) || [], // invert numbers to get "growing expenses"
         borderColor: "rgb(255, 0, 132)",
         backgroundColor: "rgba(255, 0, 132, 0.2)",
         tension: 0.4,
@@ -28,11 +101,11 @@ const Transaktionen = () => {
   };
 
   const profitData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+    labels: months,
     datasets: [
       {
         label: "Gewinn",
-        data: [500, 600, 700, 750, 800, 850, 900],
+        data: accumulated_earnings[most_recent_year]?.map(elem => (elem*(-1))/100) || [], // invert numbers to get "growing expenses",
         borderColor: "rgb(0, 255, 132)",
         backgroundColor: "rgba(0, 255, 132, 0.2)",
         tension: 0.4,
@@ -51,57 +124,52 @@ const Transaktionen = () => {
     },
   };
 
-  // Transaktionsdaten
-  const [transactions, setTransactions] = useState([
-    {
-      title: "Metro Einkauf",
-      date: "13 Oktober 2024",
-      amount: "-678,72 €",
-      type: "expense",
-      paymentMethod: "Kreditkarte",
-      handler: "Max Mustermann",
-    },
-    {
-      title: "Standmiete",
-      date: "10 Oktober 2024",
-      amount: "-100,00 €",
-      type: "expense",
-      paymentMethod: "Überweisung",
-      handler: "Anna Schmidt",
-    },
-    {
-      title: "Einnahmen Messe",
-      date: "23 September 2023",
-      amount: "+6.158,04 €",
-      type: "income",
-      paymentMethod: "Bar",
-      handler: "Lisa Müller",
-    },
-  ]);
+
+  const expense_categories = {
+    'FOOD': 'Essen & Getränke',
+    'DECOR': 'Dekorationen',
+    'COSTUME': 'Kostüme',
+    'PROMO': 'Werbung & Promotion',
+    'SUPPLY': 'Materialien',
+    'EQUIP': 'Ausrüstung',
+    'TRAVEL': 'Reisekosten',
+    'FEES': 'Gebühren & Lizenzen',
+    'MISC': 'Sonstiges',
+  }
+
+  const payment_types = {
+    'CC': 'Kreditkarte',
+    'CA': 'Bargeld'
+  }
 
   // Funktion zum Hinzufügen einer neuen Transaktion
-  const handleAddTransaction = () => {
+  const handleAddTransaction = (event) => {
+    event.preventDefault(); // Prevent page reload
+    console.log(event);
+    
     if (
       newTransaction.title &&
       newTransaction.date &&
       newTransaction.amount &&
       newTransaction.handler
     ) {
-      setTransactions([
-        ...transactions,
-        {
-          ...newTransaction,
-          amount: `${newTransaction.type === "income" ? "+" : "-"}${newTransaction.amount} €`,
-        },
-      ]);
+      let response = createCompanyExpense(newTransaction)
+      if(response.status === 200) {
+        setTransactions({
+          ...transactions,
+          ...response.data
+        })
+        window.alert('Upload successfull')
+      }
       setShowUploadMenu(false);
       setNewTransaction({
         title: "",
+        description: "",
         date: "",
-        amount: "",
-        type: "income",
-        paymentMethod: "Bar",
+        amount: 0,
         handler: "",
+        category: "",
+        payment_type: ""
       }); // Formular zurücksetzen
     }
   };
@@ -112,14 +180,14 @@ const Transaktionen = () => {
       <div className={styles.topCards}>
         <div className={styles.card}>
           <h3>Gesamtaufwand</h3>
-          <h1>678,72 €</h1>
-          <p style={{ color: "red" }}>↑ 19.91%</p>
+          <h1>{total_expenses} €</h1>
+          {/* <p style={{ color: "red" }}>↑ 19.91%</p> */}
           <Line data={totalExpenseData} options={chartOptions} />
         </div>
         <div className={styles.card}>
           <h3>Gewinn</h3>
-          <h1>5.479,32 €</h1>
-          <p style={{ color: "green" }}>↑ 21.17%</p>
+          <h1>{total_order_earnings} €</h1>
+          {/* <p style={{ color: "green" }}>↑ 21.17%</p> */}
           <Line data={profitData} options={chartOptions} />
         </div>
       </div>
@@ -133,33 +201,42 @@ const Transaktionen = () => {
         >
           Transaktion hochladen
         </button>
-        <ul className={styles.transactionList}>
-          {transactions.map((transaction, index) => (
-            <li key={index} className={styles.transactionItem}>
-              <div>
-                <strong>{transaction.title}</strong>
-                <p>{transaction.date}</p>
-                <p>Zahlungsart: {transaction.paymentMethod}</p>
-                <p>Bearbeiter: {transaction.handler}</p>
-              </div>
-              <span
-                style={{
-                  color: transaction.type === "income" ? "green" : "red",
-                }}
-              >
-                {transaction.amount}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <table className={styles.transactionList}>
+          <thead>
+            <tr>
+              <th>Titel</th>
+              <th>Datum</th>
+              <th>Zahlungsart</th>
+              <th>Bearbeiter</th>
+              <th>Betrag</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((transaction, index) => (
+              <tr key={transaction.id} className={styles.transactionItem}>
+                <td>{transaction.title}</td>
+                <td>{transaction.date}</td>
+                <td>{payment_types[transaction.payment_type]}</td>
+                <td>{transaction.handler}</td>
+                <td
+                  style={{ color: transaction.amount > 0 ? "green" : "red" }}
+                  className={styles.transactionAmount}
+                >
+                  {(transaction.amount / 100).toFixed(2).replace('.', ',')}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Upload-Menü */}
       {showUploadMenu && (
-        <div className={styles.uploadMenu}>
+        <form className={styles.uploadMenu} onSubmit={handleAddTransaction}>
           <h3>Neue Transaktion hinzufügen</h3>
           <input
             type="text"
+            required
             placeholder="Titel"
             value={newTransaction.title}
             onChange={(e) =>
@@ -167,7 +244,16 @@ const Transaktionen = () => {
             }
           />
           <input
+            type="text"
+            placeholder="Beschreibung"
+            value={newTransaction.description}
+            onChange={(e) =>
+              setNewTransaction({ ...newTransaction, description: e.target.value })
+            }
+          />
+          <input
             type="date"
+            required
             placeholder="Datum"
             value={newTransaction.date}
             onChange={(e) =>
@@ -176,33 +262,41 @@ const Transaktionen = () => {
           />
           <input
             type="number"
-            placeholder="Betrag (€)"
+            required
+            placeholder="Betrag in Cent (-2000 für -20€)"
             value={newTransaction.amount}
             onChange={(e) =>
               setNewTransaction({ ...newTransaction, amount: e.target.value })
             }
           />
           <select
-            value={newTransaction.type}
+            value={newTransaction.payment_type}
+            required
             onChange={(e) =>
-              setNewTransaction({ ...newTransaction, type: e.target.value })
+              setNewTransaction({ ...newTransaction, payment_type: e.target.value })
             }
           >
-            <option value="income">Einnahme</option>
-            <option value="expense">Ausgabe</option>
+            <option value="default" selected disabled>Select payment type</option>
+            {Object.entries(payment_types).map(([key, value]) => (
+              <option value={key} key={key}>{value}</option>
+            ))}
           </select>
           <select
-            value={newTransaction.paymentMethod}
+            value={newTransaction.category}
+            required
             onChange={(e) =>
-              setNewTransaction({ ...newTransaction, paymentMethod: e.target.value })
+              setNewTransaction({ ...newTransaction, category: e.target.value })
             }
           >
-            <option value="Bar">Bar</option>
-            <option value="Kreditkarte">Kreditkarte</option>
-            <option value="Überweisung">Überweisung</option>
+            <option value="default" selected disabled>Select category</option>
+            {Object.entries(expense_categories).map(([key, value]) => (
+              <option value={key} key={key}>{value}</option>
+            ))}
+            
           </select>
           <input
             type="text"
+            required
             placeholder="Bearbeiter"
             value={newTransaction.handler}
             onChange={(e) =>
@@ -210,10 +304,10 @@ const Transaktionen = () => {
             }
           />
           <div className={styles.uploadMenuActions}>
-            <button onClick={handleAddTransaction}>Hinzufügen</button>
+            <button type="submit">Hinzufügen</button>
             <button onClick={() => setShowUploadMenu(false)}>Abbrechen</button>
           </div>
-        </div>
+        </form>
       )}
     </div>
   );

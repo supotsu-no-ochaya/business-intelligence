@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from testdata.models import (
-    Speise, OrderItem, MesseEvent,
+    CompanyExpense, Speise, OrderItem, MesseEvent,
     Station, Category, ProductAttribute, Product,
     OrderEvent, Order, OrderItem2, PaymentOption, Payment,
     StorageItem, StorageLocation, Ingredient, SpeiseIngredient,
@@ -182,3 +182,10 @@ class StorageItemSerializer(serializers.ModelSerializer):
         model = StorageItem
         fields = ['product', 'location', 'quantity', 'unit']
 
+
+class CompanyExpenseSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)  # Explicitly read-only
+    
+    class Meta:
+        model = CompanyExpense
+        fields = '__all__'
