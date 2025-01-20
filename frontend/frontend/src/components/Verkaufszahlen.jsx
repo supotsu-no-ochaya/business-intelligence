@@ -58,25 +58,24 @@ const Verkaufszahlen = () => {
         }
     }, [orders]);
 
-    const handleFilterSpeisen = () => {
+    const handleTopProductsSpeisen = () => {
         const speisen = orders.filter(order =>
             ["Sandwich", "Crepe", "Mochi", "Burger", "Pizza Slice", "Taco", "Sushi Roll", "Pasta Bowl", "Salad", "Cupcake"].some(keyword =>
                 order.menu_item_name.includes(keyword)
             )
         );
-        const filtered = filterByDateRange(speisen, startDateSpeisen, endDateSpeisen);
-        setFilteredSpeisen(groupAndSummarize(filtered).slice(0, showTopProductsSpeisen ? 5 : undefined));
+        setFilteredSpeisen(groupAndSummarize(speisen).slice(0, 5));
     };
-
-    const handleFilterGetraenke = () => {
+    
+    const handleTopProductsGetraenke = () => {
         const getraenke = orders.filter(order =>
             ["Cola", "Kakao", "Kaffee", "Tea", "Juice"].some(keyword =>
                 order.menu_item_name.includes(keyword)
             )
         );
-        const filtered = filterByDateRange(getraenke, startDateGetraenke, endDateGetraenke);
-        setFilteredGetraenke(groupAndSummarize(filtered).slice(0, showTopProductsGetraenke ? 5 : undefined));
+        setFilteredGetraenke(groupAndSummarize(getraenke).slice(0, 5));
     };
+    
 
     const groupAndSummarize = (data) => {
         const grouped = data.reduce((acc, order) => {
@@ -112,31 +111,42 @@ const Verkaufszahlen = () => {
                 <div className={styles.salesHeader}>
                     <h3>{title}</h3>
                     <div className={styles.filters}>
-                        <button
-                            className={`${styles.filterButton} ${showTopProducts ? styles.active : ''}`}
-                            onClick={() => setShowTopProducts(!showTopProducts)}
-                        >
-                            Top Produkte
-                        </button>
+                    <button
+                        className={`${styles.filterButton} ${showTopProducts ? styles.active : ''}`}
+                        onClick={() => {
+                            setShowTopProducts(!showTopProducts);
+                            if (!showTopProducts) {
+                                title === 'Speisen' ? handleTopProductsSpeisen() : handleTopProductsGetraenke();
+                            }
+                        }}
+                    >
+                        Top Produkte
+                    </button>
+
                         <div className={styles.dateFilters}>
-                            <input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                                className={styles.datePicker}
-                                placeholder="Startdatum"
-                            />
-                            <input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                                className={styles.datePicker}
-                                placeholder="Enddatum"
-                            />
+                            <div className={styles.dateFilterRow}>
+                                <input
+                                    type="date"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                    className={styles.datePicker}
+                                    placeholder="Startdatum"
+                                />
+                            </div>
+                            <div className={styles.dateFilterRow}>
+                                <input
+                                    type="date"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    className={styles.datePicker}
+                                    placeholder="Enddatum"
+                                />
+                            </div>
                             <button onClick={handleFilter} className={styles.confirmButton}>
                                 Anwenden
                             </button>
                         </div>
+
                     </div>
                 </div>
                 <div className={styles.salesCategory}>
@@ -187,7 +197,7 @@ const Verkaufszahlen = () => {
                 setStartDateSpeisen,
                 endDateSpeisen,
                 setEndDateSpeisen,
-                handleFilterSpeisen
+                handleTopProductsSpeisen
             )}
             {renderCategory(
                 filteredGetraenke,
@@ -200,7 +210,7 @@ const Verkaufszahlen = () => {
                 setStartDateGetraenke,
                 endDateGetraenke,
                 setEndDateGetraenke,
-                handleFilterGetraenke
+                handleTopProductsGetraenke
             )}
         </div>
     );

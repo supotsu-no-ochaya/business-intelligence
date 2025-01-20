@@ -153,9 +153,36 @@
 }
 
 .datePicker {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  width: 100%; /* Breite der Datepicker */
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
+.dateFilters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Abstand zwischen den Elementen */
+  align-items: flex-start; /* Elemente linksbündig ausrichten */
+}
+
+.dateFilterRow {
+  display: flex;
+  width: 100%; /* Nimmt die volle Breite ein */
+}
+
+.confirmButton {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.confirmButton:hover {
+  background-color: #0056b3;
+}
   
