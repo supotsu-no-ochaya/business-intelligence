@@ -18,7 +18,7 @@ function App() {
   const [currentView, setCurrentView] = useState('dashboard');
 
   // Zustand für den Login-Status
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState();
 
   // Funktion zum Wechseln der Ansicht
   const navigate = (view) => {
