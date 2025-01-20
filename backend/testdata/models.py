@@ -219,6 +219,7 @@ class CompanyExpense(models.Model):
         choices=EXPENSE_CATEGORIES,
         help_text="Category of the expense."
     )
+    type = models.CharField(max_length=1, choices=[("I", "Einkommen"), ("E", "Ausgabe")])
     quantity = models.PositiveIntegerField(default=1, help_text="Quantity purchased.")
     date = models.DateField()
     payment_type = models.CharField(choices=PAYMENT_CHOICES)
