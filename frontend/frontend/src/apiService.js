@@ -57,8 +57,6 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-
-
 // API-Funktionen verwenden die Instanz
 export const fetchTotalEarnings = async () => {
   const response = await axiosInstance.get('/total_earnings');
@@ -116,7 +114,7 @@ export const loginUser = async (username, password) => {
   
       // Passwortänderung an den Endpunkt senden
       const response = await axiosInstance.patch(`/user/${userId}/`, {
-        password: newPassword, // Neues Passwort
+        "new_password": newPassword // Neues Passwort
       });
   
       return response.data; // Erfolgsmeldung zurückgeben
