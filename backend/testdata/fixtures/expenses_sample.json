@@ -4,11 +4,12 @@
         "pk": 701,
         "fields": {
             "title": "Cupcakes",
+            "type": "E",
             "description": "Delicious cupcakes for the café.",
             "category": "FOOD",
-            "amount": -25000,
+            "amount": 25000,
             "quantity": 100,
-            "date": "2025-01-15",
+            "date": "2024-01-15",
             "payment_type": "CA",
             "handler": "John Doe"
         }
@@ -18,11 +19,12 @@
         "pk": 702,
         "fields": {
             "title": "Cosplay Props",
+            "type": "E",
             "description": "Props for staff costumes.",
             "category": "COSTUME",
-            "amount": -15000,
+            "amount": 15000,
             "quantity": 10,
-            "date": "2025-03-12",
+            "date": "2024-03-12",
             "payment_type": "CA",
             "handler": "Max Mustermann"
         }
@@ -32,11 +34,12 @@
         "pk": 703,
         "fields": {
             "title": "Flyers",
+            "type": "E",
             "description": "Promotional flyers for the cosplay café.",
             "category": "PROMO",
-            "amount": -10000,
+            "amount": 10000,
             "quantity": 1000,
-            "date": "2025-05-10",
+            "date": "2024-05-10",
             "payment_type": "CA",
             "handler": "Lisa Musterfrau"
         }
@@ -46,13 +49,14 @@
         "pk": 704,
         "fields": {
             "title": "Table Decorations",
+            "type": "E",
             "description": "Anime-themed decorations for tables.",
             "category": "DECOR",
-            "amount": -15000,
+            "amount": 15000,
             "quantity": 20,
-            "date": "2025-07-08",
+            "date": "2024-07-08",
             "payment_type": "CA",
-            "handler": "Duke Nukem"
+            "handler": "John Doe"
         }
     },
     {
@@ -60,13 +64,14 @@
         "pk": 705,
         "fields": {
             "title": "Rückzahlung",
+            "type": "I",
             "description": "Rücksendung falsche Artikel",
             "category": "DECOR",
             "amount": 10000,
             "quantity": 1,
-            "date": "2025-09-09",
+            "date": "2024-09-09",
             "payment_type": "CA",
-            "handler": "Duke Nukem"
+            "handler": "John Doe"
         }
     },
     {
@@ -74,13 +79,14 @@
         "pk": 706,
         "fields": {
             "title": "Table Decorations",
+            "type": "E",
             "description": "Anime-themed decorations for tables.",
             "category": "DECOR",
-            "amount": -15000,
+            "amount": 15000,
             "quantity": 20,
-            "date": "2025-03-11",
+            "date": "2024-03-11",
             "payment_type": "CA",
-            "handler": "Duke Nukem"
+            "handler": "John Doe"
         }
     },
     {
@@ -88,13 +94,14 @@
         "pk": 707,
         "fields": {
             "title": "Rückzahlung",
+            "type": "I",
             "description": "Rücksendung falsche Artikel",
             "category": "DECOR",
             "amount": 10000,
             "quantity": 1,
-            "date": "2025-01-12",
+            "date": "2024-01-12",
             "payment_type": "CA",
-            "handler": "Duke Nukem"
+            "handler": "John Doe"
         }
     }
 ]

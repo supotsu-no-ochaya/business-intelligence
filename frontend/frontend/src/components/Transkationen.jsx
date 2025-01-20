@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import styles from "./Transaktionen.module.css";
-import { createCompanyExpense, fetchCompanyExpense} from "../apiService";
+import { createCompanyExpense, fetchCompanyExpense, fetchOrders} from "../apiService";
 
 const Transaktionen = () => {
+  const current_year = (new Date().getFullYear())
 
   const [transactions, setTransactions] = useState([]);
   const [orders, setOrders] = useState([])
+  const [selected_year, setSelectedYear] = useState(current_year)
   const [showUploadMenu, setShowUploadMenu] = useState(false); // Zustand für das Upload-Menü
   const [newTransaction, setNewTransaction] = useState({
     name: "",
@@ -31,9 +33,46 @@ const Transaktionen = () => {
     fetchTransactions();
   }, []); // Empty dependency array ensures this runs once when component mounts
 
+  useEffect(() => {
+    // Define an async function to fetch data
+    const getOrders = async () => {
+      try {
+        const order_data = await fetchOrders()
+        // Assuming the API returns an array of transactions
+        setOrders(order_data);
+      } catch (err) {
+        console.error('Error fetching transactions:', err);
+      }
+    };
+
+    getOrders();
+  }, []); // Empty dependency array ensures this runs once when component mounts
+
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
 
-  const calculateExpenseData = (transactions) => {
+  const expense_categories = {
+    'FOOD': 'Essen & Getränke',
+    'DECOR': 'Dekorationen',
+    'COSTUME': 'Kostüme',
+    'PROMO': 'Werbung & Promotion',
+    'SUPPLY': 'Materialien',
+    'EQUIP': 'Ausrüstung',
+    'TRAVEL': 'Reisekosten',
+    'FEES': 'Gebühren & Lizenzen',
+    'MISC': 'Sonstiges',
+  }
+
+  const payment_types = {
+    'CC': 'Kreditkarte',
+    'CA': 'Bargeld'
+  }
+
+  const expense_types = {
+    'I': 'Einkommen',
+    'E': 'Ausgabe'
+  }
+
+  const calculateTransactionData = (transactions) => {
     const expense_data = {};
 
     transactions.forEach(({ date, amount }) => {
@@ -69,22 +108,27 @@ const Transaktionen = () => {
   }
 
   // Generate data for charts
-  const expenses = calculateExpenseData(transactions);
-  const accumulated_expenses = calculateAccumulatedData(expenses);
+  const expenses = transactions.filter(item => item.type === 'E') // E => Expense 
+  const expenses_data = calculateTransactionData(expenses);
+  const accumulated_expenses = calculateAccumulatedData(expenses_data);
 
-  const earnings = {2025: []}
-  const accumulated_earnings = {2025: []}
+  const earnings_transactions = transactions.filter(item => item.type === 'I') // I => Income
+  const earnings_orders = orders.map(order => new Object({'date': order.created, 'amount': order.menu_item_price_in_cents}))
 
-  var most_recent_year = Math.max(...Object.keys(accumulated_expenses))
+  const combined_earnings = earnings_transactions.concat(earnings_orders)
+
+  const earnings_data = calculateTransactionData(combined_earnings)
+  const accumulated_earnings_data = calculateAccumulatedData(earnings_data)
   
-  console.log('expenses:', expenses[most_recent_year])
-  console.log('order earnings:', earnings[most_recent_year])
+  // setSelectedYear(Math.max(...Object.keys(accumulated_expenses)))
+
   const total_expenses = convertToEuro(
-    expenses[most_recent_year]?.reduce((sum, val) => sum + val, 0) || 0
+    expenses_data[selected_year]?.reduce((sum, val) => sum + val, 0) || 0
   )
   const total_order_earnings = convertToEuro(
-    earnings[most_recent_year]?.reduce((sum, val) => sum + val, 0) || 0
+    earnings_data[selected_year]?.reduce((sum, val) => sum + val, 0) || 0
   )
+
 
   // Daten für die Line-Charts
   const totalExpenseData = {
@@ -92,7 +136,7 @@ const Transaktionen = () => {
     datasets: [
       {
         label: "Gesamtaufwand",
-        data: accumulated_expenses[most_recent_year]?.map(elem => (elem*(-1))/100) || [], // invert numbers to get "growing expenses"
+        data: accumulated_expenses[selected_year]?.map(elem => elem/100) || [], // invert numbers to get "growing expenses"
         borderColor: "rgb(255, 0, 132)",
         backgroundColor: "rgba(255, 0, 132, 0.2)",
         tension: 0.4,
@@ -105,7 +149,7 @@ const Transaktionen = () => {
     datasets: [
       {
         label: "Gewinn",
-        data: accumulated_earnings[most_recent_year]?.map(elem => (elem*(-1))/100) || [], // invert numbers to get "growing expenses",
+        data: accumulated_earnings_data[selected_year]?.map(elem => elem/100) || [], // invert numbers to get "growing expenses",
         borderColor: "rgb(0, 255, 132)",
         backgroundColor: "rgba(0, 255, 132, 0.2)",
         tension: 0.4,
@@ -123,24 +167,6 @@ const Transaktionen = () => {
       y: { grid: { color: "rgba(255, 255, 255, 0.1)" } },
     },
   };
-
-
-  const expense_categories = {
-    'FOOD': 'Essen & Getränke',
-    'DECOR': 'Dekorationen',
-    'COSTUME': 'Kostüme',
-    'PROMO': 'Werbung & Promotion',
-    'SUPPLY': 'Materialien',
-    'EQUIP': 'Ausrüstung',
-    'TRAVEL': 'Reisekosten',
-    'FEES': 'Gebühren & Lizenzen',
-    'MISC': 'Sonstiges',
-  }
-
-  const payment_types = {
-    'CC': 'Kreditkarte',
-    'CA': 'Bargeld'
-  }
 
   // Funktion zum Hinzufügen einer neuen Transaktion
   const handleAddTransaction = (event) => {
@@ -174,18 +200,28 @@ const Transaktionen = () => {
     }
   };
 
+  const availableYears = Object.keys(accumulated_earnings_data).includes(current_year) ? Object.keys(accumulated_earnings_data) : Object.keys(accumulated_earnings_data).concat(current_year).sort((a,b) => a < b)
+
   return (
     <div className={styles.dashboard}>
       {/* Obere Karten */}
+      <div className={styles.yearSelect}>
+        <select name="" id="" onChange={(e) => setSelectedYear(e.target.value)}>
+          
+          {availableYears.map((year) => (
+              <option value={year} key={year} >{year}</option>
+          ))}
+        </select>
+      </div>
       <div className={styles.topCards}>
         <div className={styles.card}>
-          <h3>Gesamtaufwand</h3>
+          <h3>Gesamtaufwand - {selected_year}</h3>
           <h1>{total_expenses} €</h1>
           {/* <p style={{ color: "red" }}>↑ 19.91%</p> */}
           <Line data={totalExpenseData} options={chartOptions} />
         </div>
         <div className={styles.card}>
-          <h3>Gewinn</h3>
+          <h3>Gewinn - {selected_year}</h3>
           <h1>{total_order_earnings} €</h1>
           {/* <p style={{ color: "green" }}>↑ 21.17%</p> */}
           <Line data={profitData} options={chartOptions} />
@@ -215,11 +251,11 @@ const Transaktionen = () => {
             {transactions.map((transaction, index) => (
               <tr key={transaction.id} className={styles.transactionItem}>
                 <td>{transaction.title}</td>
-                <td>{transaction.date}</td>
+                <td>{(new Date(transaction.date)).toLocaleDateString('de-DE')}</td>
                 <td>{payment_types[transaction.payment_type]}</td>
                 <td>{transaction.handler}</td>
                 <td
-                  style={{ color: transaction.amount > 0 ? "green" : "red" }}
+                  style={{ color: transaction.type === 'I' ? "green" : "red" }}
                   className={styles.transactionAmount}
                 >
                   {(transaction.amount / 100).toFixed(2).replace('.', ',')}
@@ -243,6 +279,18 @@ const Transaktionen = () => {
               setNewTransaction({ ...newTransaction, title: e.target.value })
             }
           />
+          <select
+            value={newTransaction.expense_type}
+            required
+            onChange={(e) =>
+              setNewTransaction({ ...newTransaction, expense_type: e.target.value })
+            }
+          >
+            <option value="default" selected disabled>Ausgabe / Einkommen auswählen</option>
+            {Object.entries(expense_types).map(([key, value]) => (
+              <option value={key} key={key}>{value}</option>
+            ))}
+          </select>
           <input
             type="text"
             placeholder="Beschreibung"
@@ -263,7 +311,7 @@ const Transaktionen = () => {
           <input
             type="number"
             required
-            placeholder="Betrag in Cent (-2000 für -20€)"
+            placeholder="Betrag (in Cent)"
             value={newTransaction.amount}
             onChange={(e) =>
               setNewTransaction({ ...newTransaction, amount: e.target.value })
@@ -276,7 +324,7 @@ const Transaktionen = () => {
               setNewTransaction({ ...newTransaction, payment_type: e.target.value })
             }
           >
-            <option value="default" selected disabled>Select payment type</option>
+            <option value="default" selected disabled>Zahlungsart auswählen</option>
             {Object.entries(payment_types).map(([key, value]) => (
               <option value={key} key={key}>{value}</option>
             ))}
@@ -288,7 +336,7 @@ const Transaktionen = () => {
               setNewTransaction({ ...newTransaction, category: e.target.value })
             }
           >
-            <option value="default" selected disabled>Select category</option>
+            <option value="default" selected disabled>Kategorie auswählen</option>
             {Object.entries(expense_categories).map(([key, value]) => (
               <option value={key} key={key}>{value}</option>
             ))}
