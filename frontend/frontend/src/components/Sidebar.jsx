@@ -51,7 +51,7 @@ const Sidebar = ({ navigate }) => {
 
     const bottomLinks = [
         { label: 'Settings', icon: '⚙️', route: 'settings', groups: ['Kasse', 'Kueche', 'Admin'] },
-        { label: 'Log out', icon: '🔓', route: 'logout', groups: ['Kasse', 'Kueche', 'Admin'] },
+        { label: 'Log out', icon: '🔓', route: 'profile', groups: ['Kasse', 'Kueche', 'Admin'] },
     ];
 
     const renderMenuItems = (items) => {

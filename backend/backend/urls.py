@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from testdata.auth.viewsets import LogoutView
 from routers import router
 from testdata import views
 from testdata.views import IncomeListView, AvailableProductView, IngredientListView
@@ -47,4 +48,5 @@ urlpatterns = [
     path('api/income/', IncomeListView.as_view(), name='income-list'),
     path('api/available-products/', AvailableProductView.as_view(), name='available-products'),
     path('ingredients/', IngredientListView.as_view(), name='ingredient-list'),
+    path('api/logout/', LogoutView.as_view(), name='logout'),
 ]
