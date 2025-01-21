@@ -42,6 +42,9 @@ DEBUG = False
 # Directory where static files will be collected
 #STATIC_ROOT = '/app/staticfiles/'
 
-STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 # The URL to use when referring to static files (where they will be served from)
-STATIC_URL = '/django-static/'
+STATIC_URL = '/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+STATIC_ROOT = '/app/staticfiles/'
+print(f'Settings_prod.py STATIC_ROOT: {STATIC_ROOT}')
+
