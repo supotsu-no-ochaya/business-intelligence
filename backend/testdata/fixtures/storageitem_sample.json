@@ -1,0 +1,38 @@
+[
+    {
+      "model": "testdata.storageitem",
+      "pk": 1,
+      "fields": {
+        "id": "A1-1",
+        "name_ingredient": 1,
+        "location": "A1",
+        "total_stock": 5000,
+        "unit": "g",
+        "last_updated": "2025-01-21T10:00:00Z"
+      }
+    },
+    {
+      "model": "testdata.storageitem",
+      "pk": 2,
+      "fields": {
+        "id": "A1-2",
+        "name_ingredient": 2,
+        "location": "A1",
+        "total_stock": 3000,
+        "unit": "g",
+        "last_updated": "2025-01-21T10:00:00Z"
+      }
+    },
+    {
+      "model": "testdata.storageitem",
+      "pk": 3,
+      "fields": {
+        "id": "B1-1",
+        "name_ingredient": 3,
+        "location": "B1",
+        "total_stock": 2000,
+        "unit": "g",
+        "last_updated": "2025-01-21T10:00:00Z"
+      }
+    }
+  ]

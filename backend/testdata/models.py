@@ -1,61 +1,81 @@
 from django.db import models
-
+from django.utils import timezone
 # Create your models here.
+ 
+class PriceCurrency(models.Model):
+    name_currency = models.CharField(max_length=255) # e.g., "euro", "US dollar", "yen"
+    currency = models.CharField(max_length=255) # e.g., "EUR", "USD", "YEN"
+    symbol =  models.CharField(max_length=255) #e.g., "€", "$", "¥"
+
+    def __str__(self):
+        return self.name_currency
 
 class Speise(models.Model):
     name = models.CharField(max_length=255)
-    zutaten = models.TextField()
-    preis = models.FloatField()
-    erstellt = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    price = models.FloatField()
+    price_unit = models.ForeignKey(PriceCurrency, on_delete=models.CASCADE,null=True, blank=True)
+    ordered_stock = models.PositiveIntegerField(default=0)
+    created = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
+
+class PortionUnit(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
+    name_unit = models.CharField(max_length=50)  # e.g., "g", "ml", "pieces"
+
+    def __str__(self):
+        return self.name_unit
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=255)
-    unit = models.CharField(max_length=50, default='unit')  # e.g., "kg", "g", "pieces"
-    quantity = models.PositiveIntegerField(default=0)  # The current quantity of the ingredient in storage
-    last_updated = models.DateTimeField(auto_now=True)
+    name_ing = models.CharField(max_length=255)
+    base_stock = models.PositiveIntegerField(default=0)  # Total stock available
+    unit = models.ForeignKey(PortionUnit, on_delete=models.CASCADE,null=True, blank=True)  # e.g., "kg", "g", "pieces"
+    created = models.DateTimeField(default=timezone.now)
+    last_updated = models.DateTimeField(default=timezone.now)
+
 
     def __str__(self):
-        return f"{self.name} - {self.quantity} {self.unit}"
+        return self.name_ing
 
-class SpeiseLager(models.Model):
-    name = models.CharField(max_length=255)
-    zutaten = models.ManyToManyField(Ingredient, through='SpeiseIngredient')
-    preis = models.FloatField()
-    erstellt = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+class Recipe(models.Model):
+    speise = models.ForeignKey(Speise, on_delete=models.CASCADE)
+    name_recipe = models.CharField(max_length=255)    
+    valid_from = models.DateField()
+    valid_until = models.DateField()
+    created = models.DateTimeField(default=timezone.now)
+    last_updated = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.name
-    
-    def update_ingredient_availability(self, order_quantity):
-        # Iterate through all the SpeiseIngredient relationships
-        for speise_ingredient in self.speiseingredient_set.all():
-            speise_ingredient.update_ingredient_availability(order_quantity)
+        return self.name_recipe
 
-class SpeiseIngredient(models.Model):
-    speise = models.ForeignKey(SpeiseLager, on_delete=models.CASCADE)
+class RecipeIngredient(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='ingredients')
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    portion = models.PositiveIntegerField(default=1)  # Amount of the ingredient used per dish portion
-    required_quantity = models.PositiveIntegerField(default=0)  # The required quantity for each portion
-    
+    quantity_per_portion = models.PositiveIntegerField(default=0)  # The required quantity for each portion
+    unit = models.ForeignKey(PortionUnit, on_delete=models.CASCADE,null=True, blank=True)
     def __str__(self):
-        return f"{self.speise.name} uses {self.ingredient.name} ({self.portion} {self.ingredient.unit})"
+        return f"{self.recipe.name_recipe} requires {self.quantity_per_portion} {self.unit.name_unit} of {self.ingredient.name_ing}"
 
-    def save(self, *args, **kwargs):
-        # Automatically calculate the required_quantity before saving
-        self.required_quantity = self.portion
-        super().save(*args, **kwargs)
+class StorageLocation(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
+    name_loc = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
 
-    def update_ingredient_availability(self, order_quantity):
-        for speise_ingredient in self.speiseingredient_set.all():
-            ingredient = speise_ingredient.ingredient
-            ingredient_quantity_used = speise_ingredient.required_quantity * order_quantity
-            ingredient.quantity -= ingredient_quantity_used
-            ingredient.save()
+    def __str__(self):
+        return self.name_loc
+    
+class StorageItem(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
+    name_ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE) #ingredient name
+    location = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
+    total_stock = models.PositiveIntegerField(default=0)  # Current stock quantity
+    unit = models.ForeignKey(PortionUnit, on_delete=models.CASCADE)  # e.g., "kg", "liters", "units"
+    last_updated = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.name_ingredient.name_ing} - {self.total_stock} {self.unit.name_unit}"
 
 
 class OrderItem(models.Model):
@@ -172,26 +192,7 @@ class Payment(models.Model):
     discount_percent = models.FloatField()
     created = models.DateTimeField()
     updated = models.DateTimeField()
-
-class StorageLocation(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-class StorageItem(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
-    product = models.ForeignKey(SpeiseLager, on_delete=models.CASCADE)  
-    location = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=0)  # Current stock quantity
-    unit = models.CharField(max_length=50, default='unit')  # e.g., "kg", "liters", "units"
-    last_updated = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.product.name} - {self.quantity} {self.unit}"
-    
+   
 class CompanyExpense(models.Model):
     EXPENSE_CATEGORIES = [
         ('FOOD', 'Essen & Getränke'),

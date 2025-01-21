@@ -3,8 +3,8 @@ from testdata.models import (
     CompanyExpense, Speise, OrderItem, MesseEvent,
     Station, Category, ProductAttribute, Product,
     OrderEvent, Order, OrderItem2, PaymentOption, Payment,
-    StorageItem, StorageLocation, Ingredient, SpeiseIngredient,
-    SpeiseLager
+    StorageItem, StorageLocation, RecipeIngredient,
+    Ingredient, Recipe
 )
 
 import logging
@@ -13,36 +13,91 @@ logging.basicConfig(level=logging.DEBUG)
 class SpeiseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Speise
-        fields = ['id', 'name', 'zutaten', 'preis', 'erstellt', 'updated']
+        fields = ['id', 'name', 'price', 'price_unit', 'ordered_stock', 'created', 'updated']
 
-# Ingredient Serializer
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ['id', 'name', 'quantity', 'unit', 'last_updated']
+        fields = ['id', 'name_ing', 'base_stock', 'created', 'last_updated']
 
-# SpeiseIngredient Serializer
-class SpeiseIngredientSerializer(serializers.ModelSerializer):
-    ingredient = IngredientSerializer(required=False, allow_null=True)
-    
+# Recipe Ingredient Serializer
+class RecipeIngredientSerializer(serializers.ModelSerializer):
+    ingredient = IngredientSerializer()
+    unit = serializers.CharField(source="unit.name_unit")
+
     class Meta:
-        model = SpeiseIngredient
-        fields = ['ingredient', 'portion']
+        model = RecipeIngredient
+        fields = ['id', 'ingredient', 'quantity_per_portion', 'unit']
 
-# Updated Speise Serializer to include Ingredients
-class SpeiseLagerSerializer(serializers.ModelSerializer):
-    zutaten = SpeiseIngredientSerializer(many=True)  # Include ingredients with their portions
-    
+# Recipe Serializer
+class RecipeSerializer(serializers.ModelSerializer):
+    ingredients = RecipeIngredientSerializer(many=True)
+
     class Meta:
-        model = SpeiseLager
-        fields = ['id', 'name', 'zutaten', 'preis', 'erstellt', 'updated']
+        model = Recipe
+        fields = ['id', 'speise', 'name_recipe', 'valid_from', 'valid_until', 'created', 'last_updated', 'ingredients']
 
-    # Overriding update method to include ingredient availability update
-    def update_ingredient_availability(self, speise, order_quantity):
-        speise.update_ingredient_availability(order_quantity)
+class IngredientUsageSerializer(serializers.Serializer):
+    ingredient_name = serializers.CharField(source='ingredient.name')
+    unit = serializers.CharField(source='ingredient.unit')
+
+    class Meta:
+        model = RecipeIngredient
+        fields = ['ingredient_name', 'unit', 'quantity_per_portion']
+    
+
+class IngredientUsageCalculationSerializer(serializers.Serializer):
+    start_date = serializers.DateField()
+    end_date = serializers.DateField()
+    ingredient_usage = serializers.SerializerMethodField()
+
+    def get_ingredient_usage(self, obj):
+        # Extract the date range from the serialized data
+        start_date = obj['start_date']
+        end_date = obj['end_date']
+
+        # Fetch orders within the date range
+        orders = OrderItem2.objects.filter(order__created__date__range=(start_date, end_date))
+        ingredient_usage = {}
+
+        for order_item in orders:
+            # Parse the 'bom' field to extract product and quantity information
+            bom_data = order_item.bom
+            
+        for bom_item in bom_data:
+            product = order_item.get('product_id')
+            quantity = order_item.get('quantity',0)
+
+            # Fetch ingredients for the product
+            recipe_ingredients = RecipeIngredient.objects.filter(speise=product)
+
+            for recipe_ingredient in recipe_ingredients:
+                ingredient = recipe_ingredient.ingredient
+                total_quantity_used = recipe_ingredient.quantity_per_portion * quantity
+
+                # Accumulate ingredient usage
+                if ingredient.name_ing not in ingredient_usage:
+                    ingredient_usage[ingredient.name_ing] = {
+                        'unit': ingredient.unit,
+                        'quantity_used': total_quantity_used
+                    }
+                else:
+                    ingredient_usage[ingredient.name_ing]['quantity_used'] += total_quantity_used
+
+        # Format the ingredient usage data
+        usage_data = [
+            {
+                "ingredient_name": name,
+                "unit": data["unit"],
+                "quantity_used": data["quantity_used"]
+            }
+            for name, data in ingredient_usage.items()
+        ]
+
+        return usage_data
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    Products = SpeiseLagerSerializer(read_only=True, many=True)
+    Products = IngredientUsageSerializer(read_only=True, many=True)
 
     class Meta:
         model = OrderItem
@@ -175,7 +230,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         return payment
     
 class StorageItemSerializer(serializers.ModelSerializer):
-    product = SpeiseLagerSerializer()  # Include details about the product
+    product = IngredientUsageSerializer()  # Include details about the product
     location = serializers.CharField(source='location.name')  # Display the storage location name
 
     class Meta:

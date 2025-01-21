@@ -10,12 +10,12 @@ from django.db.models import Sum
 from rest_framework.permissions import BasePermission
 from testdata.models import (
     OrderItem, Product, Order, OrderItem2, OrderEvent,
-    Payment, SpeiseLager, Ingredient
+    Payment, Ingredient,Speise, RecipeIngredient
 )
 from testdata.serializer import (
     ProductSerializer, OrderSerializer,
-    OrderItem2Serializer, PaymentSerializer, 
-    OrderEventSerializer, IngredientSerializer
+    OrderItem2Serializer, PaymentSerializer, IngredientSerializer,
+    OrderEventSerializer, IngredientUsageCalculationSerializer
 )
 from testdata.roles import DEFAULT_PERMISSIONS
 
@@ -148,10 +148,70 @@ class IncomeListView(APIView):
             "total_income": total_income,
             "income_by_payment_option": income_by_payment_option
         })
+    
+class IngredientUsageView(APIView):
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests to calculate ingredient usage.
+        Expects a date range (start_date, end_date) in the request body.
+        """
+        # Validate and deserialize the input data
+        serializer = IngredientUsageCalculationSerializer(data=request.data)
+        if serializer.is_valid():
+            # If the data is valid, process the ingredient usage calculation
+            start_date = serializer.validated_data['start_date']
+            end_date = serializer.validated_data['end_date']
+            
+            # Initialize an empty dictionary to store ingredient usage
+            ingredient_usage = {}
+
+            # Fetch all order items within the specified date range
+            orders = OrderItem2.objects.filter(order__created__date__range=(start_date, end_date))
+
+            for order_item in orders:
+                # Parse the 'bom' field (Bill of Materials) for product and quantity information
+                bom_data = order_item.bom  # Assuming 'bom' is a dictionary with product IDs and quantities
+                
+                for bom_item in bom_data:
+                    product = bom_item.get('product_id')
+                    quantity = bom_item.get('quantity', 0)
+
+                    # Fetch recipe ingredients for the given product (Speise)
+                    recipe_ingredients = RecipeIngredient.objects.filter(speise=product)
+
+                    for recipe_ingredient in recipe_ingredients:
+                        ingredient = recipe_ingredient.ingredient
+                        total_quantity_used = recipe_ingredient.quantity_per_portion * quantity
+
+                        # Accumulate ingredient usage
+                        if ingredient.name_ing not in ingredient_usage:
+                            ingredient_usage[ingredient.name_ing] = {
+                                'unit': ingredient.unit.name_unit,  # Assuming unit is a model with 'name_unit' field
+                                'quantity_used': total_quantity_used
+                            }
+                        else:
+                            ingredient_usage[ingredient.name_ing]['quantity_used'] += total_quantity_used
+
+            # Format the ingredient usage data for the response
+            usage_data = [
+                {
+                    "ingredient_name": name,
+                    "unit": data["unit"],
+                    "quantity_used": data["quantity_used"]
+                }
+                for name, data in ingredient_usage.items()
+            ]
+
+            # Return the calculated data as a response
+            return Response({"ingredient_usage": usage_data}, status=status.HTTP_200_OK)
+
+        # If the serializer is not valid, return the error response
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class AvailableProductView(APIView):
     def get(self, request, *args, **kwargs):
-        speisen = SpeiseLager.objects.all()  # Fetch all menu items
+        speisen = Speise.objects.all()  # Fetch all menu items
         available_data = []
 
         for speise in speisen:
@@ -182,7 +242,7 @@ class AvailableProductView(APIView):
             })
 
         return Response(available_data)
-    
+  
 class IngredientListView(APIView):
     def get(self, request):
         ingredients = Ingredient.objects.all()

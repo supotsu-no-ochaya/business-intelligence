@@ -1,0 +1,82 @@
+[
+    {
+      "model": "testdata.recipeingredient",
+      "pk": 1,
+      "fields": {
+        "recipe": 1,
+        "ingredient": 1,
+        "quantity_per_portion": 15,
+        "unit": 1
+      }
+    },
+    {
+      "model": "testdata.recipeingredient",
+      "pk": 2,
+      "fields": {
+        "recipe": 1,
+        "ingredient": 2,
+        "quantity_per_portion": 10,
+        "unit": 1
+      }
+    },
+    {
+      "model": "testdata.recipeingredient",
+      "pk": 3,
+      "fields": {
+        "recipe": 1,
+        "ingredient": 3,
+        "quantity_per_portion": 10,
+        "unit": 1
+      }
+    },
+    {
+      "model": "testdata.recipeingredient",
+      "pk": 4,
+      "fields": {
+        "recipe": 1,
+        "ingredient": 4,
+        "quantity_per_portion": 6,
+        "unit": 1
+      }
+    },
+    {
+      "model": "testdata.recipeingredient",
+      "pk": 5,
+      "fields": {
+        "recipe": 2,
+        "ingredient": 1,
+        "quantity_per_portion": 15,
+        "unit": 1
+      }
+    },
+    {
+      "model": "testdata.recipeingredient",
+      "pk": 6,
+      "fields": {
+        "recipe": 2,
+        "ingredient": 2,
+        "quantity_per_portion": 10,
+        "unit": 1
+      }
+    },
+    {
+      "model": "testdata.recipeingredient",
+      "pk": 7,
+      "fields": {
+        "recipe": 2,
+        "ingredient": 3,
+        "quantity_per_portion": 10,
+        "unit": 1
+      }
+    },
+    {
+      "model": "testdata.recipeingredient",
+      "pk": 8,
+      "fields": {
+        "recipe": 2,
+        "ingredient": 5,
+        "quantity_per_portion": 6,
+        "unit": 1
+      }
+    }
+  ]

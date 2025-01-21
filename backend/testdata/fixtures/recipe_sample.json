@@ -1,0 +1,26 @@
+[
+  {
+    "model": "testdata.recipe",
+    "pk": 1,
+    "fields": {
+      "speise": 1,
+      "name_recipe": "Nutella Mochi Recipe",
+      "valid_from": "2025-01-01",
+      "valid_until": "2025-12-31",
+      "created": "2025-01-01T00:00:00Z",
+      "last_updated": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.recipe",
+    "pk": 2,
+    "fields": {
+      "speise": 2,
+      "name_recipe": "Spekulatiuscreme Mochi Recipe",
+      "valid_from": "2025-01-01",
+      "valid_until": "2025-12-31",
+      "created": "2025-01-01T00:00:00Z",
+      "last_updated": "2025-01-01T00:00:00Z"
+    }
+  }
+]
