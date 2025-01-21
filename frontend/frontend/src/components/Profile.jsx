@@ -32,9 +32,9 @@ const Profile = () => {
 
     return (
         <div className={styles.profileContainer}>
-            <p>Userame: <b>{user?.username}</b></p>
+            <p>Username: <b>{user?.username}</b></p>
             <p>Admin Status: <b>{user?.is_superuser || user?.is_staff ? 'Yes' : 'No'}</b></p>
-            <p>Groups: <b>{user?.groups.length > 0 ? user.groups.map(group => group.name).join(', ') : 'None'}</b></p>
+            <p>Gruppen: <b>{user?.groups.length > 0 ? user.groups.map(group => group.name).join(', ') : 'None'}</b></p>
             <button onClick={logout}>Logout</button>
         </div>
     );
