@@ -1,0 +1,20 @@
+[
+    {
+      "model": "testdata.storagelocation",
+      "pk": 1,
+      "fields": {
+        "id": "A1",
+        "name_loc": "Storage Location A1",
+        "description": "Main storage area for ingredients"
+      }
+    },
+    {
+      "model": "testdata.storagelocation",
+      "pk": 2,
+      "fields": {
+        "id": "B1",
+        "name_loc": "Storage Location B1",
+        "description": "Secondary storage area"
+      }
+    }
+]

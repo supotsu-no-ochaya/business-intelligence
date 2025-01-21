@@ -1,0 +1,26 @@
+[
+  {
+    "model": "testdata.portionunit",
+    "pk": 1,
+    "fields": {
+      "id": "g",
+      "name_unit": "gram"
+    }
+  },
+  {
+    "model": "testdata.portionunit",
+    "pk": 2,
+    "fields": {
+      "id": "ml",
+      "name_unit": "milliliter"
+    }
+  },
+  {
+    "model": "testdata.portionunit",
+    "pk": 3,
+    "fields": {
+      "id": "pieces",
+      "name_unit": "piece"
+    }
+  }
+]

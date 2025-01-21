@@ -1,0 +1,21 @@
+[
+    {
+      "model": "testdata.pricecurrency",
+      "pk": 1,
+      "fields": {
+        "name_currency": "Euro",
+        "currency": "EUR",
+        "symbol": "€"
+      }
+    },
+    {
+      "model": "testdata.pricecurrency",
+      "pk": 2,
+      "fields": {
+        "name_currency": "US Dollar",
+        "currency": "USD",
+        "symbol": "$"
+      }
+    }
+  ]
+  

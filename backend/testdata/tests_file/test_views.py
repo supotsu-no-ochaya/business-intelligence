@@ -5,7 +5,7 @@ from testdata.models import Speise
 class EarningsViewTest(TestCase):
     def setUp(self):
         self.client = Client()
-        self.speise = Speise.objects.create(name="Pizza", preis=10.5)
+        self.speise = Speise.objects.create(name="Nutella Crepes", price=2.5)
 
     def test_earnings_view(self):
         response = self.client.get(reverse('total_earnings'))

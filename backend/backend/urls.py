@@ -19,7 +19,7 @@ from django.urls import path, include
 from testdata.auth.viewsets import LogoutView
 from routers import router
 from testdata import views
-from testdata.views import IncomeListView, AvailableProductView, IngredientListView
+from testdata.views import IncomeListView, IngredientUsageView, AvailableProductView, IngredientListView
 from drf_yasg import openapi
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -48,5 +48,6 @@ urlpatterns = [
     path('api/income/', IncomeListView.as_view(), name='income-list'),
     path('api/available-products/', AvailableProductView.as_view(), name='available-products'),
     path('ingredients/', IngredientListView.as_view(), name='ingredient-list'),
+    path('ingredient-usage/', IngredientUsageView.as_view(), name='ingredient-usage'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
 ]

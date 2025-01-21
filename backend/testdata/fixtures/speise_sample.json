@@ -1,0 +1,26 @@
+[
+  {
+    "model": "testdata.speise",
+    "pk": 1,
+    "fields": {
+      "name": "Nutella Mochi",
+      "price": 2.50,
+      "price_unit": 1,
+      "ordered_stock": 0,
+      "created": "2025-01-21T10:00:00Z",
+      "updated": "2025-01-21T10:00:00Z"
+    }
+  },
+  {
+    "model": "testdata.speise",
+    "pk": 2,
+    "fields": {
+      "name": "Spekulatiuscreme Mochi",
+        "price": 2.50,
+      "price_unit": 1,
+      "ordered_stock": 0,
+      "created": "2025-01-21T10:00:00Z",
+      "updated": "2025-01-21T10:00:00Z"
+    }
+  }
+]
