@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Sidebar.css'; // Importiere das CSS-Stylesheet
 import { fetchUserMe } from '../apiService';
+import logo from '../assets/Logo.png'
 
 const Sidebar = ({ navigate }) => {
     const [userGroup, setUserGroup] = useState(null);
@@ -67,7 +68,7 @@ const Sidebar = ({ navigate }) => {
     return (
       <div className="sidebar">
           <div className="logo">
-              <h2>Your Logo</h2>
+            <img src={logo} alt="Logo" className="logo-image" />
           </div>
           <div style={{ width: '100%', border: '1px #1D1E2C solid' }}></div>
           <ul className="nav-list">
