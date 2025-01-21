@@ -15,10 +15,6 @@ COPY frontend /app/
 # Build the production version of the app
 RUN npm run build
 
-# Copy Django's static files into the React build directory
-# Adjust the path depending on your backend setup
-COPY staticfiles/ /app/build/static/
-
 # Serve the build with an HTTP server (you can use any production server)
 FROM nginx:alpine
 

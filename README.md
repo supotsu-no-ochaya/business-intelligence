@@ -32,3 +32,10 @@ Run Production:
 foo@bar:~$ docker compose -f docker-compose-prod.yml --env-file .env_prod up --build
 ```
 
+Run Production local:
+```console
+foo@bar:~$ docker compose -f docker-compose-prod.local.yml --env-file .env_prod up --build
+```
+
+localhost:80/admin -> Admin Dashboard
+
