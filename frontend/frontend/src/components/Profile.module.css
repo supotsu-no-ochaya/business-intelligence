@@ -1,0 +1,11 @@
+.profileContainer {
+    align-self: center;
+    width: 400px;
+    margin-top: 100px;
+    color: white;
+    text-align: center;
+    background-color: #24263A;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}

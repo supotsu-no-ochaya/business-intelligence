@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Login from './components_allways/Login';
 import Sidebar from './components/Sidebar';
 import Header from './components_allways/Header';
@@ -10,15 +10,17 @@ import Einnahmen from './components/Einnahmen';
 import Getraenke from './components/Getraenke';
 import Verkaufszahlen from './components/Verkaufszahlen';
 import Transaktionen from './components/Transkationen';
+import Profile from './components/Profile'
 import './App.css'; // Importiere das CSS-Stylesheet
 import Settings from './components/Settings';
+import { AuthContext } from "./AuthContext";
 
 function App() {
   // Zustand für die aktuelle Ansicht
   const [currentView, setCurrentView] = useState('dashboard');
 
   // Zustand für den Login-Status
-  const [loggedIn, setLoggedIn] = useState();
+  const { loggedIn, setLoggedIn } = useContext(AuthContext);
 
   // Funktion zum Wechseln der Ansicht
   const navigate = (view) => {
@@ -42,6 +44,9 @@ function App() {
     case 'zutaten':
       content = <Zutaten />;
       break;*/
+    case 'profile':
+      content = <Profile />
+      break;
     case 'getraenke':
       content = <Getraenke />;
       break; 

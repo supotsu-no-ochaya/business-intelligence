@@ -57,6 +57,25 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+export const handleLogout = async () => {
+  let successful
+  try {
+      const refreshToken = localStorage.getItem('refresh_token');
+      await axios.post('/auth/logout/', {
+          refresh: refreshToken,
+      });
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      axiosInstance.defaults.headers.common['Authorization'] = undefined;
+      alert('Successfully logged out!');
+      successful = true     
+  } catch (error) {
+      console.error('Logout failed', error);
+      successful = false 
+  }
+  return successful
+};
+
 // API-Funktionen verwenden die Instanz
 export const fetchTotalEarnings = async () => {
   const response = await axiosInstance.get('/total_earnings');
