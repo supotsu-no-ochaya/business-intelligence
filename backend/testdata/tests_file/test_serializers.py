@@ -4,6 +4,6 @@ from testdata.models import Speise
 
 class SpeiseSerializerTest(TestCase):
     def test_serialization(self):
-        speise = Speise(name="Pizza", zutaten="Cheese, Tomato", preis=10.5)
+        speise = Speise(name="Nutella Crepes", price=2.5)
         serializer = SpeiseSerializer(speise)
-        self.assertEqual(serializer.data['name'], "Pizza")
+        self.assertEqual(serializer.data['name'], "Nutella Crepes")

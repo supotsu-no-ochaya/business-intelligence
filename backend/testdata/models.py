@@ -87,7 +87,7 @@ class OrderItem(models.Model):
         return super().__str__()
 
     def getTotalPrice(self):
-        total_price = sum(speise.preis for speise in self.Products.all())
+        total_price = sum(speise.price for speise in self.Products.all())
         return total_price
 
 class MesseEvent(models.Model):
