@@ -26,12 +26,14 @@ services:
     depends_on:
       - db
     restart: always
-    volumes:
-      - staticfiles:/app/staticfiles
     env_file:
       - .env_prod
     command: >
-      sh -c "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py createsu && gunicorn backend.wsgi:application --chdir /app/backend --bind 0.0.0.0:8000"
+      sh -c "
+      python manage.py migrate && 
+      python manage.py collectstatic --noinput && 
+      python manage.py createsu && 
+      gunicorn backend.wsgi:application --chdir /app/backend --bind 0.0.0.0:8000"
 
   db:
     image: ghcr.io/supotsu-no-ochaya/business-intelligence/postgres-prod:latest
@@ -49,4 +51,3 @@ services:
 
 volumes:
   postgres_data:
-  staticfiles:  # Named volume for static files
