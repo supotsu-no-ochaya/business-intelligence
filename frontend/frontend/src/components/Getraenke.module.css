@@ -3,37 +3,33 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 30px; 
+  margin-top: 30px;
   box-sizing: border-box;
 }
-
 
 /* Stil für die Karte */
 .analytics-card {
   background-color: #24263A;
   border-radius: 15px;
-  padding: 20px;
-  width: 350px;
+  padding: 25px;
+  width: 600px; /* Breiter gemacht */
   color: #DBDFEA;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.analytics-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 /* Header-Stil */
 .header {
   text-align: center;
   margin-bottom: 20px;
-}
-
-
-.dropdown {
-  background-color: #1E1E2D;
-  color: #DBDFEA;
-  border: none;
-  border-radius: 5px;
-  padding: 8px;
-  margin-bottom: 15px;
-  font-size: 1em;
-  cursor: pointer;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #FFFFFF;
 }
 
 /* Liste und Elemente */
@@ -44,51 +40,79 @@
 
 .list-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  justify-content: space-between;
+  margin: 10px 0;
+  gap: 10px; /* Abstand zwischen den Elementen */
 }
 
 .item-name {
-  flex: 1;
+  flex: 0 0 150px; /* Feste Breite für den Getränkenamen */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
-.progress-container {
+/* Progress Bar */
+.progress-wrapper {
+  flex: 1; /* Nimmt den restlichen Platz ein */
   display: flex;
   align-items: center;
-  flex: 2;
+  gap: 10px;
 }
 
 .progress-bar {
   background-color: #3A3C54;
   border-radius: 5px;
   height: 12px;
-  flex: 1;
-  margin-right: 10px;
+  width: 100%; /* Nimmt den gesamten Platz des Wrappers ein */
+  overflow: hidden;
+  position: relative;
 }
 
 .progress-used {
   background: linear-gradient(90deg, #FF4B4B, #FF00A6);
   border-radius: 5px;
   height: 100%;
+  transition: width 0.3s ease;
 }
 
-.values {
-  font-size: 0.9em;
-  color: #DBDFEA;
-  width: 50px;
+.progress-values {
+  min-width: 80px;
   text-align: right;
 }
 
-.total-section {
-  border-top: 1px solid #3A3C54;
-  padding-top: 10px;
-  margin-top: 20px;
+/* Ist und Soll Inputs */
+.input-group {
   display: flex;
-  justify-content: space-between;
-  font-size: 1.1em;
+  align-items: center;
+  gap: 5px;
 }
 
-.total-amount {
-  font-weight: bold;
+.number-input {
+  width: 50px;
+  text-align: center;
+}
+
+.number-input:focus {
+  outline: none;
+  border-color: #FF00A6;
+}
+
+/* Dropdown für Lagerorte */
+.location-dropdown {
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.location-dropdown:hover,
+.location-dropdown:focus {
+  border-color: #FF00A6;
+}
+
+/* Hover-Effekte für Listenelemente */
+.list-item:hover {
+  background-color: #2C2F47;
+  border-radius: 5px;
 }
