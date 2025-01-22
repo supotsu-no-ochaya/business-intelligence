@@ -48,6 +48,6 @@ urlpatterns = [
     path('api/income/', IncomeListView.as_view(), name='income-list'),
     path('api/available-products/', AvailableProductView.as_view(), name='available-products'),
     path('ingredients/', IngredientListView.as_view(), name='ingredient-list'),
-    path('ingredient-usage/', IngredientUsageView.as_view(), name='ingredient-usage'),
+    path('api/ingredient-usage/', IngredientUsageView.as_view(), name='ingredient-usage'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
 ]
