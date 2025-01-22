@@ -3,7 +3,7 @@ from testdata.models import (CompanyExpense, Order, OrderItem2, Product, Speise,
                              OrderItem, MesseEvent, Recipe, Ingredient)
 from testdata.serializer import (OrderItem2Serializer, ProductSerializer, SpeiseSerializer, 
                                  OrderItemSerializer, MesseEventSerializer, OrderSerializer,
-                                 IngredientUsageSerializer, CompanyExpenseSerializer)
+                                 IngredientUsageSerializer, CompanyExpenseSerializer, IngredientSerializer)
 from datetime import date
 from testdata.roles import DEFAULT_PERMISSIONS
 
@@ -18,8 +18,11 @@ class SpeiseViewSet(viewsets.ModelViewSet):
 
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
-    serializer_class = IngredientUsageSerializer
+    serializer_class = IngredientSerializer
     view_permissions = DEFAULT_PERMISSIONS
+
+    def get_queryset(self):
+        return Ingredient.objects.all()
 
 class OrderItemViewSet(viewsets.ModelViewSet):
     serializer_class = OrderItemSerializer
@@ -42,7 +45,7 @@ class MesseEventViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         print('------> Anonymous: {0}'.format(self.request.user.is_anonymous))
         return MesseEvent.objects.all()
-    
+   
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     view_permissions = DEFAULT_PERMISSIONS
