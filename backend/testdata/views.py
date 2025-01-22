@@ -19,6 +19,7 @@ from testdata.serializer import (
     OrderEventSerializer
 )
 from testdata.roles import DEFAULT_PERMISSIONS
+from drf_yasg.utils import swagger_auto_schema
 
 # Create your views here.
 
