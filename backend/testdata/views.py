@@ -8,14 +8,15 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 from rest_framework.permissions import BasePermission
+from rest_framework.permissions import AllowAny
 from testdata.models import (
     OrderItem, Product, Order, OrderItem2, OrderEvent,
-    Payment, Ingredient,Speise, RecipeIngredient
+    Payment, Ingredient,Speise, RecipeIngredient, StorageItem
 )
 from testdata.serializer import (
     ProductSerializer, OrderSerializer,
     OrderItem2Serializer, PaymentSerializer, IngredientSerializer,
-    OrderEventSerializer, IngredientUsageCalculationSerializer
+    OrderEventSerializer
 )
 from testdata.roles import DEFAULT_PERMISSIONS
 
@@ -149,102 +150,181 @@ class IncomeListView(APIView):
             "income_by_payment_option": income_by_payment_option
         })
     
+def calculate_ingredient_usage():
+    
+    ingredient_usage = {}
+
+    try:
+        orders = OrderItem2.objects.all()
+        for order_item in orders:
+            bom_data = order_item.bom or []  # Default to an empty list if bom is None
+
+            for bom_item in bom_data:
+                product = bom_item.get('product_id')
+                quantity = bom_item.get('quantity', 0)
+
+                if product is None:
+                    continue
+
+                # Fetch recipe ingredients for the product
+                recipe_ingredients = RecipeIngredient.objects.filter(recipe__speise=product)
+
+                for recipe_ingredient in recipe_ingredients:
+                    ingredient = recipe_ingredient.ingredient
+                    total_quantity_used = recipe_ingredient.quantity_per_portion * quantity
+
+                    # Accumulate ingredient usage
+                    if ingredient.name_ing not in ingredient_usage:
+                        ingredient_usage[ingredient.name_ing] = {
+                            'unit': ingredient.unit.name_unit if ingredient.unit else None,
+                            'quantity_used': total_quantity_used,
+                        }
+                    else:
+                        ingredient_usage[ingredient.name_ing]['quantity_used'] += total_quantity_used
+
+        return [
+            {"ingredient_name": name, "unit": data["unit"], "quantity_used": data["quantity_used"]}
+            for name, data in ingredient_usage.items()
+        ]
+    except Exception as e:
+        return {"error": f"An error occurred while calculating ingredient usage: {str(e)}"}
+
+
+
+# Helper Function to Calculate Total Available
+def calculate_total_available(ingredient):
+   
+    # Get the total stock from StorageItem
+    try:
+        # Get the total stock from StorageItem
+        total_stock = StorageItem.objects.filter(name_ingredient=ingredient).aggregate(
+            total=Sum('total_stock')
+        )['total'] or 0
+
+        # Fetch usage data for this ingredient
+        ingredient_usage = 0
+        usage_data = calculate_ingredient_usage()
+
+        if isinstance(usage_data, dict) and "error" in usage_data:
+            return {"error": usage_data["error"]}
+
+        for usage in usage_data:
+            if usage["ingredient_name"] == ingredient.name_ing:
+                ingredient_usage = usage["quantity_used"]
+                break
+
+        # Calculate total available stock
+        total_available = total_stock - ingredient_usage
+        return max(total_available, 0)  # Ensure non-negative values
+    except Exception as e:
+        return {"error": f"An error occurred while calculating total availability: {str(e)}"}
+
+
+
+# Ingredient Usage View
 class IngredientUsageView(APIView):
-    def post(self, request, *args, **kwargs):
-        """
-        Handle POST requests to calculate ingredient usage.
-        Expects a date range (start_date, end_date) in the request body.
-        """
-        # Validate and deserialize the input data
-        serializer = IngredientUsageCalculationSerializer(data=request.data)
-        if serializer.is_valid():
-            # If the data is valid, process the ingredient usage calculation
-            start_date = serializer.validated_data['start_date']
-            end_date = serializer.validated_data['end_date']
-            
-            # Initialize an empty dictionary to store ingredient usage
-            ingredient_usage = {}
+    permission_classes = [AllowAny]
 
-            # Fetch all order items within the specified date range
-            orders = OrderItem2.objects.filter(order__created__date__range=(start_date, end_date))
-
-            for order_item in orders:
-                # Parse the 'bom' field (Bill of Materials) for product and quantity information
-                bom_data = order_item.bom  # Assuming 'bom' is a dictionary with product IDs and quantities
-                
-                for bom_item in bom_data:
-                    product = bom_item.get('product_id')
-                    quantity = bom_item.get('quantity', 0)
-
-                    # Fetch recipe ingredients for the given product (Speise)
-                    recipe_ingredients = RecipeIngredient.objects.filter(speise=product)
-
-                    for recipe_ingredient in recipe_ingredients:
-                        ingredient = recipe_ingredient.ingredient
-                        total_quantity_used = recipe_ingredient.quantity_per_portion * quantity
-
-                        # Accumulate ingredient usage
-                        if ingredient.name_ing not in ingredient_usage:
-                            ingredient_usage[ingredient.name_ing] = {
-                                'unit': ingredient.unit.name_unit,  # Assuming unit is a model with 'name_unit' field
-                                'quantity_used': total_quantity_used
-                            }
-                        else:
-                            ingredient_usage[ingredient.name_ing]['quantity_used'] += total_quantity_used
-
-            # Format the ingredient usage data for the response
-            usage_data = [
-                {
-                    "ingredient_name": name,
-                    "unit": data["unit"],
-                    "quantity_used": data["quantity_used"]
-                }
-                for name, data in ingredient_usage.items()
-            ]
-
-            # Return the calculated data as a response
-            return Response({"ingredient_usage": usage_data}, status=status.HTTP_200_OK)
-
-        # If the serializer is not valid, return the error response
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AvailableProductView(APIView):
     def get(self, request, *args, **kwargs):
-        speisen = Speise.objects.all()  # Fetch all menu items
-        available_data = []
+        usage_data = calculate_ingredient_usage()
 
-        for speise in speisen:
-            ingredient_data = []
-            min_portions = None  # Placeholder to calculate available portions
+        if isinstance(usage_data, dict) and "error" in usage_data:
+            return Response({"error": usage_data["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            for speise_ingredient in speise.speiseingredient_set.all():
-                ingredient = speise_ingredient.ingredient
-                required_quantity = speise_ingredient.portion * speise.preis  # Assuming order quantity is linked to price for simplicity
-                # Check the stock of the ingredient
-                available_quantity = ingredient.quantity
+        return Response({"ingredient_usage": usage_data}, status=status.HTTP_200_OK)
 
-                if min_portions is None or available_quantity // required_quantity < min_portions:
-                    min_portions = available_quantity // required_quantity
 
-                ingredient_data.append({
-                    'name': ingredient.name,
-                    'available_quantity': available_quantity,
-                    'unit': ingredient.unit,
-                    'required_quantity': required_quantity
+# Ingredient Availability View
+class IngredientAvailabilityView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            ingredients = Ingredient.objects.all()
+            ingredient_availability = []
+
+            for ingredient in ingredients:
+                # Calculate total available stock dynamically
+                total_available = calculate_total_available(ingredient)
+
+                if isinstance(total_available, dict) and "error" in total_available:
+                    return Response({"error": total_available["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                ingredient_availability.append({
+                    'ingredient_name': ingredient.name_ing,
+                    'total_stock': StorageItem.objects.filter(name_ingredient=ingredient).aggregate(
+                        total=Sum('total_stock')
+                    )['total'] or 0,
+                    'ingredient_usage': total_available,
+                    'unit': ingredient.unit.name_unit if ingredient.unit else None,
+                    'total_available': total_available,
                 })
 
-            available_data.append({
-                'name': speise.name,
-                'price': speise.preis,
-                'available_portions': min_portions,
-                'ingredients': ingredient_data
-            })
+            return Response({'ingredients': ingredient_availability}, status=status.HTTP_200_OK)
 
-        return Response(available_data)
+        except Exception as e:
+            return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# Available Product View
+class AvailableProductView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            speisen = Speise.objects.all()
+            available_products = []
+
+            for speise in speisen:
+                ingredient_data = []
+                min_portions = None
+
+                # Fetch recipe ingredients for the product
+                recipe_ingredients = RecipeIngredient.objects.filter(recipe__speise=speise)
+
+                for recipe_ingredient in recipe_ingredients:
+                    ingredient = recipe_ingredient.ingredient
+                    required_quantity = recipe_ingredient.quantity_per_portion
+
+                    # Calculate total available dynamically
+                    total_available = calculate_total_available(ingredient)
+
+                    if isinstance(total_available, dict) and "error" in total_available:
+                        return Response({"error": total_available["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                    # Calculate max portions based on ingredient availability
+                    max_portions = total_available // required_quantity if required_quantity > 0 else 0
+
+                    if min_portions is None or max_portions < min_portions:
+                        min_portions = max_portions
+
+                    ingredient_data.append({
+                        'ingredient_name': ingredient.name_ing,
+                        'required_quantity_per_portion': required_quantity,
+                        'total_available': total_available,
+                        'max_portions_from_this_ingredient': max_portions,
+                    })
+
+                available_products.append({
+                    'product_name': speise.name,
+                    'price': speise.price,
+                    'available_portions': min_portions,
+                    'ingredients': ingredient_data,
+                })
+
+            return Response({'available_products': available_products}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
   
 class IngredientListView(APIView):
+    permission_classes = [AllowAny]
     def get(self, request):
-        ingredients = Ingredient.objects.all()
-        serializer = IngredientSerializer(ingredients, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            ingredients = Ingredient.objects.all()
+            if not ingredients:
+                return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = IngredientSerializer(ingredients, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
