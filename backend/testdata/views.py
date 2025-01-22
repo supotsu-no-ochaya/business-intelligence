@@ -316,7 +316,7 @@ class AvailableProductView(APIView):
 
         except Exception as e:
             return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-  
+ 
 class IngredientListView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
@@ -328,3 +328,41 @@ class IngredientListView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    def post(self, request):
+        try:
+            serializer = IngredientSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # PUT method: Update an existing ingredient
+    def put(self, request, *args, **kwargs):
+        try:
+            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            ingredient = Ingredient.objects.get(id=ingredient_id)
+            serializer = IngredientSerializer(ingredient, data=request.data, partial=True)  # Allow partial updates
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Ingredient.DoesNotExist:
+            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # DELETE method: Delete an existing ingredient
+    def delete(self, request, *args, **kwargs):
+        try:
+            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            ingredient = Ingredient.objects.get(id=ingredient_id)
+            ingredient.delete()
+            return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except Ingredient.DoesNotExist:
+            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

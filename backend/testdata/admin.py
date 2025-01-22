@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import (MesseEvent, Speise, Order, OrderEvent,
+from .models import (MesseEvent, Speise, Order, OrderEvent, Ingredient,
                      Payment, PaymentOption)
 
 # Register your models here.
