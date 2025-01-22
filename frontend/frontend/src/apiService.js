@@ -112,6 +112,22 @@ export const createCompanyExpense = async(data) => {
   return response
 }
 
+export const fetchProduct = async () => {
+  try {
+    const response = await axiosInstance.get('/product');
+    const products = response.data;
+
+    // Produkte in Kategorien aufteilen
+    const foodItems = products.filter(product => product.category.name.toLowerCase() === 'food');
+    const drinkItems = products.filter(product => product.category.name.toLowerCase() === 'drinks');
+
+    return { foodItems, drinkItems };
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    throw error;
+  }
+};
+
 export const loginUser = async (username, password) => {
     const user = { username, password };
     try {

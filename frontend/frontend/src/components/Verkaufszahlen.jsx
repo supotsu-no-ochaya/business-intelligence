@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Verkaufszahlen.module.css';
-import { fetchOrders, fetchSpeisen } from '../apiService';
+import { fetchOrders, fetchProduct } from '../apiService';
 
 const Verkaufszahlen = () => {
     const [orders, setOrders] = useState([]);
     const [speisen, setSpeisen] = useState([]);
+    const [getraenke, setGetraenke] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [originalOrders, setOriginalOrders] = useState([]); // Neuer Zustand
+
 
     // Zustände für Speisen
     const [showTopProductsSpeisen, setShowTopProductsSpeisen] = useState(false);
@@ -21,62 +24,95 @@ const Verkaufszahlen = () => {
 
     // Bestellungen laden
     useEffect(() => {
-        const loadOrders = async () => {
+        const loadProducts = async () => {
             try {
-                const fetchedOrders = await fetchOrders();
-                setOrders(fetchedOrders);
-                console.log('Orders:', fetchedOrders);
+                const { foodItems, drinkItems } = await fetchProduct();
+                console.log('Speisen:', foodItems);
+                console.log('Getränke:', drinkItems);
+    
+                const filteredSpeisen = originalOrders.filter(order =>
+                    foodItems.some(speise => order.menu_item_name.includes(speise.name))
+                );
+                const filteredGetraenke = originalOrders.filter(order =>
+                    drinkItems.some(getraenk => order.menu_item_name.includes(getraenk.name))
+                );
+    
+                setSpeisen(filteredSpeisen);
+                setGetraenke(filteredGetraenke);
+    
+                // Initiale Gruppierung ohne Filter
+                setFilteredSpeisen(groupAndSummarize(filteredSpeisen));
+                setFilteredGetraenke(groupAndSummarize(filteredGetraenke));
             } catch (error) {
-                console.error('Fehler beim Laden der Bestellungen:', error);
+                console.error('Fehler beim Laden der Produkte:', error);
+            } finally {
+                setLoading(false);
             }
         };
+    
+        if (originalOrders.length > 0) {
+            loadProducts();
+        }
+    }, [originalOrders]);
 
-        loadOrders();
-    }, []);
-
-    // Speisen aus der API laden und filtern
+    // Produkte aus der API laden und filtern
     useEffect(() => {
-        const loadSpeisen = async () => {
+        const loadProducts = async () => {
             try {
-                const fetchedSpeisen = await fetchSpeisen();
-                console.log('Speisen:', fetchedSpeisen);
+                const { foodItems, drinkItems } = await fetchProduct();
+                console.log('Speisen:', foodItems);
+                console.log('Getränke:', drinkItems);
 
                 const filteredSpeisen = orders.filter(order =>
-                    fetchedSpeisen.some(speise => order.menu_item_name.includes(speise.name))
+                    foodItems.some(speise => order.menu_item_name.includes(speise.name))
                 );
-                console.log('speisen:', filteredSpeisen);
+                const filteredGetraenke = orders.filter(order =>
+                    drinkItems.some(getraenk => order.menu_item_name.includes(getraenk.name))
+                );
+
                 setSpeisen(filteredSpeisen);
+                setGetraenke(filteredGetraenke);
+
+                // Initiale Gruppierung ohne Filter
+                setFilteredSpeisen(groupAndSummarize(filteredSpeisen));
+                setFilteredGetraenke(groupAndSummarize(filteredGetraenke));
             } catch (error) {
-                console.error('Fehler beim Laden der Speisen:', error);
+                console.error('Fehler beim Laden der Produkte:', error);
             } finally {
                 setLoading(false);                
             }
         };
 
         if (orders.length > 0) {
-            loadSpeisen();
+            loadProducts();
         }
     }, [orders]);
 
     const handleTopProductsSpeisen = () => {
-        const speisen = orders.filter(order =>
-            ["Sandwich", "Crepe", "Mochi", "Burger", "Pizza Slice", "Taco", "Sushi Roll", "Pasta Bowl", "Salad", "Cupcake"].some(keyword =>
-                order.menu_item_name.includes(keyword)
-            )
-        );
-        setFilteredSpeisen(groupAndSummarize(speisen).slice(0, 5));
+        if (speisen.length === 0) {
+            console.error('Keine Speisen-Daten verfügbar.');
+            return;
+        }
+    
+        const groupedSpeisen = groupAndSummarize(speisen).slice(0, 5);
+        console.log('Top Produkte Speisen:', groupedSpeisen);
+        setFilteredSpeisen(groupedSpeisen);
     };
     
     const handleTopProductsGetraenke = () => {
-        const getraenke = orders.filter(order =>
-            ["Cola", "Kakao", "Kaffee", "Tea", "Juice"].some(keyword =>
-                order.menu_item_name.includes(keyword)
-            )
-        );
-        setFilteredGetraenke(groupAndSummarize(getraenke).slice(0, 5));
+        if (getraenke.length === 0) {
+            console.error('Keine Getränke-Daten verfügbar.');
+            return;
+        }
+    
+        const groupedGetraenke = groupAndSummarize(getraenke).slice(0, 5);
+        console.log('Top Produkte Getränke:', groupedGetraenke);
+        setFilteredGetraenke(groupedGetraenke);
     };
     
+    
 
+    // Gruppierungsfunktion, die auch bei der Filterung aufgerufen wird
     const groupAndSummarize = (data) => {
         const grouped = data.reduce((acc, order) => {
             if (!acc[order.menu_item_name]) {
@@ -90,20 +126,46 @@ const Verkaufszahlen = () => {
             acc[order.menu_item_name].totalRevenue += order.menu_item_price_in_cents / 100;
             return acc;
         }, {});
+
         return Object.values(grouped).sort((a, b) => b.sales - a.sales);
     };
 
+    // Filtert Bestellungen nach Datum
     const filterByDateRange = (data, startDate, endDate) => {
         const startTimestamp = startDate ? new Date(startDate).getTime() : null;
         const endTimestamp = endDate ? new Date(endDate).getTime() : null;
-
+    
         return data.filter(order => {
-            const orderTimestamp = new Date(order.date).getTime();
+            const orderTimestamp = new Date(order.created).getTime(); // Hier Zugriff auf "created"
             if (startTimestamp && orderTimestamp < startTimestamp) return false;
             if (endTimestamp && orderTimestamp > endTimestamp) return false;
             return true;
         });
     };
+    
+
+    // Filter anwenden (bei Klicken auf den "Anwenden"-Button)
+    const handleFilter = () => {
+        const filteredSpeisen = filterByDateRange(speisen, startDateSpeisen, endDateSpeisen);
+        const filteredGetraenke = filterByDateRange(getraenke, startDateGetraenke, endDateGetraenke);
+        
+        // Gruppiere die gefilterten Daten
+        setFilteredSpeisen(groupAndSummarize(filteredSpeisen));
+        setFilteredGetraenke(groupAndSummarize(filteredGetraenke));
+    };
+
+    const handleFilterSpeisen = () => {
+        const filtered = filterByDateRange(orders, startDateSpeisen, endDateSpeisen);
+        const grouped = groupAndSummarize(filtered);
+        setFilteredSpeisen(grouped);
+    };
+    
+    const handleFilterGetraenke = () => {
+        const filtered = filterByDateRange(orders, startDateGetraenke, endDateGetraenke);
+        const grouped = groupAndSummarize(filtered);
+        setFilteredGetraenke(grouped);
+    };
+    
 
     const renderCategory = (data, maxSales, title, total, showTopProducts, setShowTopProducts, startDate, setStartDate, endDate, setEndDate, handleFilter) => {
         return (
@@ -197,7 +259,7 @@ const Verkaufszahlen = () => {
                 setStartDateSpeisen,
                 endDateSpeisen,
                 setEndDateSpeisen,
-                handleTopProductsSpeisen
+                handleFilterSpeisen // Hier die neue Funktion übergeben
             )}
             {renderCategory(
                 filteredGetraenke,
@@ -210,7 +272,7 @@ const Verkaufszahlen = () => {
                 setStartDateGetraenke,
                 endDateGetraenke,
                 setEndDateGetraenke,
-                handleTopProductsGetraenke
+                handleFilterGetraenke // Hier die neue Funktion übergeben
             )}
         </div>
     );
