@@ -328,7 +328,9 @@ class IngredientListView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+
+    
+    @swagger_auto_schema(request_body=IngredientSerializer,)
     def post(self, request):
         try:
             serializer = IngredientSerializer(data=request.data)
@@ -340,6 +342,7 @@ class IngredientListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # PUT method: Update an existing ingredient
+    @swagger_auto_schema()
     def put(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
@@ -355,6 +358,8 @@ class IngredientListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # DELETE method: Delete an existing ingredient
+    
+    @swagger_auto_schema()
     def delete(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
