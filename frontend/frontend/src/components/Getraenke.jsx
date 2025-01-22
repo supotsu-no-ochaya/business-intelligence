@@ -21,10 +21,40 @@ const Getraenke = () => {
     setData(updatedData);
   };
 
+  // Funktion zum Berechnen der fehlenden Artikel
+  const calculateMissingItems = () => {
+    return data.filter(item => item.used < item.total)
+      .map(item => ({
+        name: item.name,
+        missing: item.total - item.used,
+        location: item.location,
+      }));
+  };
+
+  const downloadShoppingList = () => {
+    const missingItems = calculateMissingItems();
+    const csvContent = [
+      ['Artikel', 'benoetigte Menge', 'Lagerort'].join(';'), // CSV-Header
+      ...missingItems.map(item => `${item.name};${item.missing};${item.location}`),
+    ].join('\n'); // Jede Zeile wird separat hinzugefügt
+  
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'einkaufsliste.csv';
+    link.click();
+    URL.revokeObjectURL(url);
+  };  
+
   return (
     <div className={styles.container}>
       <div className={styles['analytics-card']}>
         <h2 className={styles.header}>Getränke Analytics</h2>
+        {/* Button für Einkaufsliste */}
+        <button onClick={downloadShoppingList} className={styles['download-button']}>
+          Einkaufsliste herunterladen
+        </button>
   
         <ul className={styles['analytics-list']}>
           {data.map((item, index) => (
@@ -77,7 +107,6 @@ const Getraenke = () => {
       </div>
     </div>
   );
-  
-}  
+};
 
 export default Getraenke;
