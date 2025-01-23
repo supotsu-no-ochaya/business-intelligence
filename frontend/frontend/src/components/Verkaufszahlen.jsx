@@ -24,36 +24,23 @@ const Verkaufszahlen = () => {
 
     // Bestellungen laden
     useEffect(() => {
-        const loadProducts = async () => {
+        const fetchData = async () => {
             try {
-                const { foodItems, drinkItems } = await fetchProduct();
-                console.log('Speisen:', foodItems);
-                console.log('Getränke:', drinkItems);
-    
-                const filteredSpeisen = originalOrders.filter(order =>
-                    foodItems.some(speise => order.menu_item_name.includes(speise.name))
-                );
-                const filteredGetraenke = originalOrders.filter(order =>
-                    drinkItems.some(getraenk => order.menu_item_name.includes(getraenk.name))
-                );
-    
-                setSpeisen(filteredSpeisen);
-                setGetraenke(filteredGetraenke);
-    
-                // Initiale Gruppierung ohne Filter
-                setFilteredSpeisen(groupAndSummarize(filteredSpeisen));
-                setFilteredGetraenke(groupAndSummarize(filteredGetraenke));
+                setLoading(true);
+                const fetchedOrders = await fetchOrders(); // API-Aufruf
+                console.log('Bestellungen:', fetchedOrders);
+                setOrders(fetchedOrders); // Setzt die geladenen Bestellungen
+                setOriginalOrders(fetchedOrders); // Setzt die Original-Bestellungen
             } catch (error) {
-                console.error('Fehler beim Laden der Produkte:', error);
+                console.error('Fehler beim Laden der Bestellungen:', error);
             } finally {
                 setLoading(false);
             }
         };
     
-        if (originalOrders.length > 0) {
-            loadProducts();
-        }
-    }, [originalOrders]);
+        fetchData();
+    }, []);
+    
 
     // Produkte aus der API laden und filtern
     useEffect(() => {
@@ -259,7 +246,7 @@ const Verkaufszahlen = () => {
                 setStartDateSpeisen,
                 endDateSpeisen,
                 setEndDateSpeisen,
-                handleFilterSpeisen // Hier die neue Funktion übergeben
+                handleFilterSpeisen 
             )}
             {renderCategory(
                 filteredGetraenke,
@@ -272,7 +259,7 @@ const Verkaufszahlen = () => {
                 setStartDateGetraenke,
                 endDateGetraenke,
                 setEndDateGetraenke,
-                handleFilterGetraenke // Hier die neue Funktion übergeben
+                handleFilterGetraenke
             )}
         </div>
     );
