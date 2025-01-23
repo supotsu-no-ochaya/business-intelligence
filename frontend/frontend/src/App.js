@@ -7,7 +7,7 @@ import Ausgaben from './components/Ausgaben';
 import Einnahmen from './components/Einnahmen';
  //import Verbrauch from './components/Verbrauch';
 // import Zutaten from './components/Zutaten';
-import Getraenke from './components/Getraenke';
+import Lager from './components/Lager';
 import Verkaufszahlen from './components/Verkaufszahlen';
 import Transaktionen from './components/Transkationen';
 import Profile from './components/Profile'
@@ -47,8 +47,8 @@ function App() {
     case 'profile':
       content = <Profile />
       break;
-    case 'getraenke':
-      content = <Getraenke />;
+    case 'lager':
+      content = <Lager />;
       break; 
     case 'ausgaben':
       content = <Ausgaben />;

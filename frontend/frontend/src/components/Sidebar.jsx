@@ -40,10 +40,10 @@ const Sidebar = ({ navigate }) => {
 
     // Sichtbarkeitslogik basierend auf der Benutzergruppe
     const menuItems = [
-        { label: 'Dashboard', icon: '⌛', route: 'dashboard', groups: ['Kasse', 'Kueche', 'Admin'] },
-        { label: 'Verbrauch', icon: '🍴', route: 'verbrauch', groups: ['Kueche', 'Admin'] },
-        { label: 'Zutaten', icon: '📦', route: 'zutaten', groups: ['Kueche', 'Admin'] },
-        { label: 'Getränke', icon: '🥤', route: 'getraenke', groups: ['Kueche', 'Admin'] },
+        //{ label: 'Dashboard', icon: '⌛', route: 'dashboard', groups: ['Kasse', 'Kueche', 'Admin'] },
+        //{ label: 'Verbrauch', icon: '🍴', route: 'verbrauch', groups: ['Kueche', 'Admin'] },
+        //{ label: 'Zutaten', icon: '📦', route: 'zutaten', groups: ['Kueche', 'Admin'] },
+        { label: 'Lager', icon: '📦', route: 'lager', groups: ['Kueche', 'Admin'] },
         { label: 'Transaktionen', icon: '💳', route: 'transaktionen', groups: ['Kasse', 'Admin'] },
         { label: 'Einnahmen', icon: '📈', route: 'einnahmen', groups: ['Kasse', 'Admin'] },
         { label: 'Ausgaben', icon: '💲', route: 'ausgaben', groups: ['Kasse', 'Admin'] },

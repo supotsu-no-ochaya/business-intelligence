@@ -13,7 +13,7 @@ const Login = ({ onLogin }) => {
       await loginUser(username, password);
       onLogin(); // Callback nach erfolgreichem Login
     } catch (error) {
-      alert('Falsche E-Mail oder Passwort!');
+      alert('Falscher Benutzername oder Passwort!');
       console.error('Error during login:', error);
     }
   };

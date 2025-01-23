@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './Getraenke.module.css';
+import styles from './Lager.module.css';
 
 const Getraenke = () => {
   const [data, setData] = useState([
