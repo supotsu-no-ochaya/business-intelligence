@@ -657,7 +657,7 @@ class StorageLocationListView(APIView):
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class StorageItemListView(APIView):
+class StorageLocationListView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
