@@ -19,7 +19,9 @@ from django.urls import path, include
 from testdata.auth.viewsets import LogoutView
 from routers import router
 from testdata import views
-from testdata.views import IncomeListView, IngredientUsageView, AvailableProductView, IngredientListView
+from testdata.views import (IncomeListView, IngredientUsageView, AvailableProductView, 
+                            IngredientListView, PriceCurrencyView, PortionUnitView, RecipeIngredientView,
+                            RecipeView)
 from drf_yasg import openapi
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -49,6 +51,14 @@ urlpatterns = [
     path('api/available-products/', AvailableProductView.as_view(), name='available-products'),
     path('ingredients/', IngredientListView.as_view(), name='ingredient-list'),
     path('ingredients/<int:id>/', IngredientListView.as_view(), name='ingredient-detail'),  # For PUT and DELETE
+    path('price-currencies/', PriceCurrencyView.as_view(), name='price_currency_list'),
+    path('price-currencies/<int:id>/', PriceCurrencyView.as_view(), name='price_currency_detail'),
+    path('portion-units/', PortionUnitView.as_view(), name='portion_unit_list'),
+    path('portion-units/<str:id>/', PortionUnitView.as_view(), name='portion_unit_detail'),
+    path('recipes/', RecipeView.as_view(), name='recipe_list'),
+    path('recipes/<int:id>/', RecipeView.as_view(), name='recipe_detail'),
+    path('recipe-ingredients/', RecipeIngredientView.as_view(), name='recipe_ingredient_list'),
+    path('recipe-ingredients/<int:id>/', RecipeIngredientView.as_view(), name='recipe_ingredient_detail'),
     path('api/ingredient-usage/', IngredientUsageView.as_view(), name='ingredient-usage'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
 ]

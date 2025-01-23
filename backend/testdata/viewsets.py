@@ -1,14 +1,22 @@
 from rest_framework import viewsets
 from testdata.models import (CompanyExpense, Order, OrderItem2, Product, Speise, 
-                             OrderItem, MesseEvent, Recipe, Ingredient)
+                             OrderItem, MesseEvent, Recipe, Ingredient, StorageItem)
 from testdata.serializer import (OrderItem2Serializer, ProductSerializer, SpeiseSerializer, 
                                  OrderItemSerializer, MesseEventSerializer, OrderSerializer,
-                                 IngredientUsageSerializer, CompanyExpenseSerializer, IngredientSerializer)
+                                 IngredientSerializer, CompanyExpenseSerializer, IngredientSerializer,
+                                 StorageItemSerializer)
 from datetime import date
 from testdata.roles import DEFAULT_PERMISSIONS
 
 # Same as Controllers
 # This set of views corresponds to the predefined actions of CRUD type
+class PriceCurrencyViewSet(viewsets.ModelViewSet):
+    serializer_class = SpeiseSerializer    
+    view_permissions = DEFAULT_PERMISSIONS
+
+    def get_queryset(self):
+        return Speise.objects.all()
+
 class SpeiseViewSet(viewsets.ModelViewSet):
     serializer_class = SpeiseSerializer    
     view_permissions = DEFAULT_PERMISSIONS
@@ -23,6 +31,14 @@ class IngredientViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Ingredient.objects.all()
+    
+class StorageItemViewSet(viewsets.ModelViewSet):
+    queryset = StorageItem.objects.all()
+    serializer_class = StorageItemSerializer
+    view_permissions = DEFAULT_PERMISSIONS
+
+    def get_queryset(self):
+        return StorageItem.objects.all()
 
 class OrderItemViewSet(viewsets.ModelViewSet):
     serializer_class = OrderItemSerializer

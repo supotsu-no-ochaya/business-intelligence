@@ -11,14 +11,18 @@ from rest_framework.permissions import BasePermission
 from rest_framework.permissions import AllowAny
 from testdata.models import (
     OrderItem, Product, Order, OrderItem2, OrderEvent,
-    Payment, Ingredient,Speise, RecipeIngredient, StorageItem
+    Payment, Ingredient,Speise, RecipeIngredient, StorageItem,
+    StorageLocation, PriceCurrency, PortionUnit, Recipe
 )
 from testdata.serializer import (
     ProductSerializer, OrderSerializer,
     OrderItem2Serializer, PaymentSerializer, IngredientSerializer,
-    OrderEventSerializer
+    OrderEventSerializer, StorageItemSerializer, PortionUnitSerializer,
+    PriceCurrencySerializer, StorageLocationSerializer, RecipeSerializer,
+    RecipeIngredientSerializer
 )
 from testdata.roles import DEFAULT_PERMISSIONS
+from drf_yasg.utils import swagger_auto_schema
 
 # Create your views here.
 
@@ -247,7 +251,7 @@ def calculate_total_available(ingredient):
 
 # Ingredient Usage View
 class IngredientUsageView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         usage_data = calculate_ingredient_usage()
@@ -260,7 +264,7 @@ class IngredientUsageView(APIView):
 
 # Ingredient Availability View
 class IngredientAvailabilityView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         try:
@@ -292,7 +296,7 @@ class IngredientAvailabilityView(APIView):
 
 # Available Product View
 class AvailableProductView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         try:
@@ -311,7 +315,7 @@ class AvailableProductView(APIView):
                     required_quantity = recipe_ingredient.quantity_per_portion
 
                     # Calculate total available dynamically
-                    total_available = calculate_total_available(ingredient)
+                    total_available = calculate_total_available(ingredient) #Current available stock
 
                     if isinstance(total_available, dict) and "error" in total_available:
                         return Response({"error": total_available["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -340,9 +344,113 @@ class AvailableProductView(APIView):
 
         except Exception as e:
             return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
- 
+
+class PriceCurrencyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # GET method: Retrieve all currencies
+    def get(self, request):
+        try:
+            currencies = PriceCurrency.objects.all()
+            if not currencies:
+                return Response({"detail": "No currencies found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = PriceCurrencySerializer(currencies, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # POST method: Create a new currency
+    @swagger_auto_schema(request_body=PriceCurrencySerializer)
+    def post(self, request):
+        try:
+            serializer = PriceCurrencySerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # PUT method: Update an existing currency
+    @swagger_auto_schema(request_body=PriceCurrencySerializer)
+    def put(self, request, *args, **kwargs):
+        try:
+            currency_id = kwargs.get('id')  # Fetch the ID from URL parameters
+            currency = PriceCurrency.objects.get(id=currency_id)
+            serializer = PriceCurrencySerializer(currency, data=request.data, partial=True)  # Allow partial updates
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except PriceCurrency.DoesNotExist:
+            return Response({"detail": "Currency not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # DELETE method: Delete a currency
+    def delete(self, request, *args, **kwargs):
+        try:
+            currency_id = kwargs.get('id')  # Fetch the ID from URL parameters
+            currency = PriceCurrency.objects.get(id=currency_id)
+            currency.delete()
+            return Response({"detail": "Currency deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except PriceCurrency.DoesNotExist:
+            return Response({"detail": "Currency not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class PortionUnitView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            units = PortionUnit.objects.all()
+            if not units:
+                return Response({"detail": "No portion units found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = PortionUnitSerializer(units, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @swagger_auto_schema(request_body=PortionUnitSerializer)
+    def post(self, request):
+        try:
+            serializer = PortionUnitSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @swagger_auto_schema(request_body=PortionUnitSerializer)
+    def put(self, request, *args, **kwargs):
+        try:
+            unit_id = kwargs.get('id')
+            unit = PortionUnit.objects.get(id=unit_id)
+            serializer = PortionUnitSerializer(unit, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except PortionUnit.DoesNotExist:
+            return Response({"detail": "Portion unit not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            unit_id = kwargs.get('id')
+            unit = PortionUnit.objects.get(id=unit_id)
+            unit.delete()
+            return Response({"detail": "Portion unit deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except PortionUnit.DoesNotExist:
+            return Response({"detail": "Portion unit not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class IngredientListView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
             ingredients = Ingredient.objects.all()
@@ -353,6 +461,8 @@ class IngredientListView(APIView):
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+    # PUT method: Update an existing ingredient
+    @swagger_auto_schema(request_body=IngredientSerializer,)
     def post(self, request):
         try:
             serializer = IngredientSerializer(data=request.data)
@@ -364,6 +474,7 @@ class IngredientListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # PUT method: Update an existing ingredient
+    @swagger_auto_schema()
     def put(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
@@ -379,6 +490,8 @@ class IngredientListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # DELETE method: Delete an existing ingredient
+    
+    @swagger_auto_schema()
     def delete(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
@@ -389,3 +502,267 @@ class IngredientListView(APIView):
             return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class RecipeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            recipes = Recipe.objects.all()
+            if not recipes:
+                return Response({"detail": "No recipes found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = RecipeSerializer(recipes, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @swagger_auto_schema(request_body=RecipeSerializer)
+    def post(self, request):
+        try:
+            serializer = RecipeSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @swagger_auto_schema(request_body=RecipeSerializer)
+    def put(self, request, *args, **kwargs):
+        try:
+            recipe_id = kwargs.get('id')
+            recipe = Recipe.objects.get(id=recipe_id)
+            serializer = RecipeSerializer(recipe, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Recipe.DoesNotExist:
+            return Response({"detail": "Recipe not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            recipe_id = kwargs.get('id')
+            recipe = Recipe.objects.get(id=recipe_id)
+            recipe.delete()
+            return Response({"detail": "Recipe deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except Recipe.DoesNotExist:
+            return Response({"detail": "Recipe not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class RecipeIngredientView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            recipe_ingredients = RecipeIngredient.objects.all()
+            if not recipe_ingredients:
+                return Response({"detail": "No recipe ingredients found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = RecipeIngredientSerializer(recipe_ingredients, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @swagger_auto_schema(request_body=RecipeIngredientSerializer)
+    def post(self, request):
+        try:
+            serializer = RecipeIngredientSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @swagger_auto_schema(request_body=RecipeIngredientSerializer)
+    def put(self, request, *args, **kwargs):
+        try:
+            recipe_ingredient_id = kwargs.get('id')
+            recipe_ingredient = RecipeIngredient.objects.get(id=recipe_ingredient_id)
+            serializer = RecipeIngredientSerializer(recipe_ingredient, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except RecipeIngredient.DoesNotExist:
+            return Response({"detail": "Recipe ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            recipe_ingredient_id = kwargs.get('id')
+            recipe_ingredient = RecipeIngredient.objects.get(id=recipe_ingredient_id)
+            recipe_ingredient.delete()
+            return Response({"detail": "Recipe ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except RecipeIngredient.DoesNotExist:
+            return Response({"detail": "Recipe ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class StorageLocationListView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            ingredients = StorageLocation.objects.all()
+            if not ingredients:
+                return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = StorageLocationSerializer(ingredients, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    # PUT method: Update an existing ingredient
+    @swagger_auto_schema(request_body=StorageLocationSerializer,)
+    def post(self, request):
+        try:
+            serializer = StorageLocationSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # PUT method: Update an existing ingredient
+    @swagger_auto_schema()
+    def put(self, request, *args, **kwargs):
+        try:
+            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            ingredient = StorageLocation.objects.get(id=ingredient_id)
+            serializer = StorageLocationSerializer(ingredient, data=request.data, partial=True)  # Allow partial updates
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except StorageItem.DoesNotExist:
+            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # DELETE method: Delete an existing ingredient
+    
+    @swagger_auto_schema()
+    def delete(self, request, *args, **kwargs):
+        try:
+            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            ingredient = StorageLocation.objects.get(id=ingredient_id)
+            ingredient.delete()
+            return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except StorageItem.DoesNotExist:
+            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class StorageItemListView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            ingredients = StorageItem.objects.all()
+            if not ingredients:
+                return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = StorageItemSerializer(ingredients, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    # PUT method: Update an existing ingredient
+    @swagger_auto_schema(request_body=StorageItemSerializer,)
+    def post(self, request):
+        try:
+            serializer = StorageItemSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # PUT method: Update an existing ingredient
+    @swagger_auto_schema()
+    def put(self, request, *args, **kwargs):
+        try:
+            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            ingredient = StorageLocation.objects.get(id=ingredient_id)
+            serializer = StorageLocationSerializer(ingredient, data=request.data, partial=True)  # Allow partial updates
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except StorageItem.DoesNotExist:
+            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # DELETE method: Delete an existing ingredient
+    
+    @swagger_auto_schema()
+    def delete(self, request, *args, **kwargs):
+        try:
+            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            ingredient = StorageItem.objects.get(id=ingredient_id)
+            ingredient.delete()
+            return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except StorageItem.DoesNotExist:
+            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class StorageItemListView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            ingredients = StorageItem.objects.all()
+            if not ingredients:
+                return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = StorageItemSerializer(ingredients, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    # PUT method: Update an existing ingredient
+    @swagger_auto_schema(request_body=StorageItemSerializer,)
+    def post(self, request):
+        try:
+            serializer = StorageItemSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # PUT method: Update an existing ingredient
+    @swagger_auto_schema()
+    def put(self, request, *args, **kwargs):
+        try:
+            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            ingredient = StorageItem.objects.get(id=ingredient_id)
+            serializer = StorageItemSerializer(ingredient, data=request.data, partial=True)  # Allow partial updates
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except StorageItem.DoesNotExist:
+            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # DELETE method: Delete an existing ingredient
+    
+    @swagger_auto_schema()
+    def delete(self, request, *args, **kwargs):
+        try:
+            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            ingredient = StorageItem.objects.get(id=ingredient_id)
+            ingredient.delete()
+            return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except StorageItem.DoesNotExist:
+            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
