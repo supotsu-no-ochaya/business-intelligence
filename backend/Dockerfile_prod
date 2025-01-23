@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y \
     make \
     build-essential \
     python3-distutils \
-    vim \
     && apt-get clean
 
 # Copy the requirements file and install dependencies

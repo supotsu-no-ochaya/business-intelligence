@@ -9,8 +9,6 @@ COPY frontend/package.json /app/
 COPY frontend/package-lock.json /app/
 RUN npm install
 
-RUN apt install -y vim
-
 # Copy the rest of the frontend code
 COPY frontend /app/
 
