@@ -28,12 +28,15 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost', 'http://141.45.146.228',
     'http://141.45.146.228:80', 'https://141.45.146.228:80',
     'http://141.45.146.228:8000', 'https://141.45.146.228:8000',
+    'http://localhost:8000', 'https://localhost:8000',
 ]
 
 # Change this to not *
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost', 'http://127.0.0.1', 'http://141.45.146.228',
     'https://localhost', 'https://127.0.0.1', 'https://141.45.146.228',
+    'http://141.45.146.228:8000', 'https://141.45.146.228:8000',
+    'http://localhost:8000', 'https://localhost:8000',
 ]
 
 # Set DEBUG to False for production
