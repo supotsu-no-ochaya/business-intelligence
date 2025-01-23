@@ -160,8 +160,10 @@ def calculate_ingredient_usage(start_date=None, end_date=None):
     try:
         # Filter orders by the provided date range
         orders = OrderItem2.objects.all()
+
+        # If start_date and end_date are provided, filter the orders by the date range
         if start_date and end_date:
-            orders = orders.filter(order_date__range=[start_date, end_date])
+            orders = orders.filter(created__range=[start_date, end_date])
 
         for order_item in orders:
             try:
@@ -253,12 +255,12 @@ class IngredientUsageView(APIView):
         start_date = request.data.get("start_date")
         end_date = request.data.get("end_date")
 
-        # Validate date inputs
+        # If no dates are provided, calculate usage for all time
         if not start_date or not end_date:
-            return Response(
-                {"error": "Both start_date and end_date are required."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            start_date = "2000-01-01"  # Default start date if not provided (e.g., very early date)
+            end_date = datetime.today().date().strftime("%Y-%m-%d")  # Today's date as default end date
+
+        # Validate date inputs
         try:
             # Convert strings to date objects
             start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
@@ -279,50 +281,106 @@ class IngredientUsageView(APIView):
         return Response({"ingredient_usage": usage_data}, status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):
-        usage_data = calculate_ingredient_usage()
+        # This could be an option to fetch all ingredient usage data without date range
+        usage_data = calculate_ingredient_usage()  # No date range applied here
 
         if isinstance(usage_data, dict) and "error" in usage_data:
             return Response({"error": usage_data["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({"ingredient_usage": usage_data}, status=status.HTTP_200_OK)
 
-
 # Ingredient Availability View
-class IngredientAvailabilityView(APIView):
-    permission_classes = [IsAuthenticated]
+def calculate_total_available(ingredient, start_date=None, end_date=None):
+    try:
+        # Get the total stock from StorageItem
+        total_stock = StorageItem.objects.filter(name_ingredient=ingredient).aggregate(
+            total=Sum('total_stock')
+        )['total'] or 0
 
-    def get(self, request, *args, **kwargs):
-        try:
-            ingredients = Ingredient.objects.all()
-            ingredient_availability = []
+        # Fetch usage data for this ingredient
+        ingredient_usage = 0
+        usage_data = calculate_ingredient_usage(start_date=start_date, end_date=end_date)
 
-            for ingredient in ingredients:
-                # Calculate total available stock dynamically
-                total_available = calculate_total_available(ingredient)
+        if isinstance(usage_data, dict) and "error" in usage_data:
+            return {"error": usage_data["error"]}
 
-                if isinstance(total_available, dict) and "error" in total_available:
-                    return Response({"error": total_available["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        for usage in usage_data:
+            if usage["ingredient_name"] == ingredient.name_ing:
+                ingredient_usage = usage["quantity_used"]
+                break
 
-                ingredient_availability.append({
-                    'ingredient_name': ingredient.name_ing,
-                    'total_stock': StorageItem.objects.filter(name_ingredient=ingredient).aggregate(
-                        total=Sum('total_stock')
-                    )['total'] or 0,
-                    'ingredient_usage': total_available,
-                    'unit': ingredient.unit.name_unit if ingredient.unit else None,
-                    'total_available': total_available,
-                })
-
-            return Response({'ingredients': ingredient_availability}, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # Calculate total available stock
+        total_available = total_stock - ingredient_usage
+        return max(total_available, 0)  # Ensure non-negative values
+    except Exception as e:
+        return {"error": f"An error occurred while calculating total availability: {str(e)}"}
 
 
 # Available Product View
 class AvailableProductView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def post(self, request, *args, **kwargs):
+        start_date = request.data.get("start_date")
+        end_date = request.data.get("end_date")
+
+        # Validate date inputs
+        if start_date and end_date:
+            try:
+                start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+                end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+            except ValueError:
+                return Response(
+                    {"error": "Invalid date format. Use YYYY-MM-DD."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        try:
+            speisen = Speise.objects.all()
+            available_products = []
+
+            for speise in speisen:
+                ingredient_data = []
+                min_portions = None
+
+                # Fetch recipe ingredients for the product
+                recipe_ingredients = RecipeIngredient.objects.filter(recipe__speise=speise)
+
+                for recipe_ingredient in recipe_ingredients:
+                    ingredient = recipe_ingredient.ingredient
+                    required_quantity = recipe_ingredient.quantity_per_portion
+
+                    # Calculate total available dynamically with the date range
+                    total_available = calculate_total_available(ingredient, start_date=start_date, end_date=end_date)
+
+                    if isinstance(total_available, dict) and "error" in total_available:
+                        return Response({"error": total_available["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                    # Calculate max portions based on ingredient availability
+                    max_portions = total_available // required_quantity if required_quantity > 0 else 0
+
+                    if min_portions is None or max_portions < min_portions:
+                        min_portions = max_portions
+
+                    ingredient_data.append({
+                        'ingredient_name': ingredient.name_ing,
+                        'required_quantity_per_portion': required_quantity,
+                        'total_available': total_available,
+                        'max_portions_from_this_ingredient': max_portions,
+                    })
+
+                available_products.append({
+                    'product_name': speise.name,
+                    'price': speise.price,
+                    'available_portions': min_portions,
+                    'ingredients': ingredient_data,
+                })
+
+            return Response({'available_products': available_products}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
     def get(self, request, *args, **kwargs):
         try:
             speisen = Speise.objects.all()
