@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 from rest_framework.permissions import BasePermission
-from rest_framework.permissions import AllowAny
+from datetime import datetime
 from testdata.models import (
     OrderItem, Product, Order, OrderItem2, OrderEvent,
     Payment, Ingredient,Speise, RecipeIngredient, StorageItem,
@@ -154,20 +154,22 @@ class IncomeListView(APIView):
             "income_by_payment_option": income_by_payment_option
         })
     
-def calculate_ingredient_usage():
-    
+def calculate_ingredient_usage(start_date=None, end_date=None):
     ingredient_usage = {}
 
     try:
+        # Filter orders by the provided date range
         orders = OrderItem2.objects.all()
-        for order_item in orders:
+        if start_date and end_date:
+            orders = orders.filter(order_date__range=[start_date, end_date])
 
+        for order_item in orders:
             try:
                 bom_data = json.loads(order_item.bom) if isinstance(order_item.bom, str) else order_item.bom
             except json.JSONDecodeError:
-                bom_data = [] 
-            
-            bom_details = bom_data.get('details',{})
+                bom_data = []
+
+            bom_details = bom_data.get('details', {})
             speise_items = bom_details.get('speise', [])
 
             for bom_item in speise_items:
@@ -178,23 +180,18 @@ def calculate_ingredient_usage():
                     continue
 
                 try:
-                    # Fetch the Product
                     product = Product.objects.get(id=product_id)
-
-                    # Use the Product name to find the matching Speise
                     speise = Speise.objects.filter(name=product.name).first()
 
                     if not speise:
-                        continue  # Skip if no matching Speise is found
+                        continue
 
-                    # Fetch recipe ingredients for the Speise
                     recipe_ingredients = RecipeIngredient.objects.filter(recipe__speise=speise)
 
                     for recipe_ingredient in recipe_ingredients:
                         ingredient = recipe_ingredient.ingredient
                         total_quantity_used = recipe_ingredient.quantity_per_portion * quantity
 
-                        # Accumulate ingredient usage
                         if ingredient.name_ing not in ingredient_usage:
                             ingredient_usage[ingredient.name_ing] = {
                                 'unit': ingredient.unit.name_unit if ingredient.unit else None,
@@ -204,10 +201,8 @@ def calculate_ingredient_usage():
                             ingredient_usage[ingredient.name_ing]['quantity_used'] += total_quantity_used
 
                 except Product.DoesNotExist:
-                    # Handle missing Product objects
                     continue
 
-        # Return the accumulated data as a list of dictionaries
         return [
             {"ingredient_name": name, "unit": data["unit"], "quantity_used": data["quantity_used"]}
             for name, data in ingredient_usage.items()
@@ -252,6 +247,36 @@ def calculate_total_available(ingredient):
 # Ingredient Usage View
 class IngredientUsageView(APIView):
     permission_classes = [IsAuthenticated]
+
+    # POST method: Accept start_date and end_date from the request body
+    def post(self, request, *args, **kwargs):
+        start_date = request.data.get("start_date")
+        end_date = request.data.get("end_date")
+
+        # Validate date inputs
+        if not start_date or not end_date:
+            return Response(
+                {"error": "Both start_date and end_date are required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            # Convert strings to date objects
+            start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+            end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+        except ValueError:
+            return Response(
+                {"error": "Invalid date format. Use YYYY-MM-DD."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Call the function to calculate ingredient usage for the date range
+        usage_data = calculate_ingredient_usage(start_date=start_date, end_date=end_date)
+
+        if isinstance(usage_data, dict) and "error" in usage_data:
+            return Response({"error": usage_data["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Return the usage data
+        return Response({"ingredient_usage": usage_data}, status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):
         usage_data = calculate_ingredient_usage()
