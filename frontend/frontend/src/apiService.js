@@ -108,8 +108,28 @@ export const fetchCompanyExpense = async () => {
   return response.data
 }
 
+export const fetchStorage = async () => {
+  const response = await axiosInstance.get('/available-products/')
+  return response.data
+}
+
 export const createCompanyExpense = async(data) => {
   const response = await axiosInstance.post('/expense/', data)
+  return response
+}
+
+export const fetchLagerItems = async() => {
+  const response = await axiosInstance.get('http://localhost:8000/storage-item/')
+  return response
+}
+
+export const fetchIngredients = async() => {
+  const response = await axiosInstance.get('http://localhost:8000/ingredients/')
+  return response
+}
+
+export const fetchLocation = async() => {
+  const response = await axiosInstance.get('http://localhost:8000/storage-location/')
   return response
 }
 
