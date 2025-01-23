@@ -19,7 +19,6 @@ from testdata.serializer import (
     OrderEventSerializer
 )
 from testdata.roles import DEFAULT_PERMISSIONS
-from drf_yasg.utils import swagger_auto_schema
 
 # Create your views here.
 
@@ -158,37 +157,61 @@ def calculate_ingredient_usage():
     try:
         orders = OrderItem2.objects.all()
         for order_item in orders:
-            bom_data = order_item.bom or []  # Default to an empty list if bom is None
 
-            for bom_item in bom_data:
-                product = bom_item.get('product_id')
+            try:
+                bom_data = json.loads(order_item.bom) if isinstance(order_item.bom, str) else order_item.bom
+            except json.JSONDecodeError:
+                bom_data = [] 
+            
+            bom_details = bom_data.get('details',{})
+            speise_items = bom_details.get('speise', [])
+
+            for bom_item in speise_items:
+                product_id = bom_item.get('product_id')
                 quantity = bom_item.get('quantity', 0)
 
-                if product is None:
+                if product_id is None:
                     continue
 
-                # Fetch recipe ingredients for the product
-                recipe_ingredients = RecipeIngredient.objects.filter(recipe__speise=product)
+                try:
+                    # Fetch the Product
+                    product = Product.objects.get(id=product_id)
 
-                for recipe_ingredient in recipe_ingredients:
-                    ingredient = recipe_ingredient.ingredient
-                    total_quantity_used = recipe_ingredient.quantity_per_portion * quantity
+                    # Use the Product name to find the matching Speise
+                    speise = Speise.objects.filter(name=product.name).first()
 
-                    # Accumulate ingredient usage
-                    if ingredient.name_ing not in ingredient_usage:
-                        ingredient_usage[ingredient.name_ing] = {
-                            'unit': ingredient.unit.name_unit if ingredient.unit else None,
-                            'quantity_used': total_quantity_used,
-                        }
-                    else:
-                        ingredient_usage[ingredient.name_ing]['quantity_used'] += total_quantity_used
+                    if not speise:
+                        continue  # Skip if no matching Speise is found
 
+                    # Fetch recipe ingredients for the Speise
+                    recipe_ingredients = RecipeIngredient.objects.filter(recipe__speise=speise)
+
+                    for recipe_ingredient in recipe_ingredients:
+                        ingredient = recipe_ingredient.ingredient
+                        total_quantity_used = recipe_ingredient.quantity_per_portion * quantity
+
+                        # Accumulate ingredient usage
+                        if ingredient.name_ing not in ingredient_usage:
+                            ingredient_usage[ingredient.name_ing] = {
+                                'unit': ingredient.unit.name_unit if ingredient.unit else None,
+                                'quantity_used': total_quantity_used,
+                            }
+                        else:
+                            ingredient_usage[ingredient.name_ing]['quantity_used'] += total_quantity_used
+
+                except Product.DoesNotExist:
+                    # Handle missing Product objects
+                    continue
+
+        # Return the accumulated data as a list of dictionaries
         return [
             {"ingredient_name": name, "unit": data["unit"], "quantity_used": data["quantity_used"]}
             for name, data in ingredient_usage.items()
         ]
+
     except Exception as e:
         return {"error": f"An error occurred while calculating ingredient usage: {str(e)}"}
+
 
 
 
@@ -329,9 +352,7 @@ class IngredientListView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    
-    @swagger_auto_schema(request_body=IngredientSerializer,)
+        
     def post(self, request):
         try:
             serializer = IngredientSerializer(data=request.data)
@@ -343,7 +364,6 @@ class IngredientListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # PUT method: Update an existing ingredient
-    @swagger_auto_schema()
     def put(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
@@ -359,8 +379,6 @@ class IngredientListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # DELETE method: Delete an existing ingredient
-    
-    @swagger_auto_schema()
     def delete(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
