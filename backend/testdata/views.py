@@ -744,19 +744,19 @@ class StorageLocationListView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
-            ingredients = StorageItem.objects.all()
+            ingredients = StorageLocation.objects.all()
             if not ingredients:
                 return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
-            serializer = StorageItemSerializer(ingredients, many=True)
+            serializer = StorageLocationSerializer(ingredients, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     # PUT method: Update an existing ingredient
-    @swagger_auto_schema(request_body=StorageItemSerializer,)
+    @swagger_auto_schema(request_body=StorageLocationSerializer,)
     def post(self, request):
         try:
-            serializer = StorageItemSerializer(data=request.data)
+            serializer = StorageLocationSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -786,10 +786,10 @@ class StorageLocationListView(APIView):
     def delete(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
-            ingredient = StorageItem.objects.get(id=ingredient_id)
+            ingredient = StorageLocation.objects.get(id=ingredient_id)
             ingredient.delete()
             return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
-        except StorageItem.DoesNotExist:
+        except StorageLocation.DoesNotExist:
             return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
