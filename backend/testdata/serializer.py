@@ -4,49 +4,51 @@ from testdata.models import (
     Station, Category, ProductAttribute, Product,
     OrderEvent, Order, OrderItem2, PaymentOption, Payment,
     StorageItem, StorageLocation, RecipeIngredient,
-    Ingredient, Recipe
+    Ingredient, Recipe, PriceCurrency, PortionUnit
 )
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
+
+class PriceCurrencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PriceCurrency
+        fields = "__all__"
 
 class SpeiseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Speise
         fields = ['id', 'name', 'price', 'price_unit', 'ordered_stock', 'created', 'updated']
 
+class PortionUnitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PortionUnit
+        fields = ['id', 'name_unit']
+
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = ['id', 'name_ing', 'base_stock', 'created', 'last_updated']
 
-# Recipe Ingredient Serializer
-class RecipeIngredientSerializer(serializers.ModelSerializer):
-    ingredient = IngredientSerializer()
-    unit = serializers.CharField(source="unit.name_unit")
-
-    class Meta:
-        model = RecipeIngredient
-        fields = ['id', 'ingredient', 'quantity_per_portion', 'unit']
-
 # Recipe Serializer
 class RecipeSerializer(serializers.ModelSerializer):
-    ingredients = RecipeIngredientSerializer(many=True)
+    ingredients = serializers.CharField(source='ingredient.name_ing', read_only=True)
 
     class Meta:
         model = Recipe
-        fields = ['id', 'speise', 'name_recipe', 'valid_from', 'valid_until', 'created', 'last_updated', 'ingredients']
+        fields = ['id', 'ingredients', 'name_recipe', 'valid_from', 'valid_until', 'created', 'last_updated']
 
-class IngredientUsageSerializer(serializers.Serializer):
+class RecipeIngredientSerializer(serializers.Serializer):
     ingredient_name = serializers.CharField(source='ingredient.name')
     unit = serializers.CharField(source='ingredient.unit')
 
     class Meta:
         model = RecipeIngredient
-        fields = ['ingredient_name', 'unit', 'quantity_per_portion']
-    
+        fields = ['ingredient_name', 'unit', 'quantity_per_portion', 'unit']
+
+   
 class OrderItemSerializer(serializers.ModelSerializer):
-    Products = IngredientUsageSerializer(read_only=True, many=True)
+    Products = RecipeIngredientSerializer(read_only=True, many=True)
 
     class Meta:
         model = OrderItem
@@ -177,14 +179,20 @@ class PaymentSerializer(serializers.ModelSerializer):
 
         payment, _ = Payment.objects.update_or_create(**validated_data, payment_option=payment_option)
         return payment
-    
-class StorageItemSerializer(serializers.ModelSerializer):
-    product = IngredientUsageSerializer()  # Include details about the product
-    location = serializers.CharField(source='location.name')  # Display the storage location name
 
+class StorageLocationSerializer(serializers.ModelSerializer):
+    ingredient_name = serializers.CharField(source='ingredient.name_ing', read_only=True)
+    
+    class Meta:
+        model = StorageLocation
+        fields = '__all__'
+
+class StorageItemSerializer(serializers.ModelSerializer):
+    ingredient_name = serializers.CharField(source='ingredient.name_ing', read_only=True)
+    
     class Meta:
         model = StorageItem
-        fields = ['product', 'location', 'quantity', 'unit']
+        fields = '__all__'
 
 
 class CompanyExpenseSerializer(serializers.ModelSerializer):
