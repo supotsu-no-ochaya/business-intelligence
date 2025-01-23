@@ -12,6 +12,9 @@ RUN npm install
 # Copy the rest of the frontend code
 COPY frontend /app/
 
+# Replace API_BASE_URL
+RUN sed -i "s|const API_BASE_URL = 'http://localhost:8000/api';|const API_BASE_URL = 'http://141.45.146.228/api';|" src/apiService.js
+RUN cat src/apiService.js
 # Build the production version of the app
 RUN npm run build
 
