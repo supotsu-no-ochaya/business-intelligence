@@ -389,4 +389,3 @@ class IngredientListView(APIView):
             return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
