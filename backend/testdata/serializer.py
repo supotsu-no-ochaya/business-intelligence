@@ -28,7 +28,7 @@ class PortionUnitSerializer(serializers.ModelSerializer):
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ['id', 'name_ing', 'base_stock', 'created', 'last_updated']
+        fields = "__all__"
 
 # Recipe Serializer
 class RecipeSerializer(serializers.ModelSerializer):

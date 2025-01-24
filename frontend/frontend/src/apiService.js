@@ -133,6 +133,38 @@ export const fetchLocation = async() => {
   return response
 }
 
+export const PutLagerItems = async (id, data) => {
+  try {
+    const response = await axiosInstance.put(`http://localhost:8000/storage-item/${id}/`, data);
+    return response;
+  } catch (error) {
+    console.error('Fehler beim Speichern der Lagerdaten:', error);
+    throw error;
+  }
+};
+
+
+export const PutIngredients = async (id, data) => {
+  try {
+    const response = await axiosInstance.put(`http://localhost:8000/ingredients/${id}/`, data);
+    return response;
+  } catch (error) {
+    console.error('Fehler beim Speichern der Zutaten:', error);
+    throw error;
+  }
+}
+
+export const PutLocation = async (data) => {
+  try {
+    const response = await axiosInstance.put('http://localhost:8000/storage-location/', data);
+    return response;
+  } catch (error) {
+    console.error('Fehler beim Speichern der Lagerorte:', error);
+    throw error;
+  }
+}
+
+
 export const fetchProduct = async () => {
   try {
     const response = await axiosInstance.get('/product');
