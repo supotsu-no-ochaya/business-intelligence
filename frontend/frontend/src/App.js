@@ -50,12 +50,12 @@ function App() {
     case 'lager':
       content = <Lager />;
       break; 
-    case 'ausgaben':
+    /*case 'ausgaben':
       content = <Ausgaben />;
       break;
     case 'einnahmen':
       content = <Einnahmen />;
-      break;
+      break;*/
     case 'verkaufszahlen':
       content = <Verkaufszahlen />;
       break;

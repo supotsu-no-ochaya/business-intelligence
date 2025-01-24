@@ -45,8 +45,8 @@ const Sidebar = ({ navigate }) => {
         //{ label: 'Zutaten', icon: '📦', route: 'zutaten', groups: ['Kueche', 'Admin'] },
         { label: 'Lager', icon: '📦', route: 'lager', groups: ['Kueche', 'Admin'] },
         { label: 'Transaktionen', icon: '💳', route: 'transaktionen', groups: ['Kasse', 'Admin'] },
-        { label: 'Einnahmen', icon: '📈', route: 'einnahmen', groups: ['Kasse', 'Admin'] },
-        { label: 'Ausgaben', icon: '💲', route: 'ausgaben', groups: ['Kasse', 'Admin'] },
+        //{ label: 'Einnahmen', icon: '📈', route: 'einnahmen', groups: ['Kasse', 'Admin'] },
+        //{ label: 'Ausgaben', icon: '💲', route: 'ausgaben', groups: ['Kasse', 'Admin'] },
         { label: 'Verkaufszahlen', icon: '📊', route: 'verkaufszahlen', groups: ['Kasse', 'Admin'] },
     ];
 
