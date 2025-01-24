@@ -53,4 +53,3 @@ EXPOSE 80
 
 # Start nginx to serve the app
 CMD ["nginx", "-g", "daemon off;"]
-
