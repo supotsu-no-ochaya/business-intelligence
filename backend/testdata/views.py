@@ -545,7 +545,7 @@ class IngredientListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     # PUT method: Update an existing ingredient
-    @swagger_auto_schema(request_body=IngredientSerializer,)
+    @swagger_auto_schema(request_body=IngredientSerializer)
     def post(self, request):
         try:
             serializer = IngredientSerializer(data=request.data)
@@ -557,7 +557,7 @@ class IngredientListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # PUT method: Update an existing ingredient
-    @swagger_auto_schema()
+    @swagger_auto_schema(request_body=IngredientSerializer)
     def put(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
@@ -571,10 +571,10 @@ class IngredientListView(APIView):
             return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+    
     # DELETE method: Delete an existing ingredient
     
-    @swagger_auto_schema()
+    @swagger_auto_schema(request_body=IngredientSerializer)
     def delete(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
@@ -624,7 +624,8 @@ class RecipeView(APIView):
             return Response({"detail": "Recipe not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+    
+    @swagger_auto_schema(request_body=RecipeSerializer)
     def delete(self, request, *args, **kwargs):
         try:
             recipe_id = kwargs.get('id')
@@ -650,7 +651,7 @@ class RecipeIngredientView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @swagger_auto_schema(request_body=RecipeIngredientSerializer)
-    def post(self, request):
+    def post(self, request): 
         try:
             serializer = RecipeIngredientSerializer(data=request.data)
             if serializer.is_valid():
@@ -675,6 +676,7 @@ class RecipeIngredientView(APIView):
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @swagger_auto_schema(request_body=RecipeIngredientSerializer)
     def delete(self, request, *args, **kwargs):
         try:
             recipe_ingredient_id = kwargs.get('id')
@@ -699,7 +701,7 @@ class StorageLocationListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     # PUT method: Update an existing ingredient
-    @swagger_auto_schema(request_body=StorageLocationSerializer,)
+    @swagger_auto_schema(request_body=StorageLocationSerializer)
     def post(self, request):
         try:
             serializer = StorageLocationSerializer(data=request.data)
@@ -711,7 +713,7 @@ class StorageLocationListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # PUT method: Update an existing ingredient
-    @swagger_auto_schema()
+    @swagger_auto_schema(request_body=StorageLocationSerializer)
     def put(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
@@ -728,7 +730,7 @@ class StorageLocationListView(APIView):
 
     # DELETE method: Delete an existing ingredient
     
-    @swagger_auto_schema()
+    @swagger_auto_schema(request_body=StorageLocationSerializer)
     def delete(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
@@ -740,6 +742,7 @@ class StorageLocationListView(APIView):
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+'''
 class StorageLocationListView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -793,7 +796,7 @@ class StorageLocationListView(APIView):
             return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+'''
 class StorageItemListView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -807,7 +810,7 @@ class StorageItemListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     # PUT method: Update an existing ingredient
-    @swagger_auto_schema(request_body=StorageItemSerializer,)
+    @swagger_auto_schema(request_body=StorageItemSerializer)
     def post(self, request):
         try:
             serializer = StorageItemSerializer(data=request.data)
@@ -819,7 +822,7 @@ class StorageItemListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # PUT method: Update an existing ingredient
-    @swagger_auto_schema()
+    @swagger_auto_schema(request_body=StorageItemSerializer)
     def put(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
@@ -836,7 +839,7 @@ class StorageItemListView(APIView):
 
     # DELETE method: Delete an existing ingredient
     
-    @swagger_auto_schema()
+    @swagger_auto_schema(request_body=StorageItemSerializer)
     def delete(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
