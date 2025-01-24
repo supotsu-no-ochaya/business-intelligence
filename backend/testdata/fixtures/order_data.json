@@ -1,0 +1,1182 @@
+{
+  "filter": {
+    "start": "2024-01-01T00:00:00Z",
+    "end": "2024-12-31T00:00:00Z"
+  },
+  "products": [
+    {
+      "attribute": [
+        {
+          "created": "2024-01-12T05:52:02Z",
+          "id": "62fc4cb1-c971-42e1-b8fb-ff11e49445e3",
+          "name": "is available",
+          "updated": "2024-05-08T22:10:26Z"
+        }
+      ],
+      "category": {
+        "created": "2024-07-28T10:52:09Z",
+        "id": "f0767c9d-ee57-4204-b690-a7859000084f",
+        "name": "Food",
+        "updated": "2024-11-19T21:53:44Z"
+      },
+      "created": "2024-01-14T05:49:26Z",
+      "id": "6daab920-767b-456b-817c-b4534eb102ad",
+      "is_available": true,
+      "name": "Sandwich (Ei-Mais)",
+      "station": {
+        "created": "2024-12-11T21:35:42Z",
+        "id": "3732b4dd-7614-4342-aa37-6851f9a75390",
+        "name": "Main Station",
+        "updated": "2024-10-09T18:37:50Z"
+      },
+      "updated": "2024-07-01T21:28:57Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-01-05T09:25:57Z",
+          "id": "31d1fd69-0f08-4300-8d4a-37eea1a16d5b",
+          "name": "is available",
+          "updated": "2024-08-02T17:54:41Z"
+        }
+      ],
+      "category": {
+        "created": "2024-07-20T10:29:01Z",
+        "id": "541adaf7-8a21-4f02-944e-63a3feea7495",
+        "name": "Food",
+        "updated": "2024-04-23T03:15:00Z"
+      },
+      "created": "2024-04-15T07:34:34Z",
+      "id": "27a2521f-6a33-41b9-b0e9-02eb80cbf19f",
+      "is_available": true,
+      "name": "Sandwich (Tofu)",
+      "station": {
+        "created": "2024-06-20T17:22:08Z",
+        "id": "61e72f57-dcb8-4101-a211-742cf67297ac",
+        "name": "Main Station",
+        "updated": "2024-07-07T14:01:12Z"
+      },
+      "updated": "2024-09-25T20:44:45Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-08-15T00:29:40Z",
+          "id": "3ecddb83-0597-45dc-b44d-8bf4a5cef825",
+          "name": "is available",
+          "updated": "2024-11-28T08:42:10Z"
+        }
+      ],
+      "category": {
+        "created": "2024-05-14T01:50:58Z",
+        "id": "47888e7b-7a0a-42d6-bcd6-c8d7f9704705",
+        "name": "Food",
+        "updated": "2024-10-07T18:07:38Z"
+      },
+      "created": "2024-06-09T12:02:15Z",
+      "id": "543344ff-efeb-4413-a4f7-e14c03fca7eb",
+      "is_available": true,
+      "name": "Sandwich (K\u00e4se Schinken)",
+      "station": {
+        "created": "2024-07-06T04:00:20Z",
+        "id": "3bd6d341-8e83-4292-b69d-76404304d74c",
+        "name": "Main Station",
+        "updated": "2024-09-14T18:34:47Z"
+      },
+      "updated": "2024-07-10T07:09:30Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-07-07T02:04:59Z",
+          "id": "2ac6fda7-60ad-46be-9d77-8bd3741cc902",
+          "name": "is available",
+          "updated": "2024-07-09T20:31:08Z"
+        }
+      ],
+      "category": {
+        "created": "2024-02-02T20:35:03Z",
+        "id": "50415aef-19bc-4b9a-8602-fff8c18fc858",
+        "name": "Food",
+        "updated": "2024-12-07T09:20:49Z"
+      },
+      "created": "2024-07-01T13:53:35Z",
+      "id": "afecb12a-ee86-4919-879c-902a80c7ce63",
+      "is_available": true,
+      "name": "Sandwich (K\u00e4se Salami)",
+      "station": {
+        "created": "2024-05-06T07:36:01Z",
+        "id": "007d2ad4-4c32-444d-87f0-5fff1fdc9d9a",
+        "name": "Main Station",
+        "updated": "2024-05-12T21:27:48Z"
+      },
+      "updated": "2024-11-04T01:43:06Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-04-16T12:02:53Z",
+          "id": "a71aa964-05fd-462a-8c9c-e8ad59c43f8a",
+          "name": "is available",
+          "updated": "2024-12-15T06:30:12Z"
+        }
+      ],
+      "category": {
+        "created": "2024-12-12T16:36:38Z",
+        "id": "5619b420-f1bd-4c51-b352-a1c1ed291f27",
+        "name": "Food",
+        "updated": "2024-12-25T09:00:06Z"
+      },
+      "created": "2024-12-19T21:22:55Z",
+      "id": "4537dc8d-ded4-41c0-8ddb-7da87c0fe24f",
+      "is_available": true,
+      "name": "Crepe (Zimt Zucker)",
+      "station": {
+        "created": "2024-09-30T22:11:52Z",
+        "id": "dfa61d81-0b9d-434c-a824-dede3d8a20aa",
+        "name": "Main Station",
+        "updated": "2024-01-28T16:39:56Z"
+      },
+      "updated": "2024-12-17T11:59:38Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-05-23T13:49:01Z",
+          "id": "a4f09f43-4c8c-4781-ac14-9d604ab1c8ee",
+          "name": "is available",
+          "updated": "2024-09-10T00:32:38Z"
+        }
+      ],
+      "category": {
+        "created": "2024-05-11T16:22:06Z",
+        "id": "e298baca-93d1-49a6-b860-ce5748cd2136",
+        "name": "Food",
+        "updated": "2024-06-27T12:18:03Z"
+      },
+      "created": "2024-09-04T17:44:08Z",
+      "id": "bbf865bb-8c1b-474a-a925-0b7a87ede263",
+      "is_available": true,
+      "name": "Crepe (Apfel)",
+      "station": {
+        "created": "2024-05-31T10:48:11Z",
+        "id": "29d1ab79-9de6-408d-b806-5d40c76c5f00",
+        "name": "Main Station",
+        "updated": "2024-05-22T05:28:22Z"
+      },
+      "updated": "2024-10-02T04:52:19Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-02-20T20:35:32Z",
+          "id": "86752026-d665-47e1-9972-770e8a901c60",
+          "name": "is available",
+          "updated": "2024-11-18T10:39:40Z"
+        }
+      ],
+      "category": {
+        "created": "2024-06-04T08:25:51Z",
+        "id": "26311969-c7cf-4d7b-865d-3e6871c49ecb",
+        "name": "Food",
+        "updated": "2024-12-07T09:51:05Z"
+      },
+      "created": "2024-11-07T11:22:47Z",
+      "id": "4c4df4da-ae94-4738-b395-77bd3fc77237",
+      "is_available": true,
+      "name": "Crepe (ZZA)",
+      "station": {
+        "created": "2024-10-05T03:09:24Z",
+        "id": "08801472-4758-49af-acd8-331bbc174bc2",
+        "name": "Main Station",
+        "updated": "2024-01-24T16:27:42Z"
+      },
+      "updated": "2024-06-08T05:32:53Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-10-07T21:02:19Z",
+          "id": "cf0b703b-8573-4cb9-93f4-64b9d99395b0",
+          "name": "is available",
+          "updated": "2024-01-17T02:18:41Z"
+        }
+      ],
+      "category": {
+        "created": "2024-07-22T07:32:49Z",
+        "id": "50be1bc4-deb9-4fae-a166-c7231e44ee58",
+        "name": "Food",
+        "updated": "2024-09-28T11:33:52Z"
+      },
+      "created": "2024-01-23T23:49:54Z",
+      "id": "2d9c56bd-f926-4dbb-9a13-41b307e43412",
+      "is_available": true,
+      "name": "Crepe (Erdbeer)",
+      "station": {
+        "created": "2024-06-07T04:54:45Z",
+        "id": "33505655-bc67-4651-b787-1df41578e7b3",
+        "name": "Main Station",
+        "updated": "2024-05-08T23:54:24Z"
+      },
+      "updated": "2024-08-12T19:11:44Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-10-05T06:48:59Z",
+          "id": "f091a484-3900-4b7b-979a-c44e19fad608",
+          "name": "is available",
+          "updated": "2024-04-13T21:31:49Z"
+        }
+      ],
+      "category": {
+        "created": "2024-05-05T02:36:29Z",
+        "id": "4d962523-7577-406f-aa2f-3c82f0b6dd0b",
+        "name": "Food",
+        "updated": "2024-02-12T14:01:50Z"
+      },
+      "created": "2024-08-01T18:50:59Z",
+      "id": "27646ed4-4041-47b4-ac3b-13a2d78ac652",
+      "is_available": true,
+      "name": "Crepe (Nutella)",
+      "station": {
+        "created": "2024-11-29T08:54:48Z",
+        "id": "c455ba58-fb77-4092-81f1-fbfe7f9f0188",
+        "name": "Main Station",
+        "updated": "2024-02-15T22:19:52Z"
+      },
+      "updated": "2024-12-10T04:21:51Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-01-19T05:59:50Z",
+          "id": "32021f94-11eb-466a-b63d-9248533f8925",
+          "name": "is available",
+          "updated": "2024-09-24T13:24:52Z"
+        }
+      ],
+      "category": {
+        "created": "2024-10-29T05:45:30Z",
+        "id": "034345e7-7577-42f5-858a-4cf0aefa4cf4",
+        "name": "Food",
+        "updated": "2024-06-26T17:34:28Z"
+      },
+      "created": "2024-05-25T10:45:10Z",
+      "id": "259a4947-8557-4e0b-85e2-62a193081e12",
+      "is_available": true,
+      "name": "Crepe (K\u00e4se Schinken)",
+      "station": {
+        "created": "2024-04-11T01:33:16Z",
+        "id": "8b477fcf-02db-4d2e-a27b-391985649858",
+        "name": "Main Station",
+        "updated": "2024-11-14T11:28:27Z"
+      },
+      "updated": "2024-03-27T09:03:17Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-12-13T08:49:09Z",
+          "id": "2e8d58e3-1790-45df-8408-9300424d75a2",
+          "name": "is available",
+          "updated": "2024-05-01T08:09:03Z"
+        }
+      ],
+      "category": {
+        "created": "2024-08-16T01:41:29Z",
+        "id": "be076f8c-06c8-48ad-a5b5-4915d34789a1",
+        "name": "Food",
+        "updated": "2024-06-01T16:13:43Z"
+      },
+      "created": "2024-12-14T02:27:17Z",
+      "id": "ebc02298-9cac-4d30-8bfb-414d939fa392",
+      "is_available": true,
+      "name": "Crepe (Spekulatius)",
+      "station": {
+        "created": "2024-11-17T06:45:07Z",
+        "id": "6a3c6d01-d2c3-4425-80c6-94b6033dad4b",
+        "name": "Main Station",
+        "updated": "2024-10-31T05:35:54Z"
+      },
+      "updated": "2024-07-01T18:39:25Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-12-01T02:33:18Z",
+          "id": "458c1af6-41f4-44b6-ae95-4a43b17a48ba",
+          "name": "is available",
+          "updated": "2024-01-07T05:33:44Z"
+        }
+      ],
+      "category": {
+        "created": "2024-05-27T12:40:59Z",
+        "id": "97f37988-457c-4dff-9795-07e920c09bab",
+        "name": "Food",
+        "updated": "2024-03-10T06:14:02Z"
+      },
+      "created": "2024-02-15T22:55:19Z",
+      "id": "a4fc6658-cceb-4e87-9535-e66e5f647609",
+      "is_available": true,
+      "name": "Sandwich (Nut)",
+      "station": {
+        "created": "2024-10-25T12:49:29Z",
+        "id": "504422ba-9225-4a48-b432-2eeec04e59ea",
+        "name": "Main Station",
+        "updated": "2024-06-23T23:45:57Z"
+      },
+      "updated": "2024-10-04T12:55:05Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-09-26T06:18:34Z",
+          "id": "1bdfe678-e6fc-4a18-a139-24083d6fe6d3",
+          "name": "is available",
+          "updated": "2024-07-27T03:25:15Z"
+        }
+      ],
+      "category": {
+        "created": "2024-06-19T19:32:47Z",
+        "id": "bf0fec06-89b9-42f1-8d16-18760343a9b2",
+        "name": "Food",
+        "updated": "2024-02-02T14:06:35Z"
+      },
+      "created": "2024-01-22T11:01:04Z",
+      "id": "ad1815e9-dd03-41f6-8ff4-e420c7c4482e",
+      "is_available": true,
+      "name": "Sandwich (Erdbeer)",
+      "station": {
+        "created": "2024-03-22T18:53:57Z",
+        "id": "45f1bc83-4227-4cd8-b1fd-a8c09e5adc87",
+        "name": "Main Station",
+        "updated": "2024-06-08T19:11:18Z"
+      },
+      "updated": "2024-11-25T16:03:47Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-03-03T08:16:38Z",
+          "id": "e751e251-4ba8-4e12-9e6e-31e93a5f8f1f",
+          "name": "is available",
+          "updated": "2024-09-15T10:46:32Z"
+        }
+      ],
+      "category": {
+        "created": "2024-03-28T15:14:22Z",
+        "id": "5d5836a4-7492-409a-8e16-326aa00928f9",
+        "name": "Food",
+        "updated": "2024-10-18T12:53:52Z"
+      },
+      "created": "2024-06-13T13:21:32Z",
+      "id": "eea78a01-b1c7-4106-996d-c0334d4607fd",
+      "is_available": true,
+      "name": "Sandwich (Rote Bohne)",
+      "station": {
+        "created": "2024-08-25T15:26:54Z",
+        "id": "acd8030f-da52-4010-b4aa-d0ff87639949",
+        "name": "Main Station",
+        "updated": "2024-12-02T05:09:57Z"
+      },
+      "updated": "2024-08-15T09:27:39Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-05-12T23:50:24Z",
+          "id": "4b6d8ff6-2236-4c25-9ff1-97e667a1eb58",
+          "name": "is available",
+          "updated": "2024-01-25T03:13:06Z"
+        }
+      ],
+      "category": {
+        "created": "2024-07-06T03:49:19Z",
+        "id": "48615855-4e5c-4d25-9433-ac09051f6a99",
+        "name": "Food",
+        "updated": "2024-11-29T13:36:40Z"
+      },
+      "created": "2024-07-24T05:18:14Z",
+      "id": "167d1bfc-d8ab-424f-8a8b-5f75e051f925",
+      "is_available": true,
+      "name": "Sandwich (Spekulatius)",
+      "station": {
+        "created": "2024-01-28T22:23:06Z",
+        "id": "0097cbbf-75be-467f-b11d-4491d59b740c",
+        "name": "Main Station",
+        "updated": "2024-02-13T04:13:50Z"
+      },
+      "updated": "2024-11-28T12:23:38Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-10-31T21:21:44Z",
+          "id": "25f31c4b-dca0-4ada-8595-dbf29b0ad842",
+          "name": "is available",
+          "updated": "2024-07-26T19:32:13Z"
+        }
+      ],
+      "category": {
+        "created": "2024-09-13T04:29:32Z",
+        "id": "ce67c237-e625-4385-9574-083047db86fc",
+        "name": "Food",
+        "updated": "2024-02-07T21:31:48Z"
+      },
+      "created": "2024-01-30T16:30:18Z",
+      "id": "c6da567e-0cf1-476c-880f-885c5ee13f4c",
+      "is_available": true,
+      "name": "Sandwich (Box 9Stk)",
+      "station": {
+        "created": "2024-02-27T17:41:07Z",
+        "id": "d5ab1dc3-ecca-46a3-b0a0-fdf8defeda4a",
+        "name": "Main Station",
+        "updated": "2024-05-23T12:27:26Z"
+      },
+      "updated": "2024-08-08T04:02:47Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-08-01T08:18:27Z",
+          "id": "2dcbbfe8-93cd-4043-89f0-3f9cb0e32683",
+          "name": "is available",
+          "updated": "2024-09-08T10:55:39Z"
+        }
+      ],
+      "category": {
+        "created": "2024-01-08T17:50:54Z",
+        "id": "d7ffb8e0-ee25-4088-91bb-66262b5e8f2c",
+        "name": "Food",
+        "updated": "2024-11-23T05:27:48Z"
+      },
+      "created": "2024-05-01T08:07:45Z",
+      "id": "f70b0ae0-a98f-4bf7-997e-20cdfa84a095",
+      "is_available": true,
+      "name": "Onigiri (Ei Mais)",
+      "station": {
+        "created": "2024-01-19T18:00:22Z",
+        "id": "14af0796-e526-46c6-bfcd-1121048813bd",
+        "name": "Main Station",
+        "updated": "2024-04-19T18:12:21Z"
+      },
+      "updated": "2024-12-05T12:55:54Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-09-13T14:10:10Z",
+          "id": "a04d212d-70b3-42be-b3ef-6ae39b2a62d1",
+          "name": "is available",
+          "updated": "2024-05-08T18:41:09Z"
+        }
+      ],
+      "category": {
+        "created": "2024-09-28T02:47:33Z",
+        "id": "3a97c93a-65ab-4bff-a5e3-421dc7027a47",
+        "name": "Food",
+        "updated": "2024-02-09T17:04:36Z"
+      },
+      "created": "2024-05-05T19:14:36Z",
+      "id": "88e780a1-89c6-43b5-b690-f8e4d8f32bdc",
+      "is_available": true,
+      "name": "Onigiri (Tofu)",
+      "station": {
+        "created": "2024-08-04T12:41:09Z",
+        "id": "ddf4b961-16f3-447f-9c33-40e9d2701b37",
+        "name": "Main Station",
+        "updated": "2024-07-11T13:41:34Z"
+      },
+      "updated": "2024-12-11T11:01:29Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-04-03T23:59:29Z",
+          "id": "6ae08843-5f43-41a3-81f5-2e6907b4e9fe",
+          "name": "is available",
+          "updated": "2024-10-05T00:21:28Z"
+        }
+      ],
+      "category": {
+        "created": "2024-04-28T22:55:57Z",
+        "id": "1cb84a78-fc1a-4189-bf5a-809e301858ac",
+        "name": "Food",
+        "updated": "2024-03-25T11:49:02Z"
+      },
+      "created": "2024-08-13T18:29:05Z",
+      "id": "ad6ef002-484f-4fcb-9f47-746b46f79d6a",
+      "is_available": true,
+      "name": "Onigiri (Hack)",
+      "station": {
+        "created": "2024-12-21T10:20:33Z",
+        "id": "7ea4bafc-3c66-4bf0-8bf9-f08b0ff124df",
+        "name": "Main Station",
+        "updated": "2024-11-13T20:07:35Z"
+      },
+      "updated": "2024-04-05T14:21:55Z"
+    },
+    {
+      "attribute": [
+        {
+          "created": "2024-06-12T04:39:12Z",
+          "id": "7776469f-4098-4c7a-96e5-2f3a178d1190",
+          "name": "is available",
+          "updated": "2024-08-25T20:11:04Z"
+        }
+      ],
+      "category": {
+        "created": "2024-12-24T21:44:09Z",
+        "id": "65694c61-20d1-48c4-8b34-d8f23c2ed0c8",
+        "name": "Food",
+        "updated": "2024-12-10T08:04:16Z"
+      },
+      "created": "2024-05-19T08:47:42Z",
+      "id": "041dc6ff-2615-443a-96c3-c962dda1dea8",
+      "is_available": true,
+      "name": "Onigiri (Thun)",
+      "station": {
+        "created": "2024-01-21T11:21:48Z",
+        "id": "e1f39721-a955-461a-82a1-40f746eb8436",
+        "name": "Main Station",
+        "updated": "2024-05-19T16:32:24Z"
+      },
+      "updated": "2024-04-10T18:34:54Z"
+    }
+  ],
+  "orders": [
+    {
+      "created": "2024-08-24T20:26:45Z",
+      "events": [
+        {
+          "content": {
+            "order_id": "be7e90ee-94a4-4117-8316-5058b344a87a",
+            "status": "aufgegeben"
+          },
+          "created": "2024-01-06T15:42:45Z",
+          "id": "2fb18d91-2979-4d23-ab8f-635c4de0408d",
+          "type": "order",
+          "updated": "2024-06-10T09:40:57Z"
+        }
+      ],
+      "id": "be7e90ee-94a4-4117-8316-5058b344a87a",
+      "order_items": [
+        {
+          "bom": {
+            "dummy": "dummy"
+          },
+          "created": "2024-05-25T10:43:52Z",
+          "events": [
+            {
+              "content": {
+                "order_item_id": "5c73cf98-786c-4fac-aa2c-8fe2cc692dca",
+                "status": "aufgegeben"
+              },
+              "created": "2024-05-07T11:06:22Z",
+              "id": "b44f02dd-d73e-42d7-9037-91de49627cca",
+              "type": "order_item",
+              "updated": "2024-07-20T14:09:21Z"
+            }
+          ],
+          "id": "3f2182f1-0430-4f71-a232-14b0614353d6",
+          "order": "be7e90ee-94a4-4117-8316-5058b344a87a",
+          "price": 17,
+          "status": "aufgegeben",
+          "updated": "2024-06-10T11:38:46Z"
+        }
+      ],
+      "status": "aufgegeben",
+      "table": 7,
+      "menu_item_name": "Sandwich (Nut)",
+      "menu_item_price_in_cents": 1360,
+      "updated": "2024-12-22T17:31:00Z",
+      "waiter": "3e77e684-51ea-45c1-9158-ebc3ad3e0f96"
+    },
+    {
+      "created": "2024-11-12T01:54:36Z",
+      "events": [
+        {
+          "content": {
+            "order_id": "507ec285-298a-44b1-bb0a-dfb25f462895",
+            "status": "aufgegeben"
+          },
+          "created": "2024-03-04T23:09:19Z",
+          "id": "6f38f786-c4a7-4c56-87fe-ac80159dc486",
+          "type": "order",
+          "updated": "2024-11-08T22:51:02Z"
+        }
+      ],
+      "id": "507ec285-298a-44b1-bb0a-dfb25f462895",
+      "order_items": [
+        {
+          "bom": {
+            "dummy": "dummy"
+          },
+          "created": "2024-03-29T08:56:35Z",
+          "events": [
+            {
+              "content": {
+                "order_item_id": "2dedd405-df1e-417a-bf7e-73895f6d1580",
+                "status": "aufgegeben"
+              },
+              "created": "2024-05-03T13:20:31Z",
+              "id": "f4473392-c449-447d-a64e-91e0afd51155",
+              "type": "order_item",
+              "updated": "2024-05-22T11:51:20Z"
+            }
+          ],
+          "id": "410f35ae-4f71-4d57-bf0e-53eb3670e99c",
+          "order": "507ec285-298a-44b1-bb0a-dfb25f462895",
+          "price": 16,
+          "status": "aufgegeben",
+          "updated": "2024-02-13T19:55:33Z"
+        }
+      ],
+      "status": "aufgegeben",
+      "table": 9,
+      "menu_item_name": "Sandwich (K\u00e4se Salami)",
+      "menu_item_price_in_cents": 1488,
+      "updated": "2024-07-10T19:22:40Z",
+      "waiter": "10aabc6f-2f60-4eb9-a48d-618ba1e4d1ef"
+    },
+    {
+      "created": "2024-03-28T06:32:07Z",
+      "events": [
+        {
+          "content": {
+            "order_id": "05867984-8382-4d58-bb0b-f5261dc86714",
+            "status": "aufgegeben"
+          },
+          "created": "2024-11-21T03:27:48Z",
+          "id": "6b2c7c80-cc01-4270-8ff0-87d36aabcde2",
+          "type": "order",
+          "updated": "2024-04-16T07:33:46Z"
+        }
+      ],
+      "id": "05867984-8382-4d58-bb0b-f5261dc86714",
+      "order_items": [
+        {
+          "bom": {
+            "dummy": "dummy"
+          },
+          "created": "2024-08-06T09:47:52Z",
+          "events": [
+            {
+              "content": {
+                "order_item_id": "164fa7ac-6b60-49c8-9ca8-14373b3ea451",
+                "status": "aufgegeben"
+              },
+              "created": "2024-10-08T00:28:13Z",
+              "id": "5b4014c1-2ef2-456c-8eb3-ec3287ec7e08",
+              "type": "order_item",
+              "updated": "2024-08-24T21:33:45Z"
+            }
+          ],
+          "id": "a319ed2d-45c9-4d5e-b238-595d18aad52a",
+          "order": "05867984-8382-4d58-bb0b-f5261dc86714",
+          "price": 18,
+          "status": "aufgegeben",
+          "updated": "2024-10-27T07:40:59Z"
+        }
+      ],
+      "status": "aufgegeben",
+      "table": 5,
+      "menu_item_name": "Sandwich (Box 9Stk)",
+      "menu_item_price_in_cents": 1842,
+      "updated": "2024-12-16T14:35:38Z",
+      "waiter": "bee42325-9bac-4068-a612-2a3df4be05dd"
+    },
+    {
+      "created": "2024-02-28T01:04:06Z",
+      "events": [
+        {
+          "content": {
+            "order_id": "d5f66e4b-03f2-4b6a-b92c-7a82fdfbedae",
+            "status": "aufgegeben"
+          },
+          "created": "2024-05-08T13:50:49Z",
+          "id": "a1f41404-b7ad-4636-bc8d-7a496624ec5e",
+          "type": "order",
+          "updated": "2024-04-05T05:39:48Z"
+        }
+      ],
+      "id": "d5f66e4b-03f2-4b6a-b92c-7a82fdfbedae",
+      "order_items": [
+        {
+          "bom": {
+            "dummy": "dummy"
+          },
+          "created": "2024-04-21T20:51:34Z",
+          "events": [
+            {
+              "content": {
+                "order_item_id": "d8219462-b573-4b02-b7cf-b1a50bf9721e",
+                "status": "aufgegeben"
+              },
+              "created": "2024-05-09T01:33:25Z",
+              "id": "e6e215b8-9e21-47a5-ae6e-48e4529c5710",
+              "type": "order_item",
+              "updated": "2024-09-13T00:38:42Z"
+            }
+          ],
+          "id": "f0335358-bf64-44b3-9800-6ad669b0b006",
+          "order": "d5f66e4b-03f2-4b6a-b92c-7a82fdfbedae",
+          "price": 10,
+          "status": "aufgegeben",
+          "updated": "2024-07-14T23:28:47Z"
+        }
+      ],
+      "status": "aufgegeben",
+      "table": 3,
+      "menu_item_name": "Crepe (Spekulatius)",
+      "menu_item_price_in_cents": 1336,
+      "updated": "2024-11-26T19:50:34Z",
+      "waiter": "ca729ef0-e3e6-45af-9444-717360907882"
+    },
+    {
+      "created": "2024-03-27T01:40:39Z",
+      "events": [
+        {
+          "content": {
+            "order_id": "100b29e4-15da-4750-be9f-89e51a0f3d6d",
+            "status": "aufgegeben"
+          },
+          "created": "2024-10-11T07:10:14Z",
+          "id": "52920295-c4f3-450e-a224-ccc778239ec3",
+          "type": "order",
+          "updated": "2024-11-07T04:13:03Z"
+        }
+      ],
+      "id": "100b29e4-15da-4750-be9f-89e51a0f3d6d",
+      "order_items": [
+        {
+          "bom": {
+            "dummy": "dummy"
+          },
+          "created": "2024-10-14T04:50:05Z",
+          "events": [
+            {
+              "content": {
+                "order_item_id": "a7023bbf-8074-4574-9005-74c4e9f86c5e",
+                "status": "aufgegeben"
+              },
+              "created": "2024-07-31T10:55:24Z",
+              "id": "34e98694-bd9b-41dd-ad01-68f1f6047189",
+              "type": "order_item",
+              "updated": "2024-03-19T10:45:21Z"
+            }
+          ],
+          "id": "e4918182-0e06-4636-8bbf-928e970893b6",
+          "order": "100b29e4-15da-4750-be9f-89e51a0f3d6d",
+          "price": 20,
+          "status": "aufgegeben",
+          "updated": "2024-02-06T18:18:55Z"
+        }
+      ],
+      "status": "aufgegeben",
+      "table": 8,
+      "menu_item_name": "Crepe (Zimt Zucker)",
+      "menu_item_price_in_cents": 1201,
+      "updated": "2024-02-13T08:18:34Z",
+      "waiter": "b688871c-9381-4bca-acac-cd9fb5a1578c"
+    },
+    {
+      "created": "2024-03-22T21:16:02Z",
+      "events": [
+        {
+          "content": {
+            "order_id": "b8e78cf1-8936-44a4-ae9d-6f2c057b5764",
+            "status": "aufgegeben"
+          },
+          "created": "2024-06-06T09:11:38Z",
+          "id": "909577f6-1408-4612-a61c-875cbefd1f54",
+          "type": "order",
+          "updated": "2024-10-21T19:57:20Z"
+        }
+      ],
+      "id": "b8e78cf1-8936-44a4-ae9d-6f2c057b5764",
+      "order_items": [
+        {
+          "bom": {
+            "dummy": "dummy"
+          },
+          "created": "2024-02-18T01:49:28Z",
+          "events": [
+            {
+              "content": {
+                "order_item_id": "59bdecf7-9073-4d01-8cc5-efe5a57b1767",
+                "status": "aufgegeben"
+              },
+              "created": "2024-08-09T08:22:34Z",
+              "id": "e431763f-f674-4b3f-a951-529730d7960e",
+              "type": "order_item",
+              "updated": "2024-03-21T17:36:23Z"
+            }
+          ],
+          "id": "0b5e73c9-8171-45c1-946d-83cf2e0a80e8",
+          "order": "b8e78cf1-8936-44a4-ae9d-6f2c057b5764",
+          "price": 8,
+          "status": "aufgegeben",
+          "updated": "2024-08-17T20:08:30Z"
+        }
+      ],
+      "status": "aufgegeben",
+      "table": 3,
+      "menu_item_name": "Sandwich (Box 9Stk)",
+      "menu_item_price_in_cents": 1049,
+      "updated": "2024-02-15T09:19:54Z",
+      "waiter": "f67984db-6393-4d5e-9578-e304206227ec"
+    },
+    {
+      "created": "2024-06-07T12:51:52Z",
+      "events": [
+        {
+          "content": {
+            "order_id": "80eba15a-472d-4897-83e7-776e5c4726ec",
+            "status": "aufgegeben"
+          },
+          "created": "2024-02-23T18:02:43Z",
+          "id": "d01c25fe-9d22-4749-a917-0d972e88d80c",
+          "type": "order",
+          "updated": "2024-09-15T18:06:09Z"
+        }
+      ],
+      "id": "80eba15a-472d-4897-83e7-776e5c4726ec",
+      "order_items": [
+        {
+          "bom": {
+            "dummy": "dummy"
+          },
+          "created": "2024-07-05T21:55:13Z",
+          "events": [
+            {
+              "content": {
+                "order_item_id": "8438eea8-0532-4b3b-acbc-bb7373463e0b",
+                "status": "aufgegeben"
+              },
+              "created": "2024-05-25T16:21:33Z",
+              "id": "1b47b8e2-f1e2-4dd3-83f3-a3d6db21b30d",
+              "type": "order_item",
+              "updated": "2024-07-17T22:39:48Z"
+            }
+          ],
+          "id": "c927e02b-ce77-4bd2-9ee4-c06d28cc4f30",
+          "order": "80eba15a-472d-4897-83e7-776e5c4726ec",
+          "price": 19,
+          "status": "aufgegeben",
+          "updated": "2024-09-28T23:46:38Z"
+        }
+      ],
+      "status": "aufgegeben",
+      "table": 3,
+      "menu_item_name": "Crepe (K\u00e4se Schinken)",
+      "menu_item_price_in_cents": 850,
+      "updated": "2024-06-26T20:38:14Z",
+      "waiter": "e7c8df78-7027-4fda-9e09-006babf42586"
+    },
+    {
+      "created": "2024-02-01T20:26:29Z",
+      "events": [
+        {
+          "content": {
+            "order_id": "0f4c437f-eec3-494f-aa63-b76ceae0b518",
+            "status": "aufgegeben"
+          },
+          "created": "2024-11-21T16:27:51Z",
+          "id": "178040a2-57e8-4f27-a1f4-d81e0a562e86",
+          "type": "order",
+          "updated": "2024-10-05T18:14:29Z"
+        }
+      ],
+      "id": "0f4c437f-eec3-494f-aa63-b76ceae0b518",
+      "order_items": [
+        {
+          "bom": {
+            "dummy": "dummy"
+          },
+          "created": "2024-09-02T18:47:39Z",
+          "events": [
+            {
+              "content": {
+                "order_item_id": "0716d344-126b-44cf-ad0b-691208c39122",
+                "status": "aufgegeben"
+              },
+              "created": "2024-08-19T16:14:54Z",
+              "id": "07da0fbc-785a-4b45-9cb0-d1879bff5866",
+              "type": "order_item",
+              "updated": "2024-03-26T09:27:18Z"
+            }
+          ],
+          "id": "413b25c4-bdb9-484b-9e05-03fee373637c",
+          "order": "0f4c437f-eec3-494f-aa63-b76ceae0b518",
+          "price": 17,
+          "status": "aufgegeben",
+          "updated": "2024-08-25T00:13:34Z"
+        }
+      ],
+      "status": "aufgegeben",
+      "table": 8,
+      "menu_item_name": "Sandwich (Erdbeer)",
+      "menu_item_price_in_cents": 913,
+      "updated": "2024-05-29T14:21:45Z",
+      "waiter": "2844a68a-06db-4b8f-b597-4cca71adda79"
+    },
+    {
+      "created": "2024-10-24T08:44:10Z",
+      "events": [
+        {
+          "content": {
+            "order_id": "049ec338-6600-4831-9a08-1d645f2c57c1",
+            "status": "aufgegeben"
+          },
+          "created": "2024-07-25T13:02:08Z",
+          "id": "2dccc6bb-d049-4c61-9037-490d8bc2a157",
+          "type": "order",
+          "updated": "2024-07-04T15:01:13Z"
+        }
+      ],
+      "id": "049ec338-6600-4831-9a08-1d645f2c57c1",
+      "order_items": [
+        {
+          "bom": {
+            "dummy": "dummy"
+          },
+          "created": "2024-07-18T09:55:38Z",
+          "events": [
+            {
+              "content": {
+                "order_item_id": "434ef3ba-a8b6-45bb-b054-dd7987be4899",
+                "status": "aufgegeben"
+              },
+              "created": "2024-08-11T06:43:14Z",
+              "id": "45473e57-f8df-42f3-b853-e051a6095d62",
+              "type": "order_item",
+              "updated": "2024-03-07T18:27:57Z"
+            }
+          ],
+          "id": "d5a8e936-2026-49bc-9cd9-2e389773beff",
+          "order": "049ec338-6600-4831-9a08-1d645f2c57c1",
+          "price": 16,
+          "status": "aufgegeben",
+          "updated": "2024-01-19T22:35:56Z"
+        }
+      ],
+      "status": "aufgegeben",
+      "table": 3,
+      "menu_item_name": "Sandwich (K\u00e4se Schinken)",
+      "menu_item_price_in_cents": 1434,
+      "updated": "2024-07-17T00:12:11Z",
+      "waiter": "e0acbcfe-0e24-4ee6-a402-0145cd830677"
+    },
+    {
+      "created": "2024-05-17T18:45:55Z",
+      "events": [
+        {
+          "content": {
+            "order_id": "2af36576-9bf8-4376-b2e2-fc207c1c2785",
+            "status": "aufgegeben"
+          },
+          "created": "2024-06-26T18:04:47Z",
+          "id": "8d9b2e6a-8af7-41cd-a7e6-5d6c5cd4ce6a",
+          "type": "order",
+          "updated": "2024-02-08T23:00:21Z"
+        }
+      ],
+      "id": "2af36576-9bf8-4376-b2e2-fc207c1c2785",
+      "order_items": [
+        {
+          "bom": {
+            "dummy": "dummy"
+          },
+          "created": "2024-02-11T19:22:00Z",
+          "events": [
+            {
+              "content": {
+                "order_item_id": "95536694-1e0a-4359-990a-e3738c215377",
+                "status": "aufgegeben"
+              },
+              "created": "2024-11-01T18:07:36Z",
+              "id": "f81649f7-b56c-4378-9f89-9580dfdfc95a",
+              "type": "order_item",
+              "updated": "2024-06-15T00:46:36Z"
+            }
+          ],
+          "id": "3dd3c297-eb79-464e-aa0c-4671575ec22c",
+          "order": "2af36576-9bf8-4376-b2e2-fc207c1c2785",
+          "price": 17,
+          "status": "aufgegeben",
+          "updated": "2024-01-22T18:08:28Z"
+        }
+      ],
+      "status": "aufgegeben",
+      "table": 9,
+      "menu_item_name": "Sandwich (Erdbeer)",
+      "menu_item_price_in_cents": 534,
+      "updated": "2024-04-27T14:14:45Z",
+      "waiter": "4f47b703-de62-4aae-a7f0-0b83d5380eb0"
+    }
+  ],
+  "payments": [
+    {
+      "created": "2024-12-02T20:33:36Z",
+      "discount_percent": 3,
+      "id": "3e8dad4a-d785-4072-8fda-eaece5477444",
+      "order": "be7e90ee-94a4-4117-8316-5058b344a87a",
+      "payment_option": {
+        "created": "2024-09-17T12:26:30Z",
+        "details": "Payment with Cash",
+        "id": "91a72107-1018-4454-b84e-a971d71703c0",
+        "name": "Cash",
+        "updated": "2024-09-27T19:46:21Z"
+      },
+      "tip_amount": 0,
+      "total_amount": 29,
+      "updated": "2024-06-01T11:08:47Z"
+    },
+    {
+      "created": "2024-01-30T09:49:18Z",
+      "discount_percent": 7,
+      "id": "328463d6-4216-4d9f-98ec-374d1dcfeeb8",
+      "order": "507ec285-298a-44b1-bb0a-dfb25f462895",
+      "payment_option": {
+        "created": "2024-04-10T15:23:24Z",
+        "details": "Payment with Cash",
+        "id": "f62c6eef-b012-4f7b-9a7c-34a49646d97a",
+        "name": "Cash",
+        "updated": "2024-03-13T00:52:58Z"
+      },
+      "tip_amount": 0,
+      "total_amount": 44,
+      "updated": "2024-09-05T00:48:53Z"
+    },
+    {
+      "created": "2024-09-17T19:11:21Z",
+      "discount_percent": 4,
+      "id": "e8150f6a-5bde-49c0-a0ed-08c79ecefb64",
+      "order": "05867984-8382-4d58-bb0b-f5261dc86714",
+      "payment_option": {
+        "created": "2024-11-27T02:08:44Z",
+        "details": "Payment with Cash",
+        "id": "d0213fb7-bc9f-4924-b55f-086217eb8790",
+        "name": "Cash",
+        "updated": "2024-06-05T04:49:37Z"
+      },
+      "tip_amount": 2,
+      "total_amount": 28,
+      "updated": "2024-08-01T22:35:06Z"
+    },
+    {
+      "created": "2024-12-30T09:12:50Z",
+      "discount_percent": 9,
+      "id": "fb01dd19-d584-4ea5-9b93-2fa48ac86d01",
+      "order": "d5f66e4b-03f2-4b6a-b92c-7a82fdfbedae",
+      "payment_option": {
+        "created": "2024-08-17T07:58:09Z",
+        "details": "Payment with Cash",
+        "id": "a7c00c7e-ee07-4fe6-b462-8b27c5b7d150",
+        "name": "Cash",
+        "updated": "2024-08-06T18:26:54Z"
+      },
+      "tip_amount": 0,
+      "total_amount": 37,
+      "updated": "2024-11-03T12:00:36Z"
+    },
+    {
+      "created": "2024-02-23T19:40:02Z",
+      "discount_percent": 9,
+      "id": "018514a9-d734-420b-a558-ed319f621646",
+      "order": "100b29e4-15da-4750-be9f-89e51a0f3d6d",
+      "payment_option": {
+        "created": "2024-07-15T03:09:35Z",
+        "details": "Payment with Cash",
+        "id": "fe3e846f-78dc-4e95-8daf-06ced7bfd45e",
+        "name": "Cash",
+        "updated": "2024-06-06T18:44:35Z"
+      },
+      "tip_amount": 1,
+      "total_amount": 24,
+      "updated": "2024-10-22T18:15:02Z"
+    },
+    {
+      "created": "2024-01-18T05:17:31Z",
+      "discount_percent": 10,
+      "id": "631bfdc6-5819-42a2-9d35-bd65fb221aea",
+      "order": "b8e78cf1-8936-44a4-ae9d-6f2c057b5764",
+      "payment_option": {
+        "created": "2024-04-07T20:14:04Z",
+        "details": "Payment with Cash",
+        "id": "e4d5001c-5eac-4bff-9d53-0b1f643fa940",
+        "name": "Cash",
+        "updated": "2024-02-23T12:19:04Z"
+      },
+      "tip_amount": 5,
+      "total_amount": 24,
+      "updated": "2024-07-08T22:16:03Z"
+    },
+    {
+      "created": "2024-03-10T06:07:13Z",
+      "discount_percent": 10,
+      "id": "2c35e240-d8aa-46c0-9875-53815c05c679",
+      "order": "80eba15a-472d-4897-83e7-776e5c4726ec",
+      "payment_option": {
+        "created": "2024-07-07T02:16:53Z",
+        "details": "Payment with Cash",
+        "id": "b2f8ff77-7864-406a-864e-c5639af0a1f7",
+        "name": "Cash",
+        "updated": "2024-12-22T02:01:39Z"
+      },
+      "tip_amount": 6,
+      "total_amount": 47,
+      "updated": "2024-11-22T04:24:50Z"
+    },
+    {
+      "created": "2024-05-16T16:12:06Z",
+      "discount_percent": 1,
+      "id": "e4250dd3-5f20-4f2e-b9ff-640fc5a41f1d",
+      "order": "0f4c437f-eec3-494f-aa63-b76ceae0b518",
+      "payment_option": {
+        "created": "2024-03-12T13:59:56Z",
+        "details": "Payment with Cash",
+        "id": "8b8a15df-c157-4e7e-91f2-fed554d8c72a",
+        "name": "Cash",
+        "updated": "2024-06-26T07:29:04Z"
+      },
+      "tip_amount": 2,
+      "total_amount": 32,
+      "updated": "2024-09-25T21:58:12Z"
+    },
+    {
+      "created": "2024-05-30T07:01:17Z",
+      "discount_percent": 9,
+      "id": "460981ff-0c3e-4723-abb5-074aba0674a7",
+      "order": "049ec338-6600-4831-9a08-1d645f2c57c1",
+      "payment_option": {
+        "created": "2024-02-24T02:46:54Z",
+        "details": "Payment with Cash",
+        "id": "d1e47db6-86b9-4e88-98e7-c183a80fab8b",
+        "name": "Cash",
+        "updated": "2024-02-22T08:44:16Z"
+      },
+      "tip_amount": 9,
+      "total_amount": 35,
+      "updated": "2024-10-02T07:13:35Z"
+    },
+    {
+      "created": "2024-09-17T10:25:56Z",
+      "discount_percent": 7,
+      "id": "7c26001e-0117-435e-a3af-9842cd4ae276",
+      "order": "2af36576-9bf8-4376-b2e2-fc207c1c2785",
+      "payment_option": {
+        "created": "2024-10-21T15:50:52Z",
+        "details": "Payment with Cash",
+        "id": "20f0cdf0-becc-4708-bb94-356e1bac7ebc",
+        "name": "Cash",
+        "updated": "2024-04-07T03:31:49Z"
+      },
+      "tip_amount": 12,
+      "total_amount": 48,
+      "updated": "2024-02-12T17:44:50Z"
+    }
+  ]
+}
