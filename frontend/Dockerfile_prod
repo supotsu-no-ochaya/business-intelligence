@@ -16,6 +16,19 @@ COPY frontend /app/
 RUN sed -i "s|const API_BASE_URL = 'http://localhost:8000/api';|const API_BASE_URL = 'http://141.45.146.228/api';|" src/apiService.js
 RUN sed -i "s|await axiosInstance.post('http://localhost:8000/upload-json/', formData, {|await axiosInstance.post('http://141.45.146.228:8000/upload-json/', formData, {|" src/apiService.js
 
+RUN sed -i "s|const response = await axiosInstance.get('http://localhost:8000/storage-item/')|const response = await axiosInstance.get('http://141.45.146.228:8000/storage-item/')" src/apiService.js
+
+RUN sed -i "s|const response = await axiosInstance.get('http://localhost:8000/ingredients/')|const response = await axiosInstance.get('http://141.45.146.228:8000/ingredients/')" src/apiService.js
+
+RUN sed -i "s|const response = await axiosInstance.get('http://localhost:8000/storage-location/')|const response = await axiosInstance.get('http://141.45.146.228:8000/storage-location/')" src/apiService.js
+
+RUN sed -i "s|const response = await axiosInstance.put(`http://localhost:8000/storage-item/${id}/`, data);|const response = await axiosInstance.put(`http://141.45.146.228:8000/storage-item/${id}/`, data);" src/apiService.js
+
+RUN sed -i "s|const response = await axiosInstance.put(`http://localhost:8000/ingredients/${id}/`, data);|const response = await axiosInstance.put(`http://141.45.146.228:8000/ingredients/${id}/`, data);" src/apiService.js
+
+RUN sed -i "s|const response = await axiosInstance.put('http://localhost:8000/storage-location/', data);|const response = await axiosInstance.put('http://141.45.146.228:8000/storage-location/', data);" src/apiService.js
+
+
 RUN cat src/apiService.js
 
 
