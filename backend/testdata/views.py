@@ -420,7 +420,7 @@ class IngredientListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # PUT method: Update an existing ingredient
-    @swagger_auto_schema(request_body=IngredientSerializer,)
+    @swagger_auto_schema(request_body=IngredientSerializer)
     def put(self, request, *args, **kwargs):
         try:
             ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
