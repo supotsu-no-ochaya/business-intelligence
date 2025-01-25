@@ -68,10 +68,9 @@ export const handleLogout = async () => {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
       axiosInstance.defaults.headers.common['Authorization'] = undefined;
-      alert('Successfully logged out!');
       successful = true     
   } catch (error) {
-      console.error('Logout failed', error);
+      alert('Logout failed', error);
       successful = false 
   }
   return successful
