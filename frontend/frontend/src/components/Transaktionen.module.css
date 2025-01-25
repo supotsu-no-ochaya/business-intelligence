@@ -74,6 +74,7 @@
     flex-direction: column;
     top: 50%;
     left: 50%;
+    width: 400px;
     transform: translate(-50%, -50%);
     background: #24263A; /* Gleiche Hintergrundfarbe wie andere Karten */
     color: white; /* Textfarbe */
@@ -85,7 +86,7 @@
 
 .uploadMenu input,
 .uploadMenu select {
-    display: block;
+    display: inline-block;
     margin: 10px 0;
     /* width: 100%; */
     padding: 10px;
@@ -94,6 +95,11 @@
     border-radius: 5px; /* Leichte Rundung */
     color: white; /* Weiße Schrift */
     font-size: 1rem;
+    flex-grow: 1;
+}
+
+select option:first-child:disabled {
+  color: grey;
 }
 
 .uploadMenu input:focus,
@@ -124,4 +130,29 @@
     background-color: #0056b3; /* Hover-Effekt */
 }
 
-  
+.dateSelectField, .amountField{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: start;
+}
+
+
+.amountField > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-right: 1rem;
+}
+
+.amountField > span:first-child > input {
+  flex-grow: 1
+}
+
+.dateSelectField > * {
+  flex-grow: 1;
+}
+
+.errorField {
+  color: yellow
+}
