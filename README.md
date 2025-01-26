@@ -2,7 +2,7 @@
 Webapplication giving insights in business intelligence.\
 Backend: Django\
 Frontend: React\
-Database: Postgresql\
+Database: Postgresql
 
 ## Docker
 ### Run Production local:
@@ -14,7 +14,7 @@ DJANGO_SECRET_KEY=secret-key\
 DEBUG=False\
 DJANGO_SUPERUSER_USERNAME=admin\
 DJANGO_SUPERUSER_EMAIL=admin@email.com\
-DJANGO_SUPERUSER_PASSWORD=superduper123\
+DJANGO_SUPERUSER_PASSWORD=superduper123
 
 2. Create a secret key (django needs to be installed):
 ```console
@@ -27,9 +27,9 @@ docker compose -f docker-compose-prod.local.yml --env-file .env_prod up --build
 ```
 
 4. Navigation:
-Django admin board -> localhost:80/admin
-Login Page -> localhost:80
-
+Django admin board -> localhost:80/admin\
+Login Page -> localhost:80\
+Fixtures are loaded before starting the server.
 
 ### Run development:
 1. Create a .env file in root directory:
@@ -48,7 +48,7 @@ REACT_APP_BACKEND_URL=http://localhost:8000\
 REACT_APP_ENV=development\
 DJANGO_SUPERUSER_USERNAME=admin\
 DJANGO_SUPERUSER_PASSWORD=admin\
-DJANGO_SUPERUSER_EMAIL=admin@email.com\
+DJANGO_SUPERUSER_EMAIL=admin@email.com
 
 2. Run docker:
 ```console
@@ -59,6 +59,7 @@ docker compose -f docker-compose.yml --env-file .env up --build
 Backend -> localhost:8000\
 Backend Admin Dashboard -> localhost:8000/admin\
 Frontend -> localhost:3000\
+Fixtures are not loaded before starting the server.
 
 
 ### Run production on server:
@@ -66,6 +67,7 @@ Run Production:
 ```console
 docker compose -f docker-compose-prod.yml --env-file .env_prod up --build
 ```
+Fixtures are loaded before starting the server.
 
 ### Docker commands
 1. Stop container:
@@ -94,7 +96,10 @@ docker exec -it NAME bash
 ```
 
 ## Backend
-For installation check out the README in /backend\
+For installation check out the README in /backend
 
 ## Frontend
-For installation check out the README in frontend\
+For installation check out the README in frontend
+
+## Upload files
+JSON files inside upload-json/
