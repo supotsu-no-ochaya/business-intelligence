@@ -6,15 +6,17 @@ Database: Postgresql
 
 ## Docker
 ### Run Production local:
-1. Create a .env_prod file in the root directory containing:\
-POSTGRES_USER=postgres\
-POSTGRES_PASSWORD=your-db-password\
-POSTGRES_DB=testdb\
-DJANGO_SECRET_KEY=secret-key\
-DEBUG=False\
-DJANGO_SUPERUSER_USERNAME=admin\
-DJANGO_SUPERUSER_EMAIL=admin@email.com\
+1. Create a .env_prod file in the root directory containing:
+```python
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your-db-password
+POSTGRES_DB=testdb
+DJANGO_SECRET_KEY=secret-key
+DEBUG=False
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@email.com
 DJANGO_SUPERUSER_PASSWORD=superduper123
+```
 
 2. Create a secret key (django needs to be installed):
 ```console
@@ -31,13 +33,13 @@ sudo systemctl stop postgres
 docker compose -f docker-compose-prod.local.yml --env-file .env_prod up --build
 ```
 
-4. Navigation:\
-Django admin board -> localhost:80/admin\
-Login Page -> localhost:80\
-Fixtures are loaded before starting the server.
+4. Navigation:
+- Django admin board -> localhost:80/admin [Click Here](http://localhost:80/admin)
+- Login Page -> localhost:80 [Click Here](http://localhost:80)
+- Fixtures are loaded before starting the server.
 
 ### Run development:
-1. Create a .env file in root directory:\
+1. Create a .env file in root directory:
 ```python
 POSTGRES_DB=postgres
 POSTGRES_USER=postgres
@@ -74,11 +76,11 @@ DJANGO_SUPERUSER_EMAIL=admin@email.com
 docker compose -f docker-compose.yml --env-file .env up --build
 ```
 
-3. Navigation:\
-Backend -> localhost:8000\
-Backend Admin Dashboard -> localhost:8000/admin\
-Frontend -> localhost:3000\
-Fixtures are not loaded before starting the server.
+3. Navigation:
+- Backend -> localhost:8000 [Click Here](http://localhost:8000)
+- Backend Admin Dashboard -> localhost:8000/admin [Click Here](http://localhost:8000/admin)
+- Frontend -> localhost:3000 [Click Here](http://localhost:3000)
+- Fixtures are not loaded before starting the server.
 
 
 ### Run production on server:
@@ -114,7 +116,8 @@ docker image ls -q | xargs -I {} docker image rm -f {}
 docker exec -it NAME bash
 ```
 
-6. CAUTIOUS! Clear everything (helps when something is not working, or not..)
+6. CAUTIOUS!:
+Clear everything (helps when something is not working, or not..)\
 Stops all containers\
 Stops docker containers witout compose\
 Remove all containers\
