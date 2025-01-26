@@ -75,18 +75,32 @@ python3 manage.py clear_data
 ```console
 sudo ufw allow 8000
 ```
+**Windows** check if ports are open:
+```console
+netstat -an | find "8000"
+netstat -an | find "5432"
+```
+If they are not open, well open them.\
+
 
 1. Configure pg_hba.conf:
 ```console
 sudo vim /etc/postgresql/<version>/main/pg_hba.conf
 ```
+**Windows** under: C:\Program Files\PostgreSQL\<version>\data\pg_hba.conf\
+
 Add entry and allow connections from docker subnet (seperated by taps):\
-host    all             all             172.17.0.0/16          md5
+host    all             all             172.17.0.0/16          md5\
+
+These IP ranges should be occupied by docker. If not check the container IP with\
+like below!\
 
 2. Configure postgres to listen:
 ```console
 sudo vim /etc/postgresql/<version>/main/postgresql.conf
 ```
+**Windows** under: C:\Program Files\PostgreSQL\<version>\data\postgresql.conf\
+
 Add entry:\
 listen_addresses = '*'
 
@@ -94,6 +108,12 @@ listen_addresses = '*'
 ```console
 sudo systemctl restart postgresql
 ```
+**Windows** adjust version number!:
+```console
+net stop postgresql-x64-13
+net start postgresql-x64-13
+```
+
 
 4. Change DB_HOST in ../.env to container ip:
 You have to build and run it first to retrieve ip even if fails

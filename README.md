@@ -150,3 +150,4 @@ JSON files inside upload-json/
 ## Troubleshoot
 - Make sure there are no extra spaces or tabs in your .env files!
 - Try cleaning every docker container, networks, ...
+-  Windowns IIS Feature sucks. Webserver on port 80, get him out!
