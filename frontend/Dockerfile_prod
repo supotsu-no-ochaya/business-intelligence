@@ -11,8 +11,6 @@ RUN npm install
 
 # Copy the rest of the frontend code
 COPY frontend /app/
-RUN cat src/apiService.js
-
 
 # Build the production version of the app
 RUN npm run build

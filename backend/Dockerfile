@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    netcat-openbsd \
+    netcat-openbsd inetutils-ping\
     && apt-get clean
 
 # Install dependencies
@@ -19,6 +19,8 @@ COPY . /app/
 # Expose port 8000 for Django development server
 EXPOSE 8000
 
+# Set the environment to development
+ENV DJANGO_SETTINGS_MODULE=backend.settings
 # Command to run the development server
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
