@@ -81,3 +81,47 @@ Delete entries from fileupload (need to clean the db befor retrying the upload)
 python3 manage.py clear_data
 ```
 
+
+## Docker
+0. Check firewall rule and change them:
+```console
+sudo ufw allow 8000
+```
+
+1. Configure pg_hba.conf 
+```console
+sudo vim /etc/postgresql/<version>/main/pg_hba.conf
+```
+Add entry and allow connections from docker subnet:\
+host    all             all             172.17.0.0/16          md5\
+
+2. Configure postgres to listen:
+```console
+sudo vim /etc/postgresql/<version>/main/postgresql.conf
+```
+Add entry:\
+listen_addresses = '*'
+
+3. Restart postgres:
+```console
+sudo systemctl restart postgresql
+```
+
+4. Change DB_HOST in ../.env to container ip:
+You have to build and run it first to retrieve ip even if fails
+```console
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container_id>
+```
+Now change DB_HOST to the ip.
+
+5. Build development
+```console
+docker build -f Dockerfile -t backend-app .
+```
+
+6. Run development
+```console
+docker run --env-file ../.env -p 8000:8000 backend-app
+```
+
+

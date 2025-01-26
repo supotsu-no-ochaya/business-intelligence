@@ -1,11 +1,12 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000/api';
-//const API_BASE_URL = 'http://141.45.146.228/api';
+//const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+console.log(`API_BASE_URL: ${API_BASE_URL}`)
 
 // Erstelle eine Axios-Instanz
 const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_BASE_URL + '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -34,7 +35,7 @@ axiosInstance.interceptors.response.use(
       if (refreshToken) {
         try {
           // Hole neuen Access-Token
-          const { data } = await axios.post(`${API_BASE_URL}/auth/token/refresh/`, {
+          const { data } = await axios.post(`${API_BASE_URL}/api/auth/token/refresh/`, {
             refresh: refreshToken,
           });
 
@@ -118,23 +119,23 @@ export const createCompanyExpense = async(data) => {
 }
 
 export const fetchLagerItems = async() => {
-  const response = await axiosInstance.get('http://localhost:8000/storage-item/')
+  const response = await axiosInstance.get(`${API_BASE_URL}/storage-item/`)
   return response
 }
 
 export const fetchIngredients = async() => {
-  const response = await axiosInstance.get('http://localhost:8000/ingredients/')
+  const response = await axiosInstance.get(`${API_BASE_URL}/ingredients/`)
   return response
 }
 
 export const fetchLocation = async() => {
-  const response = await axiosInstance.get('http://localhost:8000/storage-location/')
+  const response = await axiosInstance.get(`${API_BASE_URL}/storage-location/`)
   return response
 }
 
 export const PutLagerItems = async (id, data) => {
   try {
-    const response = await axiosInstance.put(`http://localhost:8000/storage-item/${id}/`, data);
+    const response = await axiosInstance.put(`${API_BASE_URL}/storage-item/${id}/`, data);
     return response;
   } catch (error) {
     console.error('Fehler beim Speichern der Lagerdaten:', error);
@@ -145,7 +146,7 @@ export const PutLagerItems = async (id, data) => {
 
 export const PutIngredients = async (id, data) => {
   try {
-    const response = await axiosInstance.put(`http://localhost:8000/ingredients/${id}/`, data);
+    const response = await axiosInstance.put(`${API_BASE_URL}/ingredients/${id}/`, data);
     return response;
   } catch (error) {
     console.error('Fehler beim Speichern der Zutaten:', error);
@@ -155,7 +156,7 @@ export const PutIngredients = async (id, data) => {
 
 export const PutLocation = async (data) => {
   try {
-    const response = await axiosInstance.put('http://localhost:8000/storage-location/', data);
+    const response = await axiosInstance.put(`${API_BASE_URL}/storage-location/`, data);
     return response;
   } catch (error) {
     console.error('Fehler beim Speichern der Lagerorte:', error);
@@ -225,7 +226,7 @@ export const loginUser = async (username, password) => {
     formData.append('file', file);
   
     try {
-      await axiosInstance.post('http://localhost:8000/upload-json/', formData, {
+      await axiosInstance.post(`${API_BASE_URL}/upload-json/`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
     } catch (error) {

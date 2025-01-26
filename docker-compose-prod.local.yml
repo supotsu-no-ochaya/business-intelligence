@@ -7,6 +7,10 @@ services:
     restart: always
     ports:
       - "80:80"
+    env_file:
+      - ./frontend/frontend/.env.local  # Path to the .env file in your React app    
+    environment:
+      - REACT_APP_API_BASE_URL=http://localhost:8000
     depends_on:
       - backend
 

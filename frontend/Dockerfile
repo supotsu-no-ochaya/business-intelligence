@@ -11,11 +11,14 @@ RUN npm install
 # Copy project files
 COPY frontend /app/
 
-# Build the React app
-RUN npm run build
+# Build the React app (this is for production)
+#RUN npm run build
 
 # Expose port 3000 for development
 EXPOSE 3000
+
+# Set environment to development
+ENV NODE_ENV=development
 
 # Serve the app
 CMD ["npm", "start"]
