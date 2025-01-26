@@ -80,7 +80,7 @@ docker compose -f docker-compose.yml --env-file .env up --build
 - Backend -> localhost:8000 [Click Here](http://localhost:8000)
 - Backend Admin Dashboard -> localhost:8000/admin [Click Here](http://localhost:8000/admin)
 - Frontend -> localhost:3000 [Click Here](http://localhost:3000)
-- Fixtures are not loaded before starting the server.
+- Fixtures are loaded before starting the server.
 
 
 ### Run production on server:
