@@ -6,7 +6,7 @@ Database: Postgresql
 
 ## Docker
 ### Run Production local:
-1. Create a .env_prod file in the root directory containing:
+1. Create a .env_prod file in the root directory containing:\
 POSTGRES_USER=postgres\
 POSTGRES_PASSWORD=your-db-password\
 POSTGRES_DB=testdb\
@@ -26,13 +26,13 @@ python -c 'from django.core.management.utils import get_random_secret_key; print
 docker compose -f docker-compose-prod.local.yml --env-file .env_prod up --build
 ```
 
-4. Navigation:
+4. Navigation:\
 Django admin board -> localhost:80/admin\
 Login Page -> localhost:80\
 Fixtures are loaded before starting the server.
 
 ### Run development:
-1. Create a .env file in root directory:
+1. Create a .env file in root directory:\
 POSTGRES_DB=postgres\
 POSTGRES_USER=postgres\
 POSTGRES_PASSWORD=postgres\
@@ -55,7 +55,7 @@ DJANGO_SUPERUSER_EMAIL=admin@email.com
 docker compose -f docker-compose.yml --env-file .env up --build
 ```
 
-3. Navigation:
+3. Navigation:\
 Backend -> localhost:8000\
 Backend Admin Dashboard -> localhost:8000/admin\
 Frontend -> localhost:3000\
