@@ -11,6 +11,8 @@ const Settings = () => {
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessageFull, setErrorMessageFull] = useState('');
+  const [showFullErrorMessage, setShowFullErrorMessage] = useState(false)
 
   const handlePasswordChange = (e) => { 
     if(e.target.id == 'password') {
@@ -20,6 +22,23 @@ const Settings = () => {
       setPasswordConfirm(e.target.value)
     }
   }
+
+  const pw_checks = {
+    length: password.length >= 8,
+    numeric: /\d/.test(password),
+    uppercaseLowercase: /[a-z]/.test(password) && /[A-Z]/.test(password),
+  };
+
+  function isPasswordValid(password) {
+    for (const key in pw_checks) {
+      if (Object.prototype.hasOwnProperty.call(pw_checks, key)) {
+        const valid = pw_checks[key];
+        if(!valid) return false;
+      }
+    }
+    return true;
+  }
+
   function handleKeyPress(event) {
     const capsLockOn = event.getModifierState('CapsLock');
 
@@ -44,11 +63,15 @@ const Settings = () => {
   };
 
   const handlePasswordSubmit = async () => {
+    setPasswordError('');
+    setPasswordSuccess('')
     if(password != passwordConfirm)  {
-      setPasswordError('Passwörter stimmen nicht überein')
+      setPasswordError('Passwörter stimmen nicht überein');
       return
     }
-    setPasswordError('')
+
+    if(!isPasswordValid()) return;
+
     try {
       await changePassword(password);
       setPasswordSuccess('Passwort erfolgreich geändert')
@@ -56,12 +79,13 @@ const Settings = () => {
         setPasswordSuccess('')
       }, 5000);
     } catch (error) {
-      setErrorMessage('Fehler beim Ändern des Passworts.');
+      setPasswordError('Fehler beim Ändern des Passworts.');
       console.error(error);
     }
   };
 
   const handleFileSubmit = async () => {
+    setErrorMessageFull('')
     if (!file) return;
 
     try {
@@ -70,6 +94,7 @@ const Settings = () => {
       setFile(null);
     } catch (error) {
       setErrorMessage('Fehler beim Hochladen der Datei.');
+      setErrorMessageFull(JSON.stringify(error.response.data, undefined, 2))
       console.error(error);
     }
   };
@@ -93,14 +118,22 @@ const Settings = () => {
           <h3>Passwort ändern</h3>
           <div className="form-group">
             <label htmlFor="password">Neues Passwort</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={handlePasswordChange}
-              placeholder="Neues Passwort eingeben"
-              onKeyUp={handleKeyPress}
-            />
+            <div className='password1'>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={handlePasswordChange}
+                placeholder="Neues Passwort eingeben"
+                onKeyUp={handleKeyPress}
+              />
+              <ul className='password-requirements'>
+                <li style={{ color: pw_checks.length ? "green" : "red" }}>Passwort muss mindestens 8 Zeichen lang sein</li>
+                <li style={{ color: pw_checks.numeric ? "green" : "red" }}>Passwort muss mindestens eine Ziffer enthalten</li>
+                <li style={{ color: pw_checks.uppercaseLowercase ? "green" : "red" }}>Passwort muss mindestens einen Groß- und Kleinbuchstaben enthalten</li>
+              </ul>
+            </div>
+            <label htmlFor="password">Passwort bestätigen</label>
             <input
               type="password"
               id="password_confirm"
@@ -126,7 +159,8 @@ const Settings = () => {
               Datei hochladen
             </button>
           </div>
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          {errorMessage && <div><p className="error-message">{errorMessage} <span className="show-error-message" onClick={() => setShowFullErrorMessage(true)} type="button">Fehler Anzeigen</span></p></div>}
+          {errorMessageFull && showFullErrorMessage && <pre className="file-error-message-container">{errorMessageFull}</pre>}
           {successMessage && <p className="success-message">{successMessage}</p>}
           {file && <p>Ausgewählte Datei: {file.name}</p>}
         </div>

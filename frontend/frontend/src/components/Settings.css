@@ -73,3 +73,28 @@ button:hover {
   color: #4caf50;
   font-size: 14px;
 }
+
+.password-requirements {
+  text-align: left;
+  font-size: smaller;
+  padding-inline-start: 20px !important;
+}
+
+.password1 {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-error-message-container {
+  text-align: left;
+  background-color: #ff4b2b66;
+  border-radius: 5px;
+  padding: 0.25rem;
+}
+
+.show-error-message {
+  background-color: transparent;
+  color: #ff4b2b;
+  text-decoration: underline;
+  font-size: 14px;
+}
