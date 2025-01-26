@@ -44,9 +44,9 @@ Finde hba_file
 ```console
 postgres=# SHOW hba_file;
 ```
-und aendere:
-von:    local   all             all             peer
-zu:     local   all             all             md5
+und aendere:\
+von:    local   all             all             peer\
+zu:     local   all             all             md5\
 
 Schliesse
 ```console
