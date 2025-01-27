@@ -80,20 +80,20 @@ sudo ufw allow 8000
 netstat -an | find "8000"
 netstat -an | find "5432"
 ```
-If they are not open, well open them.\
+If they are not open, well open them.
 
 
 1. Configure pg_hba.conf:
 ```console
 sudo vim /etc/postgresql/<version>/main/pg_hba.conf
 ```
-**Windows** under: C:\Program Files\PostgreSQL\<version>\data\pg_hba.conf\
+**Windows** under: C:\Program Files\PostgreSQL\<version>\data\pg_hba.conf
 
 Add entry and allow connections from docker subnet (seperated by taps):\
-host    all             all             172.17.0.0/16          md5\
+host    all             all             172.17.0.0/16          md5
 
 These IP ranges should be occupied by docker. If not check the container IP with\
-like below!\
+like below!
 
 2. Configure postgres to listen:
 ```console

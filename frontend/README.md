@@ -6,7 +6,7 @@ cd frontend
 ```console
 npm install react-scripts
 ```
-Unter windows evtl: powershell -ExecutionPolicy Bypass\
+Unter windows evtl: powershell -ExecutionPolicy Bypass
 
 ## Environment files
 1. Add frontend/.env (next to package.json):
