@@ -40,6 +40,10 @@ services:
       python manage.py loaddata testdata/fixtures/ingredient_sample.json &&
       python manage.py loaddata testdata/fixtures/portionunit_sample.json &&
       python manage.py loaddata testdata/fixtures/storageitem_sample.json &&
+      python manage.py loaddata testdata/fixtures/userdata.json &&
+      python manage.py loaddata testdata/fixtures/speise_sample.json &&
+      python manage.py loaddata testdata/fixtures/recipe_sample &&
+      python manage.py loaddata testdata/fixtures/recipeingredients_sample &&
       gunicorn backend.wsgi:application --chdir /app/backend --bind 0.0.0.0:8000"
 
   db:
