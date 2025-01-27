@@ -2,7 +2,7 @@
 Webapplication giving insights in business intelligence.\
 Backend: Django\
 Frontend: React\
-Database: Postgresql
+Database: PostgreSQL
 
 ## Docker
 ### Run Production local:
@@ -139,10 +139,10 @@ netstat -tuln | grep 5432
 ```
 
 ## Backend
-For installation check out the README in /backend
+For installation check out the README in backend/
 
 ## Frontend
-For installation check out the README in frontend
+For installation check out the README in frontend/
 
 ## Upload files
 JSON files inside upload-json/
