@@ -796,19 +796,31 @@ class StorageLocationListView(APIView):
 
 class StorageItemListView(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self, request):
+
+    # GET method: Fetch all items or a specific item by ID
+    def get(self, request, *args, **kwargs):
+        ingredient_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
         try:
-            ingredients = StorageItem.objects.all()
-            if not ingredients:
-                return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
-            serializer = StorageItemSerializer(ingredients, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            if ingredient_id:
+                # Fetch a single item by ID
+                ingredient = StorageItem.objects.get(id=ingredient_id)
+                serializer = StorageItemSerializer(ingredient)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                # Fetch all items
+                ingredients = StorageItem.objects.all()
+                if not ingredients.exists():
+                    return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
+                serializer = StorageItemSerializer(ingredients, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        except StorageItem.DoesNotExist:
+            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-    # PUT method: Update an existing ingredient
-    @swagger_auto_schema(request_body=StorageItemSerializer,)
-    def post(self, request):
+
+    # POST method: Add a new item
+    @swagger_auto_schema(request_body=StorageItemSerializer)
+    def post(self, request, *args, **kwargs):
         try:
             serializer = StorageItemSerializer(data=request.data)
             if serializer.is_valid():
@@ -818,11 +830,11 @@ class StorageItemListView(APIView):
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # PUT method: Update an existing ingredient
+    # PUT method: Update an existing item
     @swagger_auto_schema(request_body=StorageItemSerializer)
     def put(self, request, *args, **kwargs):
+        ingredient_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
         try:
-            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
             ingredient = StorageItem.objects.get(id=ingredient_id)
             serializer = StorageItemSerializer(ingredient, data=request.data, partial=True)  # Allow partial updates
             if serializer.is_valid():
@@ -834,12 +846,11 @@ class StorageItemListView(APIView):
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # DELETE method: Delete an existing ingredient
-    
+    # DELETE method: Delete an existing item
     @swagger_auto_schema()
     def delete(self, request, *args, **kwargs):
+        ingredient_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
         try:
-            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
             ingredient = StorageItem.objects.get(id=ingredient_id)
             ingredient.delete()
             return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)

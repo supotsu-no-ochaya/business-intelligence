@@ -193,6 +193,8 @@ class StorageItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = StorageItem
         fields = '__all__'
+        id = serializers.CharField(max_length=50)
+
 
 
 class CompanyExpenseSerializer(serializers.ModelSerializer):

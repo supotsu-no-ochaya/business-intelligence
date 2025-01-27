@@ -16,24 +16,26 @@ const Lager = () => {
           fetchIngredients(),
           fetchLocation(),
         ]);
-
+  
         const ingredients = ingredientsResponse.data || ingredientsResponse;
         const locations = locationsResponse.data || locationsResponse;
-
+  
+        console.log('Locations:', locations); // Debugging: Zeige die Struktur der Lagerorte
+  
         setIngredients(ingredients);
         setLocations(locations);
-
+  
         const transformedData = lagerResponse.data.map((item) => {
           const ingredient = ingredients.find((ing) => ing.id === item.name_ingredient);
           const location = locations.find((loc) => loc.id === item.location);
-        
+  
           const haben = item.total_stock ?? 0; // Total Stock vom Lager
           const brauchen = ingredient?.base_stock ?? 0; // Base Stock von der Zutat
-        
+  
           return {
             id: item.id, // Lokale ID
             name_ingredient: item.name_ingredient, // Backend erwartet das
-            location: item.location, // Backend erwartet das
+            location: location ? location.name_loc : item.location, // Lagerort-Name
             name: ingredient ? ingredient.name_ing : `Zutat ${item.name_ingredient}`,
             haben, // "Haben" aus total_stock
             brauchen, // "Brauchen" aus base_stock
@@ -41,7 +43,7 @@ const Lager = () => {
             unit: item.unit,
           };
         });
-        
+  
         setData(transformedData);
       } catch (error) {
         console.error('Fehler beim Laden der Daten:', error);
@@ -49,10 +51,10 @@ const Lager = () => {
         setLoading(false);
       }
     };
-
+  
     loadData();
   }, []);
-
+  
   const handleInputChange = (index, field, value) => {
     const updatedData = [...data];
     updatedData[index][field] = field === 'total' || field === 'used' ? parseInt(value, 10) : value;
@@ -61,12 +63,20 @@ const Lager = () => {
 
   const saveChanges = async () => {
     try {
-      // Schleife über alle Items und sende die PUT-Anfragen mit der ID
       for (const item of data) {
+        // Lagerort-ID anhand des Namens finden
+        const selectedLocation = locations.find((loc) => loc.name_loc === item.location);
+  
+        if (!selectedLocation) {
+          console.error(`Lagerort nicht gefunden für: ${item.location}`);
+          alert(`Fehler: Lagerort "${item.location}" wurde nicht gefunden.`);
+          continue; // Überspringe dieses Item
+        }
+  
         const formattedData = {
           total_stock: item.haben, // "haben" wird zu total_stock
           name_ingredient: item.name_ingredient || item.id, // ID der Zutat oder Name der Zutat
-          location: item.location, // Lagerort
+          location: selectedLocation.id, // Lagerort-ID
           unit: item.unit, // Einheit
         };
   
@@ -75,10 +85,9 @@ const Lager = () => {
           name_ing: item.name, // Name der Zutat
         };
   
-        // Debugging: Logge die formatierten Daten
-        
-        console.log(`Daten für PUT für Ingredient (ID: ${item.name_ingredient}):`, ingredientData); // Log für Zutat
-        console.log(`Daten für PUT (ID: ${item.id}):`, formattedData); // Log für Lageritem
+        console.log(`Daten für PUT für Ingredient (ID: ${item.name_ingredient}):`, ingredientData);
+        console.log(`Daten für PUT (ID: ${item.id}):`, formattedData);
+  
         // API-Aufruf mit der ID in der URL für das Lageritem
         const lagerResponse = await PutLagerItems(item.id, formattedData);
         console.log('Lager Item gespeichert:', lagerResponse);
@@ -94,6 +103,8 @@ const Lager = () => {
       alert('Fehler beim Speichern der Änderungen.');
     }
   };
+  
+  
   
   
 
@@ -168,15 +179,15 @@ const Lager = () => {
                 />
               </div>
               <select
-                className={styles['location-dropdown']}
-                value={item.location}
-                onChange={(e) => handleInputChange(index, 'location', e.target.value)}
-              >
-                {locations.map((loc) => (
-                  <option key={loc.id} value={loc.name_loc}>
-                    {loc.name_loc}
-                  </option>
-                ))}
+                  className={styles['location-dropdown']}
+                  value={item.location}
+                  onChange={(e) => handleInputChange(index, 'location', e.target.value)}
+                >
+                  {locations.map((loc) => (
+                    <option key={loc.id} value={loc.name_loc}>
+                      {loc.name_loc}
+                    </option>
+                  ))}
               </select>
             </li>
           ))}
