@@ -18,7 +18,7 @@ class PriceCurrencySerializer(serializers.ModelSerializer):
 class SpeiseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Speise
-        fields = '__all__'
+        fields = ['id', 'name', 'price', 'price_unit', 'ordered_stock', 'created', 'updated']
 
 class PortionUnitSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,28 +36,28 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = '__all__'
+        fields = ['id', 'ingredients', 'name_recipe', 'valid_from', 'valid_until', 'created', 'last_updated']
 
-class RecipeIngredientSerializer(serializers.ModelSerializer):
-    recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all())
-    ingredient = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
-    unit = serializers.PrimaryKeyRelatedField(queryset=PortionUnit.objects.all())  # Accept unit as an ID
+class RecipeIngredientSerializer(serializers.Serializer):
+    ingredient_name = serializers.CharField(source='ingredient.name')
+    unit = serializers.CharField(source='ingredient.unit')
 
     class Meta:
         model = RecipeIngredient
-        fields = ['recipe', 'ingredient', 'unit', 'quantity_per_portion']
+        fields = ['ingredient_name', 'unit', 'quantity_per_portion', 'unit']
+
    
 class OrderItemSerializer(serializers.ModelSerializer):
     Products = RecipeIngredientSerializer(read_only=True, many=True)
 
     class Meta:
         model = OrderItem
-        fields = '__all__'
+        fields = "__all__"
 
 class MesseEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = MesseEvent
-        fields = '__all__'
+        fields = "__all__"
 
 
 # Serializers for file upload
@@ -181,20 +181,18 @@ class PaymentSerializer(serializers.ModelSerializer):
         return payment
 
 class StorageLocationSerializer(serializers.ModelSerializer):
-    ingredient_name = serializers.CharField(source='ingredient.name_ing', read_only=True)
-    
     class Meta:
         model = StorageLocation
         fields = '__all__'
 
 class StorageItemSerializer(serializers.ModelSerializer):
-    ingredient_name = serializers.CharField(source='ingredient.name_ing', read_only=True)
+    
     
     class Meta:
         model = StorageItem
         fields = ['id', 'ingredient_name', 'location', 'total_stock', 'last_updated', 'unit']  # Include specific fields
 
-    
+
 class CompanyExpenseSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)  # Explicitly read-only
     

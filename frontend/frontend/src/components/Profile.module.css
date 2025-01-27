@@ -9,3 +9,9 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
+
+.logoutButton {
+    background-color: #ff4b2b;
+    font-weight: bold;
+    font-size: 1rem;
+}

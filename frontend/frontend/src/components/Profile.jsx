@@ -33,9 +33,9 @@ const Profile = () => {
     return (
         <div className={styles.profileContainer}>
             <p>Username: <b>{user?.username}</b></p>
-            <p>Admin Status: <b>{user?.is_superuser || user?.is_staff ? 'Yes' : 'No'}</b></p>
-            <p>Gruppen: <b>{user?.groups.length > 0 ? user.groups.map(group => group.name).join(', ') : 'None'}</b></p>
-            <button onClick={logout}>Logout</button>
+            <p>Admin Status: <b>{user?.is_superuser || user?.is_staff ? 'Ja' : 'Nein'}</b></p>
+            <p>Gruppen: <b>{user?.groups.length > 0 ? user.groups.map(group => group.name).join(', ') : 'Keine'}</b></p>
+            <button className={styles.logoutButton} onClick={logout}>Logout</button>
         </div>
     );
 };

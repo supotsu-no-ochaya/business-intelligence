@@ -7,6 +7,10 @@ services:
     restart: always
     ports:
       - "80:80"
+    env_file:
+      - ./frontend/frontend/.env.local  # Path to the .env file in your React app    
+    environment:
+      - REACT_APP_API_BASE_URL=http://localhost:8000
     depends_on:
       - backend
 
@@ -24,9 +28,20 @@ services:
       - .env_prod
     command: >
       sh -c "
-      python3 manage.py migrate &&
-      python3 manage.py collectstatic --noinput &&
-      python3 manage.py createsu &&
+      python manage.py migrate && 
+      python manage.py collectstatic --noinput && 
+      python manage.py createsu && 
+      python manage.py loaddata testdata/fixtures/expenses_sample.json &&
+      python manage.py loaddata testdata/fixtures/messeevent_sample.json &&
+      python manage.py loaddata testdata/fixtures/pricecurrency_sample.json &&
+      python manage.py loaddata testdata/fixtures/storagelocation_sample.json &&
+      python manage.py loaddata testdata/fixtures/ingredient_sample.json &&
+      python manage.py loaddata testdata/fixtures/portionunit_sample.json &&
+      python manage.py loaddata testdata/fixtures/storageitem_sample.json &&
+      python manage.py loaddata testdata/fixtures/userdata.json &&
+      python manage.py loaddata testdata/fixtures/speise_sample.json &&
+      python manage.py loaddata testdata/fixtures/recipe_sample.json &&
+      python manage.py loaddata testdata/fixtures/recipeingredient_sample.json &&
       gunicorn backend.wsgi:application --chdir /app/backend --bind 0.0.0.0:8000"
 
   db:

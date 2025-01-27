@@ -1,4 +1,5 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.response import Response
 from testdata.models import (CompanyExpense, Order, OrderItem2, Product, Speise, 
                              OrderItem, MesseEvent, Recipe, Ingredient, StorageItem)
 from testdata.serializer import (OrderItem2Serializer, ProductSerializer, SpeiseSerializer, 
@@ -87,6 +88,25 @@ class OrderItemViewSet(viewsets.ModelViewSet):
 class CompanyExpenseViewSet(viewsets.ModelViewSet):
     serializer_class = CompanyExpenseSerializer
     view_permissions = DEFAULT_PERMISSIONS
+
+    def create(self, request, *args, **kwargs):
+        # Initialize the serializer with the incoming data
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # Save the new CompanyExpense instance
+        self.perform_create(serializer)
+        
+        # Optionally, you can trigger any additional actions here
+        # For example, logging, sending notifications, etc.
+
+        # Retrieve the entire ordered queryset
+        queryset = self.get_queryset()
+        # Serialize the entire queryset
+        all_data_serializer = self.get_serializer(queryset, many=True)
+        
+        # Return the serialized data with a 201 Created status
+        return Response(all_data_serializer.data, status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
         return CompanyExpense.objects.all().order_by('-date')

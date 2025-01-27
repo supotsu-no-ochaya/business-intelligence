@@ -18,6 +18,17 @@ services:
       python3 manage.py makemigrations &&
       python3 manage.py migrate &&
       python3 manage.py createsu &&
+      python manage.py loaddata testdata/fixtures/expenses_sample.json &&
+      python manage.py loaddata testdata/fixtures/messeevent_sample.json &&
+      python manage.py loaddata testdata/fixtures/pricecurrency_sample.json &&
+      python manage.py loaddata testdata/fixtures/storagelocation_sample.json &&
+      python manage.py loaddata testdata/fixtures/ingredient_sample.json &&
+      python manage.py loaddata testdata/fixtures/portionunit_sample.json &&
+      python manage.py loaddata testdata/fixtures/storageitem_sample.json &&
+      python manage.py loaddata testdata/fixtures/userdata.json &&
+      python manage.py loaddata testdata/fixtures/speise_sample.json &&
+      python manage.py loaddata testdata/fixtures/recipe_sample.json &&
+      python manage.py loaddata testdata/fixtures/recipeingredient_sample.json &&
       python3 manage.py runserver 0.0.0.0:8000"
   frontend:
     build:
@@ -28,6 +39,8 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend/frontend:/app
+    environment:
+      - NODE_ENV=development
     env_file:
       - .env
 

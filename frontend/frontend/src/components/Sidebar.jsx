@@ -41,7 +41,7 @@ const Sidebar = ({ navigate }) => {
     // Sichtbarkeitslogik basierend auf der Benutzergruppe
     const menuItems = [
         //{ label: 'Dashboard', icon: '⌛', route: 'dashboard', groups: ['Kasse', 'Kueche', 'Admin'] },
-        { label: 'Verbrauch', icon: '🍴', route: 'verbrauch', groups: ['Kueche', 'Admin'] },
+        //{ label: 'Verbrauch', icon: '🍴', route: 'verbrauch', groups: ['Kueche', 'Admin'] },
         //{ label: 'Zutaten', icon: '📦', route: 'zutaten', groups: ['Kueche', 'Admin'] },
         { label: 'Lager', icon: '📦', route: 'lager', groups: ['Kueche', 'Admin'] },
         { label: 'Transaktionen', icon: '💳', route: 'transaktionen', groups: ['Kasse', 'Admin'] },
@@ -52,7 +52,7 @@ const Sidebar = ({ navigate }) => {
 
     const bottomLinks = [
         { label: 'Settings', icon: '⚙️', route: 'settings', groups: ['Kasse', 'Kueche', 'Admin'] },
-        { label: 'Log out', icon: '🔓', route: 'profile', groups: ['Kasse', 'Kueche', 'Admin'] },
+        { label: 'Profile / Logout', icon: '🔓', route: 'profile', groups: ['Kasse', 'Kueche', 'Admin'] },
     ];
 
     const renderMenuItems = (items) => {
