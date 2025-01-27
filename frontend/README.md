@@ -13,7 +13,7 @@ Unter windows evtl: powershell -ExecutionPolicy Bypass
 ```python
 REACT_APP_API_BASE_URL=http://localhost:8000
 ```
-2. Add frontend/.env_prod_local (next to package.json):
+2. Add frontend/.env.local (next to package.json):
 ```python
 REACT_APP_API_BASE_URL=http://localhost:8000
 ```
