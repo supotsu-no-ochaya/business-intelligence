@@ -656,6 +656,8 @@ class StorageItemListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # POST method: Add a new item
+
+    # POST method: Add a new item
     @swagger_auto_schema(request_body=StorageItemSerializer)
     def post(self, request, *args, **kwargs):
         try:
@@ -668,9 +670,11 @@ class StorageItemListView(APIView):
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # PUT method: Update an existing item
+    # PUT method: Update an existing item
     @swagger_auto_schema(request_body=StorageItemSerializer)
     def put(self, request, *args, **kwargs):
         item_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
+        ingredient_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
         try:
             item = StorageItem.objects.get(id=item_id)
             serializer = StorageItemSerializer(item, data=request.data, partial=True)  # Allow partial updates
