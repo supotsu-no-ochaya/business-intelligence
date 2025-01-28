@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
+from django.utils.timezone import now
 from rest_framework.permissions import BasePermission
 from datetime import datetime
 from testdata.models import (
@@ -153,57 +154,56 @@ class IncomeListView(APIView):
             "total_income": total_income,
             "income_by_payment_option": income_by_payment_option
         })
-    
-def calculate_ingredient_usage(start_date=None, end_date=None):
+
+
+def calculate_ingredient_usage():
     ingredient_usage = {}
 
     try:
-        # Filter orders by the provided date range
-        orders = OrderItem2.objects.all()
+        # Retrieve the latest unprocessed order
+        latest_order = OrderItem2.objects.order_by('created').last()  # Adjust sorting if necessary
 
-        # If start_date and end_date are provided, filter the orders by the date range
-        if start_date and end_date:
-            orders = orders.filter(created__range=[start_date, end_date])
+        if not latest_order:
+            return {"error": "No orders found to process."}
 
-        for order_item in orders:
+        try:
+            bom_data = json.loads(latest_order.bom) if isinstance(latest_order.bom, str) else latest_order.bom
+        except json.JSONDecodeError:
+            bom_data = {}
+
+        bom_details = bom_data.get('details', {})
+        speise_items = bom_details.get('products', [])
+
+        for bom_item in speise_items:
+            product_id = bom_item.get('product_id')
+            quantity = bom_item.get('quantity', 0)
+
+            if product_id is None:
+                continue
+
             try:
-                bom_data = json.loads(order_item.bom) if isinstance(order_item.bom, str) else order_item.bom
-            except json.JSONDecodeError:
-                bom_data = []
+                product = Product.objects.get(id=product_id)
+                speise = Speise.objects.filter(name=product.name).first()
 
-            bom_details = bom_data.get('details', {})
-            speise_items = bom_details.get('speise', [])
-
-            for bom_item in speise_items:
-                product_id = bom_item.get('product_id')
-                quantity = bom_item.get('quantity', 0)
-
-                if product_id is None:
+                if not speise:
                     continue
 
-                try:
-                    product = Product.objects.get(id=product_id)
-                    speise = Speise.objects.filter(name=product.name).first()
+                recipe_ingredients = RecipeIngredient.objects.filter(recipe__speise=speise)
 
-                    if not speise:
-                        continue
+                for recipe_ingredient in recipe_ingredients:
+                    ingredient = recipe_ingredient.ingredient
+                    total_quantity_used = recipe_ingredient.quantity_per_portion * quantity
 
-                    recipe_ingredients = RecipeIngredient.objects.filter(recipe__speise=speise)
+                    if ingredient.name_ing not in ingredient_usage:
+                        ingredient_usage[ingredient.name_ing] = {
+                            'unit': recipe_ingredient.unit.name_unit if recipe_ingredient.unit else None,
+                            'quantity_used': total_quantity_used,
+                        }
+                    else:
+                        ingredient_usage[ingredient.name_ing]['quantity_used'] += total_quantity_used
 
-                    for recipe_ingredient in recipe_ingredients:
-                        ingredient = recipe_ingredient.ingredient
-                        total_quantity_used = recipe_ingredient.quantity_per_portion * quantity
-
-                        if ingredient.name_ing not in ingredient_usage:
-                            ingredient_usage[ingredient.name_ing] = {
-                                'unit': ingredient.unit.name_unit if ingredient.unit else None,
-                                'quantity_used': total_quantity_used,
-                            }
-                        else:
-                            ingredient_usage[ingredient.name_ing]['quantity_used'] += total_quantity_used
-
-                except Product.DoesNotExist:
-                    continue
+            except Product.DoesNotExist:
+                continue
 
         return [
             {"ingredient_name": name, "unit": data["unit"], "quantity_used": data["quantity_used"]}
@@ -250,39 +250,9 @@ def calculate_total_available(ingredient):
 class IngredientUsageView(APIView):
     permission_classes = [IsAuthenticated]
 
-    # POST method: Accept start_date and end_date from the request body
-    def post(self, request, *args, **kwargs):
-        start_date = request.data.get("start_date")
-        end_date = request.data.get("end_date")
-
-        # If no dates are provided, calculate usage for all time
-        if not start_date or not end_date:
-            start_date = "2000-01-01"  # Default start date if not provided (e.g., very early date)
-            end_date = datetime.today().date().strftime("%Y-%m-%d")  # Today's date as default end date
-
-        # Validate date inputs
-        try:
-            # Convert strings to date objects
-            start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
-            end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
-        except ValueError:
-            return Response(
-                {"error": "Invalid date format. Use YYYY-MM-DD."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        # Call the function to calculate ingredient usage for the date range
-        usage_data = calculate_ingredient_usage(start_date=start_date, end_date=end_date)
-
-        if isinstance(usage_data, dict) and "error" in usage_data:
-            return Response({"error": usage_data["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # Return the usage data
-        return Response({"ingredient_usage": usage_data}, status=status.HTTP_200_OK)
-
+    #GET Method (show the total ingredient usage)
     def get(self, request, *args, **kwargs):
-        # This could be an option to fetch all ingredient usage data without date range
-        usage_data = calculate_ingredient_usage()  # No date range applied here
+        usage_data = calculate_ingredient_usage()
 
         if isinstance(usage_data, dict) and "error" in usage_data:
             return Response({"error": usage_data["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -690,16 +660,16 @@ class StorageLocationListView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
-            ingredients = StorageLocation.objects.all()
-            if not ingredients:
-                return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
-            serializer = StorageLocationSerializer(ingredients, many=True)
+            locations = StorageLocation.objects.all()
+            if not locations:
+                return Response({"detail": "No locations found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = StorageLocationSerializer(locations, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-    # PUT method: Update an existing ingredient
-    @swagger_auto_schema(request_body=StorageLocationSerializer,)
+    # POST method: Update an existing location
+    @swagger_auto_schema(request_body=StorageLocationSerializer)
     def post(self, request):
         try:
             serializer = StorageLocationSerializer(data=request.data)
@@ -710,87 +680,32 @@ class StorageLocationListView(APIView):
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # PUT method: Update an existing ingredient
-    @swagger_auto_schema()
+    # PUT method: Update an existing location
+    @swagger_auto_schema(request_body=StorageLocationSerializer)
     def put(self, request, *args, **kwargs):
         try:
-            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
-            ingredient = StorageLocation.objects.get(id=ingredient_id)
-            serializer = StorageLocationSerializer(ingredient, data=request.data, partial=True)  # Allow partial updates
+            location_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            location = StorageLocation.objects.get(id=location_id)
+            serializer = StorageLocationSerializer(location, data=request.data, partial=True)  # Allow partial updates
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    # DELETE method: Delete an existing ingredient
-    
-    @swagger_auto_schema()
-    def delete(self, request, *args, **kwargs):
-        try:
-            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
-            ingredient = StorageLocation.objects.get(id=ingredient_id)
-            ingredient.delete()
-            return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
-        except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class StorageLocationListView(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        try:
-            ingredients = StorageLocation.objects.all()
-            if not ingredients:
-                return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
-            serializer = StorageLocationSerializer(ingredients, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-    # PUT method: Update an existing ingredient
-    @swagger_auto_schema(request_body=StorageLocationSerializer,)
-    def post(self, request):
-        try:
-            serializer = StorageLocationSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    # PUT method: Update an existing ingredient
-    @swagger_auto_schema()
-    def put(self, request, *args, **kwargs):
-        try:
-            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
-            ingredient = StorageLocation.objects.get(id=ingredient_id)
-            serializer = StorageLocationSerializer(ingredient, data=request.data, partial=True)  # Allow partial updates
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    # DELETE method: Delete an existing ingredient
-    
-    @swagger_auto_schema()
-    def delete(self, request, *args, **kwargs):
-        try:
-            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
-            ingredient = StorageLocation.objects.get(id=ingredient_id)
-            ingredient.delete()
-            return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
         except StorageLocation.DoesNotExist:
             return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # DELETE method: Delete an existing location    
+    @swagger_auto_schema()
+    def delete(self, request, *args, **kwargs):
+        try:
+            location_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            location = StorageLocation.objects.get(id=location_id)
+            location.delete()
+            return Response({"detail": "location deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except StorageLocation.DoesNotExist:
+            return Response({"detail": "location not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -798,23 +713,13 @@ class StorageItemListView(APIView):
     permission_classes = [IsAuthenticated]
 
     # GET method: Fetch all items or a specific item by ID
-    def get(self, request, *args, **kwargs):
-        ingredient_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
+    def get(self, request):
         try:
-            if ingredient_id:
-                # Fetch a single item by ID
-                ingredient = StorageItem.objects.get(id=ingredient_id)
-                serializer = StorageItemSerializer(ingredient)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                # Fetch all items
-                ingredients = StorageItem.objects.all()
-                if not ingredients.exists():
-                    return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
-                serializer = StorageItemSerializer(ingredients, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-        except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+            items = StorageItem.objects.all()
+            if not items:
+                return Response({"detail": "No items found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = StorageItemSerializer(items, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -833,30 +738,83 @@ class StorageItemListView(APIView):
     # PUT method: Update an existing item
     @swagger_auto_schema(request_body=StorageItemSerializer)
     def put(self, request, *args, **kwargs):
-        ingredient_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
+        item_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
         try:
-            ingredient = StorageItem.objects.get(id=ingredient_id)
-            serializer = StorageItemSerializer(ingredient, data=request.data, partial=True)  # Allow partial updates
+            item = StorageItem.objects.get(id=item_id)
+            serializer = StorageItemSerializer(item, data=request.data, partial=True)  # Allow partial updates
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "Item not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # DELETE method: Delete an existing item
     @swagger_auto_schema()
     def delete(self, request, *args, **kwargs):
-        ingredient_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
+        item_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
         try:
-            ingredient = StorageItem.objects.get(id=ingredient_id)
-            ingredient.delete()
-            return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+            item = StorageItem.objects.get(id=item_id)
+            item.delete()
+            return Response({"detail": "Item deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
         except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "Item not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+def update_storage_item_stock(ingredient_usage_data, is_new_order=True):
+    update_data = []
+        
+    if not is_new_order:
+        return update_data
 
+    for ingredient_data in ingredient_usage_data:
+        try:
+            storage_item = StorageItem.objects.get(name_ingredient__name_ing=ingredient_data['ingredient_name'])
+
+            new_stock = storage_item.total_stock - ingredient_data['quantity_used']
+            if new_stock < 0:
+                raise ValueError(f"Insufficient stock for ingredient: {ingredient_data['ingredient_name']}")
+            
+            storage_item.total_stock = new_stock
+            storage_item.save()
+
+            update_data.append({
+                "stock_item_id": storage_item.id,
+                "ingredient_name": storage_item.name_ingredient.name_ing,
+                "new_total_stock": new_stock
+            })
+
+        except StorageItem.DoesNotExist:
+            update_data.append({
+                "ingredient_name": ingredient_data['ingredient_name'],
+                "unit": ingredient_data['unit'],
+                "error": f"Storage item not found for ingredient: {ingredient_data['ingredient_name']}"
+            })
+        except Exception as e:
+            update_data.append({
+                "ingredient_name": ingredient_data['ingredient_name'],
+                "error": f"Error updating stock: {str(e)}"
+            })
+
+    return update_data
+
+class UpdateStockAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            # Calculate ingredient usage for the latest unprocessed order
+            ingredient_usage_data = calculate_ingredient_usage()
+
+            if isinstance(ingredient_usage_data, dict) and "error" in ingredient_usage_data:
+                return Response({"error": ingredient_usage_data["error"]}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Update stock based on the ingredient usage
+            updated_data = update_storage_item_stock(ingredient_usage_data, is_new_order=True)
+
+            return Response({"ingredient_usage": updated_data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -21,7 +21,7 @@ from routers import router
 from testdata import views
 from testdata.views import (IncomeListView, IngredientUsageView, AvailableProductView, 
                             IngredientListView, PriceCurrencyView, PortionUnitView, RecipeIngredientView,
-                            RecipeView,StorageItemListView, StorageLocationListView)
+                            RecipeView,StorageItemListView, StorageLocationListView, UpdateStockAPIView)
 from drf_yasg import openapi
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -61,8 +61,9 @@ urlpatterns = [
     path('recipe-ingredients/<int:id>/', RecipeIngredientView.as_view(), name='recipe_ingredient_detail'),
     path('api/ingredient-usage/', IngredientUsageView.as_view(), name='ingredient-usage'),
     path('storage-location/', StorageLocationListView.as_view(), name='storage_location'),
-    path('storage-location/<int:id>/', StorageLocationListView.as_view(), name='storage_location'),
+    path('storage-location/<str:id>/', StorageLocationListView.as_view(), name='storage_location'),
     path('storage-item/', StorageItemListView.as_view(), name='storage_item'),
     path('storage-item/<str:id>/', StorageItemListView.as_view(), name='storage-item-detail'),
+    path('update-stock/', UpdateStockAPIView.as_view(), name='update-stock'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
 ]

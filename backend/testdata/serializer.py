@@ -32,19 +32,16 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 # Recipe Serializer
 class RecipeSerializer(serializers.ModelSerializer):
-    ingredients = serializers.CharField(source='ingredient.name_ing', read_only=True)
+    
 
     class Meta:
         model = Recipe
-        fields = ['id', 'ingredients', 'name_recipe', 'valid_from', 'valid_until', 'created', 'last_updated']
+        fields = ['speise', 'name_recipe', 'valid_from', 'valid_until', 'created', 'last_updated']
 
-class RecipeIngredientSerializer(serializers.Serializer):
-    ingredient_name = serializers.CharField(source='ingredient.name')
-    unit = serializers.CharField(source='ingredient.unit')
-
+class RecipeIngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeIngredient
-        fields = ['ingredient_name', 'unit', 'quantity_per_portion', 'unit']
+        fields = ['recipe', 'ingredient', 'quantity_per_portion', 'unit']
 
    
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -186,11 +183,11 @@ class StorageLocationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StorageItemSerializer(serializers.ModelSerializer):
-    
+    #ingredient_name = serializers.CharField(source='name_ingredient.name_ing')
     
     class Meta:
         model = StorageItem
-        fields = ['id', 'ingredient_name', 'location', 'total_stock', 'last_updated', 'unit']  # Include specific fields
+        fields = ['id', 'name_ingredient', 'location', 'total_stock', 'last_updated', 'unit']  # Include specific fields
 
 
 class CompanyExpenseSerializer(serializers.ModelSerializer):
