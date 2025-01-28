@@ -40,11 +40,11 @@ const Settings = () => {
   }
 
   function handleKeyPress(event) {
-    const capsLockOn = event.getModifierState('CapsLock an!');
+    const capsLockOn = event.getModifierState('CapsLock');
 
     // Display a warning message if Caps Lock is on
     if (capsLockOn) {
-      setPasswordWarn('Caps Lock is on');
+      setPasswordWarn('CapsLock an!');
     } else {
       setPasswordWarn('');
     }
