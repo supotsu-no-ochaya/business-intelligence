@@ -61,6 +61,7 @@ urlpatterns = [
     path('api/ingredient-usage/', IngredientUsageView.as_view(), name='ingredient-usage'),
     path('storage-location/', StorageLocationListView.as_view(), name='storage_location'),
     path('storage-location/<str:id>/', StorageLocationListView.as_view(), name='storage_location'),
+    path('storage-location/<str:id>/', StorageLocationListView.as_view(), name='storage_location'),
     path('storage-item/', StorageItemListView.as_view(), name='storage_item'),
     path('storage-item/<str:id>/', StorageItemListView.as_view(), name='storage-item-detail'),
     path('api/logout/', LogoutView.as_view(), name='logout'),

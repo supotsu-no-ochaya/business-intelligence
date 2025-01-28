@@ -33,14 +33,18 @@ class IngredientSerializer(serializers.ModelSerializer):
 # Recipe Serializer
 class RecipeSerializer(serializers.ModelSerializer):
     
+    
 
     class Meta:
         model = Recipe
+        fields = ['speise', 'name_recipe', 'valid_from', 'valid_until', 'created', 'last_updated']
         fields = ['speise', 'name_recipe', 'valid_from', 'valid_until', 'created', 'last_updated']
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeIngredient
+        fields = ['recipe', 'ingredient', 'quantity_per_portion', 'unit']
+
         fields = ['recipe', 'ingredient', 'quantity_per_portion', 'unit']
 
    
