@@ -65,10 +65,6 @@ DJANGO_SUPERUSER_EMAIL=admin@admin.com
 REACT_APP_BACKEND_URL=http://localhost:8000
 REACT_APP_ENV=development
 
-# Create superuser
-DJANGO_SUPERUSER_USERNAME=admin
-DJANGO_SUPERUSER_PASSWORD=admin
-DJANGO_SUPERUSER_EMAIL=admin@email.com
 ```
 
 2. Run docker:
