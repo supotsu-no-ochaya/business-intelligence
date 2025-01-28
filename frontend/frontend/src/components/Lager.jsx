@@ -104,10 +104,6 @@ const Lager = () => {
     }
   };
   
-  
-  
-  
-
   const calculateMissingItems = () => {
     return data
       .filter((item) => item.haben < item.brauchen)
