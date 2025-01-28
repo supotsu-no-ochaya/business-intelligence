@@ -110,10 +110,10 @@ const Lager = () => {
 
   const calculateMissingItems = () => {
     return data
-      .filter((item) => item.used < item.total)
+      .filter((item) => item.haben < item.brauchen)
       .map((item) => ({
         name: item.name,
-        missing: item.total - item.used,
+        missing: item.brauchen - item.haben,
         location: item.location,
       }));
   };
