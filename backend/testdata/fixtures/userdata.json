@@ -11,7 +11,7 @@
     "model": "auth.group",
     "pk": "10",
     "fields": {
-      "name": "Küchenpersonal",
+      "name": "Kueche",
       "permissions": []
     }
   },
@@ -19,7 +19,7 @@
     "model": "auth.group",
     "pk": "11",
     "fields": {
-      "name": "Servicepersonal",
+      "name": "Kasse",
       "permissions": []
     }
   }

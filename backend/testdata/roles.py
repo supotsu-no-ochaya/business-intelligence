@@ -2,13 +2,13 @@ from rest_framework_roles.roles import is_user, is_anon, is_admin
 
 
 def is_kitchen_staff(request, view):
-    return is_user(request, view) and request.user.groups.filter(name='kitchen').exists()
+    return is_user(request, view) and request.user.groups.filter(name='kueche').exists()
 
 def is_waiter(request, view):
-    return is_user(request, view) and request.user.groups.filter(name='waiter').exists()
+    return is_user(request, view) and request.user.groups.filter(name='service').exists()
 
 def is_treasurer(request, view):
-    return is_user(request, view) and request.user.groups.filter(name='treasurer').exists()
+    return is_user(request, view) and request.user.groups.filter(name='kasse').exists()
 
 
 ROLES = {
