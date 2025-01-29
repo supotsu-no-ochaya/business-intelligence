@@ -11,7 +11,13 @@ const IngredientUsage = () => {
   // API-Aufruf mit dem eingegebenen Datum
   const handleApply = async () => {
     if (!startDate || !endDate) {
-      alert('Bitte wählen Sie Start- und Enddatum aus.');
+      setError('Bitte wählen Sie Start- und Enddatum aus.');
+      return;
+    }
+
+    // Startdatum darf nicht nach dem Enddatum liegen
+    if (new Date(startDate) > new Date(endDate)) {
+      setError('Das Startdatum darf nicht nach dem Enddatum liegen.');
       return;
     }
 
