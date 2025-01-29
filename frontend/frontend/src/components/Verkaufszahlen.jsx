@@ -17,7 +17,7 @@ const Verkaufszahlen = () => {
     const [endDateGetraenke, setEndDateGetraenke] = useState(getDefaultEndDate());
     const [events, setEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState('all');
-
+    const [dateError, setDateError] = useState('');
 
     function getDefaultStartDate() {
         const now = new Date();
@@ -84,9 +84,7 @@ const Verkaufszahlen = () => {
             }
         };
         loadEvents();
-    }, []);
-    
-    
+    }, []); 
 
     const filterByDateRange = (data, startDate, endDate) => {
         const startTimestamp = startDate ? new Date(startDate).getTime() : null;
@@ -120,10 +118,28 @@ const Verkaufszahlen = () => {
             }
         }
     };
-    
 
+    const validateDates = (startDate, endDate, setError) => {
+        if (new Date(startDate) > new Date(endDate)) {
+            setError('⚠️ Das Startdatum darf nicht nach dem Enddatum liegen.');
+            return false;
+        }
+        setError('');
+        return true;
+    };
     
-
+    const handleStartDateChange = (e, setStartDate, endDate, setError) => {
+        const newStartDate = e.target.value;
+        setStartDate(newStartDate);
+        validateDates(newStartDate, endDate, setError);
+    };
+    
+    const handleEndDateChange = (e, setEndDate, startDate, setError) => {
+        const newEndDate = e.target.value;
+        setEndDate(newEndDate);
+        validateDates(startDate, newEndDate, setError);
+    };    
+    
     const filterByEvent = (data, selectedEventId) => {
         if (selectedEventId === 'all') return data; // Kein Event-Filter
     
@@ -137,9 +153,7 @@ const Verkaufszahlen = () => {
             const orderTimestamp = new Date(order.created).getTime();
             return orderTimestamp >= startTimestamp && orderTimestamp <= endTimestamp;
         });
-    };
-    
-    
+    };        
 
     const handleFilter = () => {
         let filteredSpeisen = filterByDateRange(speisen, startDateSpeisen, endDateSpeisen);
@@ -150,9 +164,7 @@ const Verkaufszahlen = () => {
     
         setFilteredSpeisen(groupAndSummarize(filteredSpeisen));
         setFilteredGetraenke(groupAndSummarize(filteredGetraenke));
-    };
-    
-    
+    };  
 
     const handleTopProductsSpeisen = () => {
         setShowTopProductsSpeisen(!showTopProductsSpeisen);
@@ -179,8 +191,6 @@ const Verkaufszahlen = () => {
             setFilteredGetraenke(groupAndSummarize(getraenke));
         }
     };
-    
-    
 
     const groupAndSummarize = (data) => {
         const grouped = data.reduce((acc, order) => {
@@ -212,18 +222,20 @@ const Verkaufszahlen = () => {
                     </button>
 
                     <div className={styles.dateFilters}>
-                        <input
-                            type="date"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            className={styles.datePicker}
-                        />
-                        <input
-                            type="date"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            className={styles.datePicker}
-                        />
+                    <input
+                        type="date"
+                        value={startDateSpeisen}
+                        onChange={(e) => handleStartDateChange(e, setStartDateSpeisen, endDateSpeisen, setDateError)}
+                        className={styles.datePicker}
+                    />
+                    <input
+                        type="date"
+                        value={endDateSpeisen}
+                        onChange={(e) => handleEndDateChange(e, setEndDateSpeisen, startDateSpeisen, setDateError)}
+                        className={styles.datePicker}
+                    />
+                    {dateError && <p className={styles.errorMessage}>{dateError}</p>}                    
+
                         <button onClick={handleFilter} className={styles.confirmButton}>
                             Anwenden
                         </button>
