@@ -124,21 +124,22 @@ const Verkaufszahlen = () => {
             setError('⚠️ Das Startdatum darf nicht nach dem Enddatum liegen.');
             return false;
         }
-        setError('');
+        setError(''); // 🟢 Warnung wird sofort entfernt, wenn das Datum gültig ist
         return true;
     };
+    
     
     const handleStartDateChange = (e, setStartDate, endDate, setError) => {
         const newStartDate = e.target.value;
         setStartDate(newStartDate);
-        validateDates(newStartDate, endDate, setError);
+        validateDates(newStartDate, endDate, setError); 
     };
     
     const handleEndDateChange = (e, setEndDate, startDate, setError) => {
         const newEndDate = e.target.value;
         setEndDate(newEndDate);
-        validateDates(startDate, newEndDate, setError);
-    };    
+        validateDates(startDate, newEndDate, setError); 
+    };        
     
     const filterByEvent = (data, selectedEventId) => {
         if (selectedEventId === 'all') return data; // Kein Event-Filter
@@ -234,7 +235,7 @@ const Verkaufszahlen = () => {
                         onChange={(e) => handleEndDateChange(e, setEndDateSpeisen, startDateSpeisen, setDateError)}
                         className={styles.datePicker}
                     />
-                    {dateError && <p className={styles.errorMessage}>{dateError}</p>}                    
+                    {dateError && <p className={styles.errorMessage}>{dateError}</p>}                  
 
                         <button onClick={handleFilter} className={styles.confirmButton}>
                             Anwenden
