@@ -18,12 +18,20 @@ class Speise(models.Model):
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        verbose_name = "Speise"
+        verbose_name_plural = "Speisen"
+
     def __str__(self):
         return self.name
 
 class PortionUnit(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
     name_unit = models.CharField(max_length=50)  # e.g., "g", "ml", "pieces"
+
+    class Meta:
+        verbose_name = "Portionseinheit"
+        verbose_name_plural = "Portionseinheiten"
 
     def __str__(self):
         return self.name_unit
@@ -35,6 +43,9 @@ class Ingredient(models.Model):
     created = models.DateTimeField(default=timezone.now)
     last_updated = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        verbose_name = "Zutat"
+        verbose_name_plural = "Zutaten"
 
     def __str__(self):
         return self.name_ing
@@ -48,6 +59,10 @@ class Recipe(models.Model):
     created = models.DateTimeField(default=timezone.now)
     last_updated = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        verbose_name = "Rezept"
+        verbose_name_plural = "Rezepte"
+
     def __str__(self):
         return self.name_recipe
 
@@ -58,6 +73,10 @@ class RecipeIngredient(models.Model):
     unit = models.ForeignKey(PortionUnit, on_delete=models.CASCADE,null=True, blank=True)
     def __str__(self):
         return f"{self.recipe.name_recipe} requires {self.quantity_per_portion} {self.unit.name_unit} of {self.ingredient.name_ing}"
+    
+    class Meta:
+        verbose_name = "Rezept Zutat"
+        verbose_name_plural = "Rezept Zutaten"
 
 class StorageLocation(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
@@ -96,6 +115,10 @@ class MesseEvent(models.Model):
     name = models.CharField()
     start_date = models.DateField()
     end_date = models.DateField()
+
+    class Meta:
+        verbose_name = "Messe / Event"
+        verbose_name_plural = "Messen / Events"
 
     def __str__(self):
         return self.name
