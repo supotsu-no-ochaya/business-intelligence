@@ -7,48 +7,55 @@ const Verkaufszahlen = () => {
     const [speisen, setSpeisen] = useState([]);
     const [getraenke, setGetraenke] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [originalOrders, setOriginalOrders] = useState([]); // Neuer Zustand
-
+    const [originalOrders, setOriginalOrders] = useState([]); // Original-Bestellungen
 
     // Zustände für Speisen
     const [showTopProductsSpeisen, setShowTopProductsSpeisen] = useState(false);
-    const [startDateSpeisen, setStartDateSpeisen] = useState('');
-    const [endDateSpeisen, setEndDateSpeisen] = useState('');
+    const [startDateSpeisen, setStartDateSpeisen] = useState(getDefaultStartDate());
+    const [endDateSpeisen, setEndDateSpeisen] = useState(getDefaultEndDate());
     const [filteredSpeisen, setFilteredSpeisen] = useState([]);
 
     // Zustände für Getränke
     const [showTopProductsGetraenke, setShowTopProductsGetraenke] = useState(false);
-    const [startDateGetraenke, setStartDateGetraenke] = useState('');
-    const [endDateGetraenke, setEndDateGetraenke] = useState('');
+    const [startDateGetraenke, setStartDateGetraenke] = useState(getDefaultStartDate());
+    const [endDateGetraenke, setEndDateGetraenke] = useState(getDefaultEndDate());
     const [filteredGetraenke, setFilteredGetraenke] = useState([]);
+
+    // Standard-Daten für Datepicker (z. B. letzte 7 Tage)
+    function getDefaultStartDate() {
+        const now = new Date();
+        const sevenDaysAgo = new Date(now);
+        sevenDaysAgo.setDate(now.getDate() - 7);
+        return sevenDaysAgo.toISOString().split('T')[0]; // YYYY-MM-DD
+    }
+
+    function getDefaultEndDate() {
+        return new Date().toISOString().split('T')[0]; // Heute
+    }
 
     // Bestellungen laden
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const fetchedOrders = await fetchOrders(); // API-Aufruf
-                console.log('Bestellungen:', fetchedOrders);
-                setOrders(fetchedOrders); // Setzt die geladenen Bestellungen
-                setOriginalOrders(fetchedOrders); // Setzt die Original-Bestellungen
+                const fetchedOrders = await fetchOrders();
+                setOrders(fetchedOrders);
+                setOriginalOrders(fetchedOrders); // Originale Bestellungen speichern
             } catch (error) {
                 console.error('Fehler beim Laden der Bestellungen:', error);
             } finally {
                 setLoading(false);
             }
         };
-    
+
         fetchData();
     }, []);
-    
 
     // Produkte aus der API laden und filtern
     useEffect(() => {
         const loadProducts = async () => {
             try {
                 const { foodItems, drinkItems } = await fetchProduct();
-                console.log('Speisen:', foodItems);
-                console.log('Getränke:', drinkItems);
 
                 const filteredSpeisen = orders.filter(order =>
                     foodItems.some(speise => order.menu_item_name.includes(speise.name))
@@ -66,7 +73,7 @@ const Verkaufszahlen = () => {
             } catch (error) {
                 console.error('Fehler beim Laden der Produkte:', error);
             } finally {
-                setLoading(false);                
+                setLoading(false);
             }
         };
 
@@ -76,30 +83,29 @@ const Verkaufszahlen = () => {
     }, [orders]);
 
     const handleTopProductsSpeisen = () => {
-        if (speisen.length === 0) {
-            console.error('Keine Speisen-Daten verfügbar.');
-            return;
+        if (showTopProductsSpeisen) {
+            // Top-Produkte deaktivieren: Originalansicht wiederherstellen
+            setFilteredSpeisen(groupAndSummarize(speisen));
+        } else {
+            // Top-Produkte aktivieren
+            const groupedSpeisen = groupAndSummarize(speisen).slice(0, 5);
+            setFilteredSpeisen(groupedSpeisen);
         }
-    
-        const groupedSpeisen = groupAndSummarize(speisen).slice(0, 5);
-        console.log('Top Produkte Speisen:', groupedSpeisen);
-        setFilteredSpeisen(groupedSpeisen);
+        setShowTopProductsSpeisen(!showTopProductsSpeisen);
     };
-    
-    const handleTopProductsGetraenke = () => {
-        if (getraenke.length === 0) {
-            console.error('Keine Getränke-Daten verfügbar.');
-            return;
-        }
-    
-        const groupedGetraenke = groupAndSummarize(getraenke).slice(0, 5);
-        console.log('Top Produkte Getränke:', groupedGetraenke);
-        setFilteredGetraenke(groupedGetraenke);
-    };
-    
-    
 
-    // Gruppierungsfunktion, die auch bei der Filterung aufgerufen wird
+    const handleTopProductsGetraenke = () => {
+        if (showTopProductsGetraenke) {
+            // Top-Produkte deaktivieren: Originalansicht wiederherstellen
+            setFilteredGetraenke(groupAndSummarize(getraenke));
+        } else {
+            // Top-Produkte aktivieren
+            const groupedGetraenke = groupAndSummarize(getraenke).slice(0, 5);
+            setFilteredGetraenke(groupedGetraenke);
+        }
+        setShowTopProductsGetraenke(!showTopProductsGetraenke);
+    };
+
     const groupAndSummarize = (data) => {
         const grouped = data.reduce((acc, order) => {
             if (!acc[order.menu_item_name]) {
@@ -117,60 +123,20 @@ const Verkaufszahlen = () => {
         return Object.values(grouped).sort((a, b) => b.sales - a.sales);
     };
 
-    // Filtert Bestellungen nach Datum
-    const filterByDateRange = (data, startDate, endDate) => {
-        const startTimestamp = startDate ? new Date(startDate).getTime() : null;
-        const endTimestamp = endDate ? new Date(endDate).getTime() : null;
-    
-        return data.filter(order => {
-            const orderTimestamp = new Date(order.created).getTime(); // Hier Zugriff auf "created"
-            if (startTimestamp && orderTimestamp < startTimestamp) return false;
-            if (endTimestamp && orderTimestamp > endTimestamp) return false;
-            return true;
-        });
-    };
-    
-
-    // Filter anwenden (bei Klicken auf den "Anwenden"-Button)
-    const handleFilter = () => {
-        const filteredSpeisen = filterByDateRange(speisen, startDateSpeisen, endDateSpeisen);
-        const filteredGetraenke = filterByDateRange(getraenke, startDateGetraenke, endDateGetraenke);
-        
-        // Gruppiere die gefilterten Daten
-        setFilteredSpeisen(groupAndSummarize(filteredSpeisen));
-        setFilteredGetraenke(groupAndSummarize(filteredGetraenke));
-    };
-
-    const handleFilterSpeisen = () => {
-        const filtered = filterByDateRange(orders, startDateSpeisen, endDateSpeisen);
-        const grouped = groupAndSummarize(filtered);
-        setFilteredSpeisen(grouped);
-    };
-    
-    const handleFilterGetraenke = () => {
-        const filtered = filterByDateRange(orders, startDateGetraenke, endDateGetraenke);
-        const grouped = groupAndSummarize(filtered);
-        setFilteredGetraenke(grouped);
-    };
-    
-
     const renderCategory = (data, maxSales, title, total, showTopProducts, setShowTopProducts, startDate, setStartDate, endDate, setEndDate, handleFilter) => {
         return (
             <div className={styles.salesCard}>
                 <div className={styles.salesHeader}>
                     <h3>{title}</h3>
                     <div className={styles.filters}>
-                    <button
-                        className={`${styles.filterButton} ${showTopProducts ? styles.active : ''}`}
-                        onClick={() => {
-                            setShowTopProducts(!showTopProducts);
-                            if (!showTopProducts) {
+                        <button
+                            className={`${styles.filterButton} ${showTopProducts ? styles.active : ''}`}
+                            onClick={() => {
                                 title === 'Speisen' ? handleTopProductsSpeisen() : handleTopProductsGetraenke();
-                            }
-                        }}
-                    >
-                        Top Produkte
-                    </button>
+                            }}
+                        >
+                            {showTopProducts ? 'Alle Produkte' : 'Top Produkte'}
+                        </button>
 
                         <div className={styles.dateFilters}>
                             <div className={styles.dateFilterRow}>
@@ -195,7 +161,6 @@ const Verkaufszahlen = () => {
                                 Anwenden
                             </button>
                         </div>
-
                     </div>
                 </div>
                 <div className={styles.salesCategory}>
@@ -246,7 +211,6 @@ const Verkaufszahlen = () => {
                 setStartDateSpeisen,
                 endDateSpeisen,
                 setEndDateSpeisen,
-                handleFilterSpeisen 
             )}
             {renderCategory(
                 filteredGetraenke,
@@ -259,7 +223,6 @@ const Verkaufszahlen = () => {
                 setStartDateGetraenke,
                 endDateGetraenke,
                 setEndDateGetraenke,
-                handleFilterGetraenke
             )}
         </div>
     );

@@ -4,6 +4,58 @@ Backend: Django\
 Frontend: React\
 Database: PostgreSQL
 
+## Environment files
+1. Create a .env_prod file in the root directory containing:
+```python
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your-db-password
+POSTGRES_DB=testdb
+DJANGO_SECRET_KEY=secret-key
+DEBUG=False
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@email.com
+DJANGO_SUPERUSER_PASSWORD=superduper123
+```
+2. Create a .env file in the root directory containing:
+```python
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+# 172.17.0.1 = docker gateway
+# 172.17.0.1 or host.docker.internal (windows) => run backend Dockerfile and postgres local
+# localhost => python manage.py runserver and postgres local
+# db => docker compose -f docker-compose.yml --env-file .env up --build
+
+DB_HOST=db
+DB_PORT=5432                  
+
+# Django Configuration
+DJANGO_SECRET_KEY=your_secret_key_here
+DJANGO_DEBUG=True
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,[::1]
+
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_PASSWORD=superduper123
+DJANGO_SUPERUSER_EMAIL=admin@admin.com
+
+# React Frontend Configuration
+REACT_APP_BACKEND_URL=http://localhost:8000
+REACT_APP_ENV=development
+```
+
+3. Create a .env file in frontend/frontend (next to package.json):
+```python
+REACT_APP_API_BASE_URL=http://localhost:8000
+```
+4. Crate a .env.local in frontend/frontend (next to package.json):
+```python
+REACT_APP_API_BASE_URL=http://localhost:8000
+```
+5. Create a .env.production in frontend/frontend (next to package.json):
+```python
+REACT_APP_API_BASE_URL=IP-OF-SERVER
+```
+
 ## Docker
 ### Run Production local:
 1. Create a .env_prod file in the root directory containing:
@@ -64,11 +116,6 @@ DJANGO_SUPERUSER_EMAIL=admin@admin.com
 # React Frontend Configuration
 REACT_APP_BACKEND_URL=http://localhost:8000
 REACT_APP_ENV=development
-
-# Create superuser
-DJANGO_SUPERUSER_USERNAME=admin
-DJANGO_SUPERUSER_PASSWORD=admin
-DJANGO_SUPERUSER_EMAIL=admin@email.com
 ```
 
 2. Run docker:
