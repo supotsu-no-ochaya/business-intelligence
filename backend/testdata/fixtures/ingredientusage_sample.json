@@ -6,7 +6,7 @@
         "ingredient": 1,
         "quantity_used": "600.00",
         "unit": "grams",
-        "order": "order3",
+        "order": 1,
         "date": "2025-01-26T16:30:53.596000Z"
       }
     },
@@ -17,7 +17,7 @@
         "ingredient": 2,
         "quantity_used": "400.00",
         "unit": "grams",
-        "order": "order4",
+        "order": 1,
         "date": "2025-01-26T16:30:55.596000Z"
       }
     },
@@ -28,7 +28,7 @@
         "ingredient": 3,
         "quantity_used": "2100.00",
         "unit": "grams",
-        "order": "order5",
+        "order":1,
         "date": "2025-01-26T16:30:55.596000Z"
       }
     },
@@ -39,7 +39,7 @@
         "ingredient": 4,
         "quantity_used": "580.00",
         "unit": "grams",
-        "order": "order6",
+        "order": 2,
         "date": "2025-01-26T16:30:55.596000Z"
       }
     },
@@ -50,7 +50,7 @@
         "ingredient": 3,
         "quantity_used": "1400.00",
         "unit": "grams",
-        "order": "order7",
+        "order": 2,
         "date": "2025-01-27T22:51:10.842000Z"
       }
     },
@@ -61,7 +61,7 @@
         "ingredient": 4,
         "quantity_used": "1200.00",
         "unit": "grams",
-        "order": "order8",
+        "order": 3,
         "date": "2025-01-27T22:55:10.842000Z"
       }
     },
@@ -72,63 +72,8 @@
         "ingredient": 2,
         "quantity_used": "750.00",
         "unit": "grams",
-        "order": "order9",
+        "order": 3,
         "date": "2025-01-28T09:23:58.067000Z"
-      }
-    },
-    {
-      "model": "testdata.ingredientusage",
-      "pk": 8,
-      "fields": {
-        "ingredient": 4,
-        "quantity_used": "1750.00",
-        "unit": "grams",
-        "order": "order10",
-        "date": "2025-01-28T09:28:58.067000Z"
-      }
-    },
-    {
-      "model": "testdata.ingredientusage",
-      "pk": 9,
-      "fields": {
-        "ingredient": 3,
-        "quantity_used": "3500.00",
-        "unit": "grams",
-        "order": "order11",
-        "date": "2025-01-28T20:11:38.403000Z"
-      }
-    },
-    {
-      "model": "testdata.ingredientusage",
-      "pk": 10,
-      "fields": {
-        "ingredient": 3,
-        "quantity_used": "6000.00",
-        "unit": "grams",
-        "order": "order12",
-        "date": "2025-01-28T20:11:48.403000Z"
-      }
-    },
-    {
-      "model": "testdata.ingredientusage",
-      "pk": 11,
-      "fields": {
-        "ingredient": 3,
-        "quantity_used": "4500.00",
-        "unit": "grams",
-        "order": "order13",
-        "date": "2025-01-28T20:38:47.862000Z"
-      }
-    },
-    {
-      "model": "testdata.ingredientusage",
-      "pk": 12,
-      "fields": {
-        "ingredient": 3,
-        "quantity_used": "5700.00",
-        "unit": "grams",
-        "order": "order14",
-        "date": "2025-01-28T21:26:29.781000Z"
       }
     }
   ]

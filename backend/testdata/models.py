@@ -39,9 +39,10 @@ class Ingredient(models.Model):
     def __str__(self):
         return self.name_ing
 
+# Rezept auf produkte nicht auf speise
 class Recipe(models.Model):
     speise = models.ForeignKey(Speise, on_delete=models.CASCADE)
-    name_recipe = models.CharField(max_length=255)    
+    name_recipe = models.CharField(max_length=255)
     valid_from = models.DateField()
     valid_until = models.DateField()
     created = models.DateTimeField(default=timezone.now)
@@ -65,7 +66,7 @@ class StorageLocation(models.Model):
 
     def __str__(self):
         return self.name_loc
-    
+
 class StorageItem(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
     name_ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE) #ingredient name
@@ -192,7 +193,7 @@ class Payment(models.Model):
     discount_percent = models.FloatField()
     created = models.DateTimeField()
     updated = models.DateTimeField()
-   
+
 class CompanyExpense(models.Model):
     EXPENSE_CATEGORIES = [
         ('FOOD', 'Essen & Getränke'),
@@ -236,4 +237,4 @@ class IngredientUsage(models.Model):
     def __str__(self):
         return f"{self.ingredient.name_ing}: {self.quantity_used} {self.unit} for order {self.order.id}"
 
-    
+

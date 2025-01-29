@@ -1,0 +1,30 @@
+[
+    {
+      "model": "testdata.order",
+      "pk": 1,
+      "fields": {
+        "events": [1],
+        "table": 1,
+        "waiter": "Max Mustermann",
+        "status": "in delivery",
+        "created": "2024-11-08 11:00:00+01",
+        "updated": "2024-11-08 11:00:00+01",
+        "menu_item_name": "Nutella Mochi",
+        "menu_item_price_in_cents": 2500
+      }
+    },
+    {
+      "model": "testdata.order",
+      "pk": 2,
+      "fields": {
+        "events": [2],
+        "table": 1,
+        "waiter": "Klaus",
+        "status": "done",
+        "created": "2024-11-07 11:00:00+01",
+        "updated": "2024-11-07 12:00:00+01",
+        "menu_item_name": "Nutella Mochi",
+        "menu_item_price_in_cents": 2500
+      }
+    }
+]

@@ -29,6 +29,10 @@ services:
       python manage.py loaddata testdata/fixtures/speise_sample.json &&
       python manage.py loaddata testdata/fixtures/recipe_sample.json &&
       python manage.py loaddata testdata/fixtures/recipeingredient_sample.json &&
+      python manage.py loaddata testdata/fixtures/orderevent_sample.json &&
+      python manage.py loaddata testdata/fixtures/order_final_sample.json &&
+      python manage.py loaddata testdata/fixtures/orderitem2_sample.json &&
+      python manage.py loaddata testdata/fixtures/ingredientusage_sample.json &&
       python3 manage.py runserver 0.0.0.0:8000"
   frontend:
     build:
