@@ -19,8 +19,8 @@ from django.urls import path, include
 from testdata.auth.viewsets import LogoutView
 from routers import router
 from testdata import views
-from testdata.views import (IncomeListView, IngredientUsageView, AvailableProductView,
-                            IngredientListView, PriceCurrencyView, PortionUnitView, RecipeIngredientView,
+from testdata.views import (IncomeListView, IngredientUsageView, IngredientListView, 
+                            PriceCurrencyView, PortionUnitView, RecipeIngredientView,
                             RecipeView,StorageItemListView, StorageLocationListView)
 from drf_yasg import openapi
 from rest_framework import permissions
@@ -48,7 +48,6 @@ urlpatterns = [
     path('api/total_earnings', views.earnings, name="total_earnings"),
     path('upload-json/', views.UploadJsonView.as_view(), name='upload-json'),
     path('api/income/', IncomeListView.as_view(), name='income-list'),
-    path('api/available-products/', AvailableProductView.as_view(), name='available-products'),
     path('ingredients/', IngredientListView.as_view(), name='ingredient-list'),
     path('ingredients/<int:id>/', IngredientListView.as_view(), name='ingredient-detail'),  # For PUT and DELETE
     path('price-currencies/', PriceCurrencyView.as_view(), name='price_currency_list'),
@@ -64,6 +63,5 @@ urlpatterns = [
     path('storage-location/<str:id>/', StorageLocationListView.as_view(), name='storage_location'),
     path('storage-item/', StorageItemListView.as_view(), name='storage_item'),
     path('storage-item/<str:id>/', StorageItemListView.as_view(), name='storage-item-detail'),
-    #path('update-stock/', UpdateStockAPIView.as_view(), name='update-stock'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
 ]
