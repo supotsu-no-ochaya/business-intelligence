@@ -19,9 +19,9 @@ from django.urls import path, include
 from testdata.auth.viewsets import LogoutView
 from routers import router
 from testdata import views
-from testdata.views import (IncomeListView, IngredientUsageView, AvailableProductView, 
+from testdata.views import (IncomeListView, IngredientUsageView, AvailableProductView,
                             IngredientListView, PriceCurrencyView, PortionUnitView, RecipeIngredientView,
-                            RecipeView,StorageItemListView, StorageLocationListView, UpdateStockAPIView)
+                            RecipeView,StorageItemListView, StorageLocationListView)
 from drf_yasg import openapi
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -64,6 +64,6 @@ urlpatterns = [
     path('storage-location/<str:id>/', StorageLocationListView.as_view(), name='storage_location'),
     path('storage-item/', StorageItemListView.as_view(), name='storage_item'),
     path('storage-item/<str:id>/', StorageItemListView.as_view(), name='storage-item-detail'),
-    path('update-stock/', UpdateStockAPIView.as_view(), name='update-stock'),
+    #path('update-stock/', UpdateStockAPIView.as_view(), name='update-stock'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
 ]

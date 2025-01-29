@@ -4,7 +4,7 @@ from testdata.models import (
     Station, Category, ProductAttribute, Product,
     OrderEvent, Order, OrderItem2, PaymentOption, Payment,
     StorageItem, StorageLocation, RecipeIngredient,
-    Ingredient, Recipe, PriceCurrency, PortionUnit
+    Ingredient, Recipe, PriceCurrency, PortionUnit, IngredientUsage
 )
 
 import logging
@@ -188,6 +188,11 @@ class StorageItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = StorageItem
         fields = ['id', 'name_ingredient', 'location', 'total_stock', 'last_updated', 'unit']  # Include specific fields
+
+class IngredientUsageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IngredientUsage
+        fields = ['ingredient', 'quantity_used', 'unit', 'order', 'date']
 
 
 class CompanyExpenseSerializer(serializers.ModelSerializer):
