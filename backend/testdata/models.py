@@ -30,7 +30,7 @@ class PortionUnit(models.Model):
 
 class Ingredient(models.Model):
     name_ing = models.CharField(max_length=255)
-    base_stock = models.PositiveIntegerField(default=0)  # Total stock available
+    base_stock = models.DecimalField(max_digits=10, decimal_places=2)  # Total stock available
     unit = models.ForeignKey(PortionUnit, on_delete=models.CASCADE,null=True, blank=True)  # e.g., "kg", "g", "pieces"
     created = models.DateTimeField(default=timezone.now)
     last_updated = models.DateTimeField(default=timezone.now)
@@ -53,7 +53,7 @@ class Recipe(models.Model):
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='ingredients')
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    quantity_per_portion = models.PositiveIntegerField(default=0)  # The required quantity for each portion
+    quantity_per_portion = models.DecimalField(max_digits=10, decimal_places=2) # The required quantity for each portion
     unit = models.ForeignKey(PortionUnit, on_delete=models.CASCADE,null=True, blank=True)
     def __str__(self):
         return f"{self.recipe.name_recipe} requires {self.quantity_per_portion} {self.unit.name_unit} of {self.ingredient.name_ing}"
@@ -70,7 +70,7 @@ class StorageItem(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
     name_ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE) #ingredient name
     location = models.ForeignKey(StorageLocation, on_delete=models.CASCADE)
-    total_stock = models.PositiveIntegerField(default=0)  # Current stock quantity
+    total_stock = models.DecimalField(max_digits=10, decimal_places=2) # Current stock quantity
     unit = models.ForeignKey(PortionUnit, on_delete=models.CASCADE)  # e.g., "kg", "liters", "units"
     last_updated = models.DateTimeField()
 
@@ -225,3 +225,15 @@ class CompanyExpense(models.Model):
     date = models.DateField()
     payment_type = models.CharField(choices=PAYMENT_CHOICES)
     handler = models.CharField(help_text="Person who did the payment")
+
+class IngredientUsage(models.Model):
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    quantity_used = models.DecimalField(max_digits=10, decimal_places=2)
+    unit = models.CharField(max_length=50, null=True, blank=True)
+    order = models.ForeignKey(OrderItem2, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.ingredient.name_ing}: {self.quantity_used} {self.unit} for order {self.order.id}"
+
+    

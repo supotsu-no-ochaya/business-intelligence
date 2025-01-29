@@ -4,6 +4,8 @@
     "pk": 1,
     "fields": {
       "name_ing": "Klebereismehl",
+      "base_stock": "1000000",
+      "unit":"g",
       "created": "2025-01-01T00:00:00Z",
       "last_updated": "2025-01-01T00:00:00Z"
     }
@@ -13,6 +15,8 @@
     "pk": 2,
     "fields": {
       "name_ing": "Zucker",
+      "base_stock": "1000000",
+      "unit":"g",
       "created": "2025-01-01T00:00:00Z",
       "last_updated": "2025-01-01T00:00:00Z"
     }
@@ -22,6 +26,8 @@
     "pk": 3,
     "fields": {
       "name_ing": "Stärke",
+      "base_stock": "1000000",
+      "unit":"g",
       "created": "2025-01-01T00:00:00Z",
       "last_updated": "2025-01-01T00:00:00Z"
     }
@@ -31,6 +37,8 @@
     "pk": 4,
     "fields": {
       "name_ing": "Nutella",
+      "base_stock": "1000000",
+      "unit":"g",
       "created": "2025-01-01T00:00:00Z",
       "last_updated": "2025-01-01T00:00:00Z"
     }
@@ -40,6 +48,8 @@
     "pk": 5,
     "fields": {
       "name_ing": "Spekulatiuscreme",
+      "base_stock": "1000000",
+      "unit":"g",
       "created": "2025-01-01T00:00:00Z",
       "last_updated": "2025-01-01T00:00:00Z"
     }

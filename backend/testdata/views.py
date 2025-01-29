@@ -7,22 +7,25 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
+from django.utils.timezone import now
 from rest_framework.permissions import BasePermission
-from datetime import datetime
+from datetime import datetime, timedelta
 from testdata.models import (
     OrderItem, Product, Order, OrderItem2, OrderEvent,
     Payment, Ingredient,Speise, RecipeIngredient, StorageItem,
-    StorageLocation, PriceCurrency, PortionUnit, Recipe
+    StorageLocation, PriceCurrency, PortionUnit, Recipe, IngredientUsage,
+
 )
 from testdata.serializer import (
     ProductSerializer, OrderSerializer,
     OrderItem2Serializer, PaymentSerializer, IngredientSerializer,
     OrderEventSerializer, StorageItemSerializer, PortionUnitSerializer,
     PriceCurrencySerializer, StorageLocationSerializer, RecipeSerializer,
-    RecipeIngredientSerializer
+    RecipeIngredientSerializer, IngredientUsageSerializer
 )
 from testdata.roles import DEFAULT_PERMISSIONS
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 # Create your views here.
 
@@ -153,40 +156,43 @@ class IncomeListView(APIView):
             "total_income": total_income,
             "income_by_payment_option": income_by_payment_option
         })
-    
+
+
 def calculate_ingredient_usage(start_date=None, end_date=None):
-    ingredient_usage = {}
-
     try:
-        # Filter orders by the provided date range
-        orders = OrderItem2.objects.all()
+        # Fetch orders that are in 'processed' state (ready to calculate ingredient usage)
+        orders = OrderItem2.objects.filter(order__status="process")
 
-        # If start_date and end_date are provided, filter the orders by the date range
+        # Apply date filtering if provided
         if start_date and end_date:
-            orders = orders.filter(created__range=[start_date, end_date])
+            orders = orders.filter(order__created__range=[start_date, end_date])
 
         for order_item in orders:
+            print(f"Processing Order: {order_item.id}")
+
+            # Ensure bom_data is parsed correctly
             try:
                 bom_data = json.loads(order_item.bom) if isinstance(order_item.bom, str) else order_item.bom
-            except json.JSONDecodeError:
-                bom_data = []
+            except json.JSONDecodeError as e:
+                print(f"Error parsing bom data for order_item {order_item.id}: {str(e)}")
+                bom_data = {}
 
             bom_details = bom_data.get('details', {})
-            speise_items = bom_details.get('speise', [])
+            speise_items = bom_details.get('products', [])
 
             for bom_item in speise_items:
                 product_id = bom_item.get('product_id')
                 quantity = bom_item.get('quantity', 0)
 
-                if product_id is None:
-                    continue
+                if not product_id:
+                    continue  # Skip if product_id is missing
 
                 try:
                     product = Product.objects.get(id=product_id)
                     speise = Speise.objects.filter(name=product.name).first()
 
                     if not speise:
-                        continue
+                        continue  # Skip if no corresponding speise found
 
                     recipe_ingredients = RecipeIngredient.objects.filter(recipe__speise=speise)
 
@@ -194,239 +200,96 @@ def calculate_ingredient_usage(start_date=None, end_date=None):
                         ingredient = recipe_ingredient.ingredient
                         total_quantity_used = recipe_ingredient.quantity_per_portion * quantity
 
-                        if ingredient.name_ing not in ingredient_usage:
-                            ingredient_usage[ingredient.name_ing] = {
-                                'unit': ingredient.unit.name_unit if ingredient.unit else None,
+                        # Update or create ingredient usage entry
+                        IngredientUsage.objects.update_or_create(
+                            ingredient=ingredient,
+                            order=order_item,
+                            defaults={
                                 'quantity_used': total_quantity_used,
+                                'unit': ingredient.unit.name_unit if ingredient.unit else None,
                             }
-                        else:
-                            ingredient_usage[ingredient.name_ing]['quantity_used'] += total_quantity_used
+                        )
 
                 except Product.DoesNotExist:
+                    print(f"Product with ID {product_id} does not exist for order_item {order_item.id}")
                     continue
 
-        return [
-            {"ingredient_name": name, "unit": data["unit"], "quantity_used": data["quantity_used"]}
-            for name, data in ingredient_usage.items()
-        ]
+            # Update order status to "need_deducting"
+            order_item.status = "need_deducting"
+            order_item.save()
+
+        return {"message": "Ingredient usage saved successfully."}
 
     except Exception as e:
-        return {"error": f"An error occurred while calculating ingredient usage: {str(e)}"}
-
-
-
-
-# Helper Function to Calculate Total Available
-def calculate_total_available(ingredient):
-   
-    # Get the total stock from StorageItem
-    try:
-        # Get the total stock from StorageItem
-        total_stock = StorageItem.objects.filter(name_ingredient=ingredient).aggregate(
-            total=Sum('total_stock')
-        )['total'] or 0
-
-        # Fetch usage data for this ingredient
-        ingredient_usage = 0
-        usage_data = calculate_ingredient_usage()
-
-        if isinstance(usage_data, dict) and "error" in usage_data:
-            return {"error": usage_data["error"]}
-
-        for usage in usage_data:
-            if usage["ingredient_name"] == ingredient.name_ing:
-                ingredient_usage = usage["quantity_used"]
-                break
-
-        # Calculate total available stock
-        total_available = total_stock - ingredient_usage
-        return max(total_available, 0)  # Ensure non-negative values
-    except Exception as e:
-        return {"error": f"An error occurred while calculating total availability: {str(e)}"}
-
-
+        return {"error": f"An error occurred while calculating and saving ingredient usage: {str(e)}"}
 
 # Ingredient Usage View
 class IngredientUsageView(APIView):
     permission_classes = [IsAuthenticated]
 
-    # POST method: Accept start_date and end_date from the request body
-    def post(self, request, *args, **kwargs):
-        start_date = request.data.get("start_date")
-        end_date = request.data.get("end_date")
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'start_date', 
+                openapi.IN_QUERY, 
+                description='Start date for filtering (YYYY-MM-DD)', 
+                type=openapi.TYPE_STRING, 
+                required=False
+            ),
+            openapi.Parameter(
+                'end_date', 
+                openapi.IN_QUERY, 
+                description='End date for filtering (YYYY-MM-DD)', 
+                type=openapi.TYPE_STRING, 
+                required=False
+            ),
+        ],
+        responses={200: "Success", 400: "Bad Request", 500: "Server Error"}
+    )
+    def get(self, request, *args, **kwargs):
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
 
-        # If no dates are provided, calculate usage for all time
-        if not start_date or not end_date:
-            start_date = "2000-01-01"  # Default start date if not provided (e.g., very early date)
-            end_date = datetime.today().date().strftime("%Y-%m-%d")  # Today's date as default end date
-
-        # Validate date inputs
+        # Validate date format (if provided)
         try:
-            # Convert strings to date objects
-            start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
-            end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+            if start_date:
+                start_date = datetime.strptime(start_date, '%Y-%m-%d')
+            if end_date:
+                end_date = datetime.strptime(end_date, '%Y-%m-%d')
         except ValueError:
             return Response(
-                {"error": "Invalid date format. Use YYYY-MM-DD."},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": "Invalid date format. Use YYYY-MM-DD."}, 
+                status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Call the function to calculate ingredient usage for the date range
-        usage_data = calculate_ingredient_usage(start_date=start_date, end_date=end_date)
+        # If the start_date and end_date are the same, set end_date to the end of the day
+        if start_date and end_date and start_date == end_date:
+            end_date = end_date + timedelta(days=1) - timedelta(seconds=1)
 
-        if isinstance(usage_data, dict) and "error" in usage_data:
-            return Response({"error": usage_data["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # Calculate ingredient usage (optional step)
+        result = calculate_ingredient_usage(start_date=start_date, end_date=end_date)
 
-        # Return the usage data
-        return Response({"ingredient_usage": usage_data}, status=status.HTTP_200_OK)
+        if "error" in result:
+            return Response(result, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def get(self, request, *args, **kwargs):
-        # This could be an option to fetch all ingredient usage data without date range
-        usage_data = calculate_ingredient_usage()  # No date range applied here
+        # Fetch all ingredient usage records
+        ingredient_usages = IngredientUsage.objects.all()
 
-        if isinstance(usage_data, dict) and "error" in usage_data:
-            return Response({"error": usage_data["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response({"ingredient_usage": usage_data}, status=status.HTTP_200_OK)
-
-# Ingredient Availability View
-def calculate_total_available(ingredient, start_date=None, end_date=None):
-    try:
-        # Get the total stock from StorageItem
-        total_stock = StorageItem.objects.filter(name_ingredient=ingredient).aggregate(
-            total=Sum('total_stock')
-        )['total'] or 0
-
-        # Fetch usage data for this ingredient
-        ingredient_usage = 0
-        usage_data = calculate_ingredient_usage(start_date=start_date, end_date=end_date)
-
-        if isinstance(usage_data, dict) and "error" in usage_data:
-            return {"error": usage_data["error"]}
-
-        for usage in usage_data:
-            if usage["ingredient_name"] == ingredient.name_ing:
-                ingredient_usage = usage["quantity_used"]
-                break
-
-        # Calculate total available stock
-        total_available = total_stock - ingredient_usage
-        return max(total_available, 0)  # Ensure non-negative values
-    except Exception as e:
-        return {"error": f"An error occurred while calculating total availability: {str(e)}"}
-
-
-# Available Product View
-class AvailableProductView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        start_date = request.data.get("start_date")
-        end_date = request.data.get("end_date")
-
-        # Validate date inputs
+        # Filter IngredientUsage records by date range if dates are provided
         if start_date and end_date:
-            try:
-                start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
-                end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
-            except ValueError:
-                return Response(
-                    {"error": "Invalid date format. Use YYYY-MM-DD."},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+            ingredient_usages = ingredient_usages.filter(order__order__created__range=(start_date, end_date))
 
-        try:
-            speisen = Speise.objects.all()
-            available_products = []
+        # Aggregate the ingredient usage by ingredient and sum the quantities
+        aggregated_result =  ingredient_usages.values(
+            'ingredient__name_ing', 
+            'ingredient__unit__name_unit'
+        ).annotate(total_usage=Sum('quantity_used'))
 
-            for speise in speisen:
-                ingredient_data = []
-                min_portions = None
-
-                # Fetch recipe ingredients for the product
-                recipe_ingredients = RecipeIngredient.objects.filter(recipe__speise=speise)
-
-                for recipe_ingredient in recipe_ingredients:
-                    ingredient = recipe_ingredient.ingredient
-                    required_quantity = recipe_ingredient.quantity_per_portion
-
-                    # Calculate total available dynamically with the date range
-                    total_available = calculate_total_available(ingredient, start_date=start_date, end_date=end_date)
-
-                    if isinstance(total_available, dict) and "error" in total_available:
-                        return Response({"error": total_available["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-                    # Calculate max portions based on ingredient availability
-                    max_portions = total_available // required_quantity if required_quantity > 0 else 0
-
-                    if min_portions is None or max_portions < min_portions:
-                        min_portions = max_portions
-
-                    ingredient_data.append({
-                        'ingredient_name': ingredient.name_ing,
-                        'required_quantity_per_portion': required_quantity,
-                        'total_available': total_available,
-                        'max_portions_from_this_ingredient': max_portions,
-                    })
-
-                available_products.append({
-                    'product_name': speise.name,
-                    'price': speise.price,
-                    'available_portions': min_portions,
-                    'ingredients': ingredient_data,
-                })
-
-            return Response({'available_products': available_products}, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-    def get(self, request, *args, **kwargs):
-        try:
-            speisen = Speise.objects.all()
-            available_products = []
-
-            for speise in speisen:
-                ingredient_data = []
-                min_portions = None
-
-                # Fetch recipe ingredients for the product
-                recipe_ingredients = RecipeIngredient.objects.filter(recipe__speise=speise)
-
-                for recipe_ingredient in recipe_ingredients:
-                    ingredient = recipe_ingredient.ingredient
-                    required_quantity = recipe_ingredient.quantity_per_portion
-
-                    # Calculate total available dynamically
-                    total_available = calculate_total_available(ingredient) #Current available stock
-
-                    if isinstance(total_available, dict) and "error" in total_available:
-                        return Response({"error": total_available["error"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-                    # Calculate max portions based on ingredient availability
-                    max_portions = total_available // required_quantity if required_quantity > 0 else 0
-
-                    if min_portions is None or max_portions < min_portions:
-                        min_portions = max_portions
-
-                    ingredient_data.append({
-                        'ingredient_name': ingredient.name_ing,
-                        'required_quantity_per_portion': required_quantity,
-                        'total_available': total_available,
-                        'max_portions_from_this_ingredient': max_portions,
-                    })
-
-                available_products.append({
-                    'product_name': speise.name,
-                    'price': speise.price,
-                    'available_portions': min_portions,
-                    'ingredients': ingredient_data,
-                })
-
-            return Response({'available_products': available_products}, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # Serialize and return the aggregated data
+        return Response({
+            "message": result["message"],
+            "data": aggregated_result
+        }, status=status.HTTP_200_OK)
 
 class PriceCurrencyView(APIView):
     permission_classes = [IsAuthenticated]
@@ -690,16 +553,16 @@ class StorageLocationListView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
-            ingredients = StorageLocation.objects.all()
-            if not ingredients:
-                return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
-            serializer = StorageLocationSerializer(ingredients, many=True)
+            locations = StorageLocation.objects.all()
+            if not locations:
+                return Response({"detail": "No locations found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = StorageLocationSerializer(locations, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-    # PUT method: Update an existing ingredient
-    @swagger_auto_schema(request_body=StorageLocationSerializer,)
+    # POST method: Update an existing location
+    @swagger_auto_schema(request_body=StorageLocationSerializer)
     def post(self, request):
         try:
             serializer = StorageLocationSerializer(data=request.data)
@@ -710,111 +573,85 @@ class StorageLocationListView(APIView):
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # PUT method: Update an existing ingredient
-    @swagger_auto_schema()
+    # PUT method: Update an existing location
+    @swagger_auto_schema(request_body=StorageLocationSerializer)
     def put(self, request, *args, **kwargs):
         try:
-            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
-            ingredient = StorageLocation.objects.get(id=ingredient_id)
-            serializer = StorageLocationSerializer(ingredient, data=request.data, partial=True)  # Allow partial updates
+            location_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            location = StorageLocation.objects.get(id=location_id)
+            serializer = StorageLocationSerializer(location, data=request.data, partial=True)  # Allow partial updates
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    # DELETE method: Delete an existing ingredient
-    
-    @swagger_auto_schema()
-    def delete(self, request, *args, **kwargs):
-        try:
-            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
-            ingredient = StorageLocation.objects.get(id=ingredient_id)
-            ingredient.delete()
-            return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
-        except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class StorageLocationListView(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        try:
-            ingredients = StorageLocation.objects.all()
-            if not ingredients:
-                return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
-            serializer = StorageLocationSerializer(ingredients, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-    # PUT method: Update an existing ingredient
-    @swagger_auto_schema(request_body=StorageLocationSerializer,)
-    def post(self, request):
-        try:
-            serializer = StorageLocationSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    # PUT method: Update an existing ingredient
-    @swagger_auto_schema()
-    def put(self, request, *args, **kwargs):
-        try:
-            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
-            ingredient = StorageLocation.objects.get(id=ingredient_id)
-            serializer = StorageLocationSerializer(ingredient, data=request.data, partial=True)  # Allow partial updates
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    # DELETE method: Delete an existing ingredient
-    
-    @swagger_auto_schema()
-    def delete(self, request, *args, **kwargs):
-        try:
-            ingredient_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
-            ingredient = StorageLocation.objects.get(id=ingredient_id)
-            ingredient.delete()
-            return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
         except StorageLocation.DoesNotExist:
             return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    # DELETE method: Delete an existing location    
+    @swagger_auto_schema()
+    def delete(self, request, *args, **kwargs):
+        try:
+            location_id = kwargs.get('id')  # Fetch the ingredient ID from URL parameters
+            location = StorageLocation.objects.get(id=location_id)
+            location.delete()
+            return Response({"detail": "location deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except StorageLocation.DoesNotExist:
+            return Response({"detail": "location not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def update_storage_item_stock(ingredient_usage_data, is_new_order=True):
+    try:
+        today = now().date()
+
+        # Get orders that require stock deduction
+        orders_to_deduct = OrderItem2.objects.filter(status="need_deducting")
+
+        if not orders_to_deduct.exists():
+            return {"message": "No orders require stock deduction."}
+
+        # Get all related ingredient usage records
+        ingredient_usages = IngredientUsage.objects.filter(order__in=orders_to_deduct)
+
+        if not ingredient_usages.exists():
+            return {"message": "No ingredient usage records found for deduction."}
+
+        for usage in ingredient_usages:
+            ingredient = usage.ingredient
+            total_quantity_used = usage.quantity_used
+
+            # Find the corresponding storage item
+            storage_item = StorageItem.objects.filter(name_ingredient=ingredient).first()
+
+            if storage_item:
+                print(f"Before Update: {storage_item.name_ingredient.name_ing} - {storage_item.total_stock}")
+
+                # Deduct stock only if needed
+                storage_item.total_stock -= total_quantity_used
+                storage_item.last_updated = now()
+                storage_item.save()
+
+                print(f"After Update: {storage_item.name_ingredient.name_ing} - {storage_item.total_stock}")
+
+        # Update order status to 'completed' after deduction
+        orders_to_deduct.update(status="completed")
+
+        return {"message": "Stock updated successfully for deducted orders."}
+
+    except Exception as e:
+        return {"error": f"An error occurred while updating the stock: {str(e)}"}
 class StorageItemListView(APIView):
     permission_classes = [IsAuthenticated]
 
-    # GET method: Fetch all items or a specific item by ID
-    def get(self, request, *args, **kwargs):
-        ingredient_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
+    def get(self, request):
         try:
-            if ingredient_id:
-                # Fetch a single item by ID
-                ingredient = StorageItem.objects.get(id=ingredient_id)
-                serializer = StorageItemSerializer(ingredient)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                # Fetch all items
-                ingredients = StorageItem.objects.all()
-                if not ingredients.exists():
-                    return Response({"detail": "No ingredients found."}, status=status.HTTP_404_NOT_FOUND)
-                serializer = StorageItemSerializer(ingredients, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-        except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+            items = StorageItem.objects.all()
+            if not items:
+                return Response({"detail": "No items found."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = StorageItemSerializer(items, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -833,30 +670,46 @@ class StorageItemListView(APIView):
     # PUT method: Update an existing item
     @swagger_auto_schema(request_body=StorageItemSerializer)
     def put(self, request, *args, **kwargs):
-        ingredient_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
+        item_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
         try:
-            ingredient = StorageItem.objects.get(id=ingredient_id)
-            serializer = StorageItemSerializer(ingredient, data=request.data, partial=True)  # Allow partial updates
+            item = StorageItem.objects.get(id=item_id)
+            serializer = StorageItemSerializer(item, data=request.data, partial=True)  # Allow partial updates
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "Item not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @swagger_auto_schema(
+        responses={200: "Stock updated successfully", 500: "Server Error"}
+    )
+    def patch(self, request, *args, **kwargs):
+        try:
+            # Call the update_storage_item_stock function to update the stock based on ingredient usage
+            result = update_storage_item_stock(ingredient_usage_data=None, is_new_order=False)
+
+            return Response({
+                "message": result.get("message", "Stock updated successfully."),
+                "ingredient_usage": result
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({
+                "error": f"An error occurred: {str(e)}"
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # DELETE method: Delete an existing item
     @swagger_auto_schema()
     def delete(self, request, *args, **kwargs):
-        ingredient_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
+        item_id = kwargs.get('id')  # Extract the ingredient ID from URL parameters
         try:
-            ingredient = StorageItem.objects.get(id=ingredient_id)
-            ingredient.delete()
-            return Response({"detail": "Ingredient deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+            item = StorageItem.objects.get(id=item_id)
+            item.delete()
+            return Response({"detail": "Item deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
         except StorageItem.DoesNotExist:
-            return Response({"detail": "Ingredient not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "Item not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-
