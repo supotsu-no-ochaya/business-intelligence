@@ -127,6 +127,7 @@ docker compose -f docker-compose.yml --env-file .env up --build
 - Backend -> localhost:8000 [Click Here](http://localhost:8000)
 - Backend Admin Dashboard -> localhost:8000/admin [Click Here](http://localhost:8000/admin)
 - Frontend -> localhost:3000 [Click Here](http://localhost:3000)
+- Swagger Docs -> localhost:8000/swagger [Click Here](http://localhost:8000/swagger)
 - Fixtures are loaded before starting the server.
 
 

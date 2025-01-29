@@ -1,0 +1,23 @@
+[
+    {
+      "model": "testdata.orderevent",
+      "pk": 1,
+      "fields": {
+        "type": "aufgegeben",
+        "content": {},
+	"created": "2024-11-08 11:00:00+01",
+	"updated": "2024-11-08 11:00:00+01"
+      }
+    },
+    {
+      "model": "testdata.orderevent",
+      "pk": 2,
+      "fields": {
+        "type": "bezahlt",
+        "content": {},
+	"created": "2024-11-08 11:00:00+01",
+	"updated": "2024-11-08 11:00:00+01"
+      }
+    }
+
+]

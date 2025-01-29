@@ -2,11 +2,9 @@ import React, { useState, useContext } from 'react';
 import Login from './components_allways/Login';
 import Sidebar from './components/Sidebar';
 import Header from './components_allways/Header';
-import Dashboard from './components/Dashboard';
-import Ausgaben from './components/Ausgaben';
-import Einnahmen from './components/Einnahmen';
- //import Verbrauch from './components/Verbrauch';
+//import Dashboard from './components/Dashboard';
 // import Zutaten from './components/Zutaten';
+import IngredientUsage from './components/IngredientUsage';
 import Lager from './components/Lager';
 import Verkaufszahlen from './components/Verkaufszahlen';
 import Transaktionen from './components/Transkationen';
@@ -38,12 +36,12 @@ function App() {
    /* case 'dashboard':
       content = <Dashboard />;
       break;
-    case 'verbrauch':
-      content = <Verbrauch />;
-      break;
     case 'zutaten':
       content = <Zutaten />;
       break;*/
+      case 'verbrauch':
+      content = <IngredientUsage />;
+      break;
     case 'profile':
       content = <Profile />
       break;

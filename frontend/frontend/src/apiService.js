@@ -77,6 +77,26 @@ export const handleLogout = async () => {
   return successful
 };
 
+export const fetchIngredientUsage = async (startDate, endDate) => {
+  try {
+    const url = `/ingredient-usage/?start_date=${encodeURIComponent(startDate)}&end_date=${encodeURIComponent(endDate)}`;
+    
+    const response = await axiosInstance.get(url, {
+      headers: { 'Accept': 'application/json' },
+    });
+
+    // Extrahiere das relevante `data`-Array und mappe es um
+    return response.data.data.map(item => ({
+      ingredient_name: item.ingredient__name_ing, // Neues Feld aus der API
+      unit: item.ingredient__unit__name_unit, // Einheit
+      quantity_used: item.total_usage, // Verbrauchswert
+    }));
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Zutatenverbrauchsdaten:', error);
+    return []; // Fehler -> leeres Array zurückgeben
+  }
+};
+
 export const fetchEvents = async () => {
   const response = await axiosInstance.get('/messeevent');
   return response.data; 

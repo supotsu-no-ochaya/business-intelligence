@@ -1,0 +1,99 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: none;
+    color: #DBDFEA;
+  }
+  
+  .dashboard-card {
+    width: 400px;
+    background-color: #24263A;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .header {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .date-picker-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .date-picker {
+    background-color: #1a1a2e;
+    border: 1px solid #555;
+    color: #DBDFEA;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .date-picker::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+  
+  .apply-button {
+    background-color: #007bff;
+    color: #DBDFEA;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .apply-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .analytics-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .list-item {
+    margin-bottom: 15px;
+  }
+  
+  .item-name {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+  
+  .progress-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .progress-bar {
+    flex: 1;
+    height: 10px;
+    background-color: #3e3e5e;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .progress-used {
+    height: 100%;
+    background: linear-gradient(90deg, #FF4B4B, #FF00A6);
+  }
+  
+  .progress-values {
+    font-size: 14px;
+    font-weight: bold;
+    color: #DBDFEA;
+  }
+  

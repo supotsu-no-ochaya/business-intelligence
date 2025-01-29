@@ -1,0 +1,41 @@
+[
+    {
+      "model": "testdata.orderitem2",
+      "pk": 1,
+      "fields": {
+        "events": [1],
+        "order": 1,
+        "price": 23.50,
+        "status": "in delivery",
+        "bom": {},
+	    "created": "2024-11-08 11:00:00+01",
+	    "updated": "2024-11-08 11:00:00+01"
+	    }
+    },
+    {
+      "model": "testdata.orderitem2",
+      "pk": 2,
+      "fields": {
+        "events": [1],
+        "order": 1,
+        "price": 25.50,
+        "status": "in delivery",
+        "bom": {},
+	    "created": "2024-11-08 11:00:00+01",
+	    "updated": "2024-11-08 11:00:00+01"
+	    }
+    },
+    {
+      "model": "testdata.orderitem2",
+      "pk": 3,
+      "fields": {
+        "events": [2],
+        "order": 2,
+        "price": 15.50,
+        "status": "done",
+        "bom": {},
+	    "created": "2024-11-08 11:00:00+01",
+	    "updated": "2024-11-08 11:00:00+01"
+	    }
+    }
+]
