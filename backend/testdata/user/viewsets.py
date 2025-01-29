@@ -37,7 +37,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     view_permissions = {
         'create': {'admin': True},
         'list': {'user': True}, # everyone logged in
-        'retrieve': {'admin': True},
+        'retrieve': {'user': True},
         'update,partial_update': {'admin': True},
     }
 
