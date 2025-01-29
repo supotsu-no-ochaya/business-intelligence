@@ -22,8 +22,8 @@ services:
       python manage.py loaddata testdata/fixtures/messeevent_sample.json &&
       python manage.py loaddata testdata/fixtures/pricecurrency_sample.json &&
       python manage.py loaddata testdata/fixtures/storagelocation_sample.json &&
-      python manage.py loaddata testdata/fixtures/ingredient_sample.json &&
       python manage.py loaddata testdata/fixtures/portionunit_sample.json &&
+      python manage.py loaddata testdata/fixtures/ingredient_sample.json &&
       python manage.py loaddata testdata/fixtures/storageitem_sample.json &&
       python manage.py loaddata testdata/fixtures/userdata.json &&
       python manage.py loaddata testdata/fixtures/speise_sample.json &&
