@@ -43,7 +43,7 @@ services:
       python manage.py loaddata testdata/fixtures/userdata.json &&
       python manage.py loaddata testdata/fixtures/speise_sample.json &&
       python manage.py loaddata testdata/fixtures/recipe_sample.json &&
-      python manage.py loaddata testdata/fixtures/recipeingredient_sample.json &&
+      python manage.py loaddata testdata/fixtures/recipeingredients_sample.json &&
       python manage.py loaddata testdata/fixtures/order_final_sample.json &&
       python manage.py loaddata testdata/fixtures/orderitem2_sample.json &&
       python manage.py loaddata testdata/fixtures/ingredientusage_sample.json &&
