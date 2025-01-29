@@ -1,99 +1,148 @@
+/* Container für die gesamte Anzeige */
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: none;
-    color: #DBDFEA;
-  }
-  
-  .dashboard-card {
-    width: 400px;
-    background-color: #24263A;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  }
-  
-  .header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  background-color: none;
+  color: #DBDFEA;
+  box-sizing: border-box;
+}
+
+/* Dashboard-Karte */
+.dashboard-card {
+  width: 500px; /* Breiter */
+  height: 650px; /* Höher */
+  background-color: #24263A;
+  padding: 10px; /* Mehr Padding für mehr Abstand */
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Header */
+.header {
     font-size: 24px;
     margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .date-picker-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .date-picker {
-    background-color: #1a1a2e;
-    border: 1px solid #555;
-    color: #DBDFEA;
+  text-align: center;
+}
+
+/* Container für Date-Picker und Button */
+.date-picker-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Abstand zwischen den Elementen */
+  margin-bottom: 25px;
+}
+
+/* Date-Picker-Inputs */
+.date-picker {
+  background-color: #1a1a2e;
+  border: 1px solid #555;
+  color: #DBDFEA;
     padding: 5px;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .date-picker::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-  }
-  
-  .apply-button {
-    background-color: #007bff;
-    color: #DBDFEA;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .apply-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .analytics-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .list-item {
-    margin-bottom: 15px;
-  }
-  
-  .item-name {
-    display: block;
-    margin-bottom: 8px;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 95%;
+}
+
+.date-picker::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+/* Apply-Button */
+.apply-button {
+  background-color: #007bff;
+  color: #DBDFEA;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+}
+
+.apply-button:hover {
+  background-color: #0056b3;
+}
+
+/* Dropdown für Events */
+.dropdown {
+  background-color: #1a1a2e;
+  color: #DBDFEA;
+  border: 1px solid #555;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* Fehlernachricht */
+.error-message {
+  color: #FF4B4B;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Liste der Zutatenverbrauchsdaten */
+.analytics-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex-grow: 1; /* Damit die Liste flexibel wächst und den verfügbaren Platz ausfüllt */
+}
+
+/* Listenelement für Zutaten */
+.list-item {
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* Name des Ingredients */
+.item-name {
+  display: block;
+  margin-bottom: 8px;
     font-size: 16px;
-  }
-  
-  .progress-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .progress-bar {
-    flex: 1;
+}
+
+/* Wrapper für den Fortschrittsbalken */
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Fortschrittsbalken */
+.progress-bar {
+  flex: 1;
     height: 10px;
-    background-color: #3e3e5e;
+  background-color: #3e3e5e;
     border-radius: 5px;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .progress-used {
-    height: 100%;
-    background: linear-gradient(90deg, #FF4B4B, #FF00A6);
-  }
-  
-  .progress-values {
-    font-size: 14px;
-    font-weight: bold;
-    color: #DBDFEA;
-  }
-  
+  overflow: hidden;
+  position: relative;
+}
+
+/* Farbverlauf des Fortschrittsbalkens */
+.progress-used {
+  height: 100%;
+  background: linear-gradient(90deg, #FF4B4B, #FF00A6);
+}
+
+/* Fortschrittsanzeige */
+.progress-values {
+  font-size: 14px;
+  font-weight: bold;
+  color: #DBDFEA;
+}
+
+/* Keine Daten angezeigt */
+.no-data {
+  text-align: center;
+  color: #ccc;
+  font-size: 16px;
+}
