@@ -3,6 +3,27 @@ import { Line } from "react-chartjs-2";
 import styles from "./Transaktionen.module.css";
 import { createCompanyExpense, fetchCompanyExpense, fetchOrders} from "../apiService";
 
+import {
+  Chart as ChartJS,
+  CategoryScale, // Required for "category" scale
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 const Transaktionen = () => {
   const current_year = (new Date().getFullYear())
 
