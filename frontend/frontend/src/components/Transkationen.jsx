@@ -227,7 +227,7 @@ const Transaktionen = () => {
         setTransactions([
           ...response.data,
         ])
-        window.alert('Upload successfull')
+        window.alert('Transaktion erfolreich hochgeladen!')
       }
       setShowUploadMenu(false);
       setNewTransaction({
