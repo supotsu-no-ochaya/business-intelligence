@@ -77,6 +77,11 @@ export const handleLogout = async () => {
   return successful
 };
 
+export const fetchEvents = async () => {
+  const response = await axiosInstance.get('/messeevent');
+  return response.data;
+};
+
 // API-Funktionen verwenden die Instanz
 export const fetchTotalEarnings = async () => {
   const response = await axiosInstance.get('/total_earnings');
