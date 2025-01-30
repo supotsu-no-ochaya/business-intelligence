@@ -149,12 +149,18 @@ const Transaktionen = () => {
   )
 
   let y_lim_chart = 0
-  if(accumulated_earnings_data[selected_year] && accumulated_expenses[selected_year]) {
-    y_lim_chart = Math.max(accumulated_earnings_data[selected_year][accumulated_earnings_data[selected_year].length-1], accumulated_expenses[selected_year][accumulated_expenses[selected_year].length-1])
-    y_lim_chart /= 100 
-    y_lim_chart += y_lim_chart * 0.1
-    y_lim_chart = Math.ceil(y_lim_chart / 50) * 50 // round y limit to the next 50 for nicer numbers
+  let y_earnings, y_expenses = 100
+  if (Array.isArray(accumulated_earnings_data[selected_year])) {
+    y_earnings = accumulated_earnings_data[selected_year][accumulated_earnings_data[selected_year].length-1]
   }
+
+  if (Array.isArray(accumulated_expenses[selected_year])) {
+    y_expenses = accumulated_expenses[selected_year][accumulated_expenses[selected_year].length-1]
+  }
+  y_lim_chart = Math.max(y_earnings, y_expenses)
+  y_lim_chart /= 100 
+  y_lim_chart += y_lim_chart * 0.1
+  y_lim_chart = Math.ceil(y_lim_chart / 50) * 50 // round y limit to the next 50 for nicer numbers
 
   // Daten für die Line-Charts
   const totalExpenseData = {
